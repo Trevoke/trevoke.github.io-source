@@ -1,0 +1,28 @@
+#+TITLE:       Why Elixir is the next Great Tech
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-03-31T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/why-elixir-is-the-next-great-tech
+#+KEYWORDS:    elixir, phoenix
+#+TAGS:        elixir, phoenix
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: A list of reasons why Elixir is great
+
+* Elixir, because:
+
+I think of Elixir as an idea whose time has come; or rather, a great gathering of ideas.
+- Erlang has solved the problem of distributed computing (and therefore, of concurrency) decades ago, and now concurrency is a very desirable tool, as the amount of data we crunch regularly has increased exponentially.
+- TDD has brought a more functional approach to a lot code, and that is the paradigm Elixir espouses.
+- Elixir takes all of the syntax niceness from Ruby, so it's pretty and easy to read.
+- Elixir makes OTP incredibly convenient to use, which means that one is able to create and communicate with processes with concise and expressive code.
+- Elixir's Phoenix Framework makes both stateless (traditional request/response) and stateful (anything from long-polling to websockets) connections very simple to use, by providing powerful abstractions based on OTP. The code remains readable.
+- The websocket connections are easy to set up and easy to scale, maintaining a single state via the socket: a tempting idea for folks using the Flux architecture in the front-end.
+- Elixir's Phoenix Framework takes from all the lessons of Rails and Javascript of the past decade and has created a testable, maintainable, and extendable web MVC framework that in reality, is just another OTP application.
+- As we depend more and more on external services (API, either internal or external), fault tolerance becomes top-of-mind when building robust systems. This is another problem Erlang solved years ago through supervisors and managing how to handle failures.
+- Elixir/OTP allows for incredible uptime by letting you write code in such a way you can actually do hot reloading.
+- Elixir is one of the few non-lisp languages to implement real macros. This allows you to create your own domain language in your code should you need it.
+
+As we move more towards microservices, and given that a microservice is the unit of thought in Elixir (an OTP app is just a service that can receive messages, send messages, and hold state), it will become a de-facto choice, because it is a superior abstraction to the existing options.
+
+Elixir and Phoenix are the new present. Bow to our new tech stack overlord.

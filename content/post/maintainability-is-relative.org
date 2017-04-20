@@ -1,0 +1,79 @@
+#+TITLE:       Maintainability Is Relative
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-10-23T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/maintainability-is-relative
+#+KEYWORDS:    code, maintainability, testing
+#+TAGS:        maintainability
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: How maintainable does your code need to be? It depends
+
+I just found a great example of the variability of the need of creating maintainable code.
+
+Somewhere around 2006, I created a script that posts to the Livejournal community _daily_tao_ a new chapter of the Tao Te Ching every day. Today in 2016, I had a need to look for the script, the second time in maybe the last eight years that I had to look at it.
+
+I temporarily wasn't sure of where that script was. I remembered it was running off of a cronjob, so… Some machine with a *nix-like OS. Then I remembered and found it. I'm going to offer two versions of the code to you: the one that is in the cronjob, and .. A rewrite that I never deleted (and now of course, I have no idea why I never did).
+
+The original:
+
+#+BEGIN_SRC sh
+  #!/bin/bash
+
+  cd /home/user/www/tao
+  TAO_COUNTER=`cat .taocounter`
+
+  if (( $TAO_COUNTER > 80 ))
+     then TAO_COUNTER=0
+  fi
+
+
+  awk '/^%$/{nr++} nr==sec,/^%$/{if(!/^%$/)print}' sec=$TAO_COUNTER tao.txt > .body
+  echo '-' >> .body
+  echo '-' >> .body
+  awk '/^%$/{nr++} nr==sec,/^%$/{if(!/^%$/)print}' sec=$TAO_COUNTER beatricetao.txt >> .body
+
+  TAO_COUNTER=$(($TAO_COUNTER +1));
+  echo $TAO_COUNTER > .taocounter
+
+  echo '-' >> .body
+  echo ' ' >> .body
+  echo 'The first version is from the Fortune files. The second version is the Beatrice Tao.' >> .body
+
+  # jlj -bf .body -ec daily_tao -es `cat .taocounter` -ne -s
+  cat .body | ./clive -u username -w password -j daily_tao -s `cat .taocounter` --charset utf8
+#+END_SRC
+
+I saw this, and it didn't make a ton of sense. Thankfully it's a very short script so I was able to piece it together quickly. Today I probably wouldn't write it this way, but… It works, so why would I touch it?
+
+The new script is in Ruby. I say new because I learned Ruby after Bash, and once I knew Ruby, it was my preferred language. I'm guessing I wanted to rewrite the script so it would be more legible, and then… For some reason, I never replaced it.
+
+#+BEGIN_SRC ruby
+  #!/usr/bin/ruby
+
+  Dir.chdir '/home/user/www/tao'
+
+  # Arrays go from 0... infinity
+  # Tao goes from 1 to 81
+  # Counter therefore goes from 0 to 80 and loops.
+
+  counter = File.open('.taocounter', 'r') { |f| f.readline.strip.to_i }
+
+  tao = File.open('tao.txt', 'r') { |f| f.readlines('%') }
+  beatrice = File.open('beatricetao.txt', 'r') { |f| f.readlines('%') }
+  Disclaimer="The first version is from the Fortune files - a program for random quotes on GNU/Linux.\n The second version is the Beatrice Tao, available online, reproduced here with permission.."
+
+  File.open('.body', 'w') { |f| f << "#{tao[counter]}\n\n________________\n\n#{beatrice[counter]}\n\n#{Disclaimer}" }
+
+  `cat .body | ./clive -u username -w password -j daily_tao -s "Tao Te Ching: Chapter #{counter+1}" --charset utf8`
+  counter = 0 if (counter +=1 ) > 80
+  File.open('.taocounter', 'w') { |f| f << counter }
+#+END_SRC
+
+My favorite thing here is probably the second-to-last line of the Ruby script.
+
+There are no tests for any of this, because I definitely wrote this before I knew you could test your code.
+
+And the question remains: should I write tests? Should I refactor? Should I fix it, rewrite it, etc?
+
+And the answer remains: No. It works. There are no new features to add. Just leave it be.

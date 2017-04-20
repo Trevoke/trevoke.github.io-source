@@ -1,0 +1,51 @@
+#+TITLE:       Benefits of a rapid test suite
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-04-18T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/benefits-of-a-rapid-test-suite
+#+KEYWORDS:    development, engineering, psychology, test suite, tdd, stress
+#+TAGS:        stress, development, tdd, psychology, testing
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: A rapid test suite means your developers can play with the codebase. This is a good thing.
+
+* The value of a rapid test suite
+** Developers and codebases
+The bare minimum required of a developer is "make this change without breaking anything else in the code", and if you've been around software development for any period of time, you know that's harder than it seems.
+
+Most of the time that a developer spends on any given codebase is spent on an existing codebase, adding new features on top of existing code.
+The understanding of the core domain and/or the early code remains mostly intellectual and abstract, not based on really reading and understanding the code.
+
+This happens mainly for one important reason: *the cost in time and energy to understanding that code is usually high, and the return on investment is usually nebulous*.
+
+The cost to understanding is high because the tools one can use to gain the understanding tend to be onerous. The code is rarely as readable as it could be, and choices made in organizing code means there are levels of indirection to juggle in one's head.
+
+A developer will dive into that code when needed, which usually means "when a bug is found", or sometimes "when something is missing".
+** Learning as a fundamental skill
+A developer's work is really thought work. The code is just a means to an end. And code needs to be changeable, otherwise it gets in the way of the thought work.
+
+#+BEGIN_QUOTE
+“What no wife of a writer can ever understand is that a writer is working when he's staring out the window” – Burton Rascoe
+#+END_QUOTE
+
+*When you have built a test suite that runs quickly, and you trust that it is representative of the intended behavior of your system, you can go in, make any change, run the test suite, and see what breaks.*
+
+As developers, we learn for a living. We explore. We modify our neural pathways. This is intensive work. When we learn a new language, a new library, or a new tool, there is a very simple pattern that we follow: "Change one thing and see what happens". We can rely on this because we have computers, and computers are really good at doing this very quickly.
+*** TDD
+Test-Driven Design is a tool that is meant to enable that practice. Over time, you are building up hundreds of "Change one thing and see what happens". With strict, careful TDD, you build hundreds or thousands of these test cases, letting you build confidence that your system is working as intended. There are many, many principles, guidelines and rules of thumbs to help write effective tests, just like there are many tools and techniques. Books have been written and holy wars have been fought, so I will not dive into this particular topic.
+*** Caring for the test suite
+With careful pruning and nurturing of the test suite, and making sure that only the elements under test are being used, one can build a test suite that runs very quickly.
+How often do you *actually* have to test that logging in works? Most teams I've seen test that logging in works with every single browser-level test they have.
+How often do you *actually* have to save something to the database? If you have an abstraction on top of your storage layer, the answer might be "never".
+** Playing
+A rapid test suite makes changing the codebase accessible. It can transform exploration into play. It encourages "What ifs", and "I wonder". It enables "Eureka!" moments.
+
+It transforms painstaking exploration into play. Playing is a very effective way to learn. /This behavioral change is critical/. Doing a Google search for "learning play study adults" yields [[http://www.helpguide.org/articles/emotional-health/benefits-of-play-for-adults.htm][many]] [[http://www.npr.org/sections/ed/2014/08/06/336360521/play-doesnt-end-with-childhood-why-adults-need-recess-too][results]].
+** Stress
+It turns out stress [[http://the-programmers-stone.com/about/neuroscience/][lowers cognitive flexibility]]. Given the [[http://the-programmers-stone.com/about/implications-for-software-engineers/]["puzzle nature"]] of programming, one may conclude that keeping the stress level low around the engineers is simply a sound business decision. That developers play is a known trope.
+
+#+caption:When it comes to known tropes, who better than XKCD?
+[[file:/images/xkcd-compiling.png]]
+
+** It all starts with play
+When your team can literally play with the codebase, you might be surprised at what other behavioral changes will take place. Learning something new? Spiking new behavior? Making sweeping changes? Nothing is impossible.

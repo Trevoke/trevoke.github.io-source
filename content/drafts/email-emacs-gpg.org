@@ -1,0 +1,57 @@
+#+TITLE:       Email in emacs: offlineimap, notmuch, smtpmulti, gpg, keybase
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-03-01T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/email-in-emacs-offlineimap,-notmuch,-smtpmulti,-gpg,-keybase
+#+KEYWORDS:    keybase, gpg, emacs, email, notmuch, offlineimap
+#+TAGS:        emacs, gpg, email, notmuch
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: How I brought my email into emacs and remembered how email is supposed to work
+#+DRAFT: true
+
+* Introduction
+I drank the Google kool-aid years ago. I love it. Occasionally, however, I'm reminded that a lot of the new public-facing work is done by engineers, and rarely is there any input from designers or UX folks — or so it seems. If I've just accidentally insulted someone at Google, my apologies, folks.
+
+Email is one such example. I used Google Inbox for a while and it was great, except it wasn't. It introduced a lag around email. I thought I'd be OK with it, but it grated me. I had instantaneous access to new mail, as long as I didn't mind waiting for the user interface.
+* Why not emacs?
+I've been using emacs for a while now and I really like moving more of my workflow to it as I go. So I thought, I'll just add email to emacs, how hard can it be?
+* The emacs / email ecosystem
+There's a lot of tools in emacs to handle mail. Here's a non-exhaustive list:
+- rmail
+- gnus
+- wanderlust
+- mew
+- mu4e
+- notmuch
+
+After looking into all of these, Ι had to adjust my thinking.
+
+The main constraint is that emacs is still essentially single-threaded, even though there are now libraries like [[https://github.com/jwiegley/emacs-async][emacs-async]] out there. This means heavy work like connecting to a mail server to retrieve mail, or maybe even sending mail, might be things I don't want emacs to do.
+
+So I remembered that POP and IMAP are the two main ways of connecting to a mail server, and you choose between doing the work remotely or copying the messages locally.
+
+And then I realized that if I kept local mail files, then I could link to them from org-mode. And then my mind exploded.
+
+* The flow
+In the end, Ι used the following tools:
+| Part of the flow | Tool name                  |
+|------------------+----------------------------|
+| retrieve email   | offlineimap                |
+| index email      | notmuch                    |
+| read email       | notmuch client on emacs    |
+| write email      | notmuch client on emacs    |
+| send email       | smtpmulti library on emacs |
+
+* Offlineimap and notmuch indexing
+http://chrisdone.com/posts/emacs-mail
+
+For multiple email accounts, use e.g. =~/Mail/home= and =~/Mail/work= in offlineimap and set notmuch to index =~/Mail= .
+
+Also remember to set alternate email addresses in the notmuch config file; they'll be useful if you want to use alternate =From= fields when writing emails
+* Reading email
+There are two clients for notmuch, one is called =nm= and the other one is called =notmuch=. I'm currently using =notmuch=
+* Sending email
+smtpmail-multi lets you send through multiple SMTP servers.
+
+http://emacs.stackexchange.com/a/12932/61

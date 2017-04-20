@@ -1,0 +1,28 @@
+#+TITLE:       QA in Agile
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-04-03T00:00:00-05:00
+#+DRAFT: true
+
+The approach to “agile” is generally an effort to blend in the efforts of the various teams, to incorporate feedback on decisions quickly
+
+(and to quickly get feedback on whatever was released, but that is out of scope, I think)
+
+So, anything that allows an org to remove one of those gates is probably a good thing (note: “firing all QA people” does not remove the gate, it just hides it)
+
+So, a proactive QA role is one that gets to be a part of the decisions, and gets to do their work alongside others.
+
+One of the defining skills of QA is, I believe, “edge-case thinking”, and their fundamental role is “finding defects". This is the basis for the following paragraphs. If you disagree, please separate that disagreement from the rest of the words, which are an example. The following activities aren’t all required, but they are example of how QA can be integrated with the rest of the team to make sure the idea of a gated process dies.
+
+Product and QA sit together to discuss the tests on existing / upcoming work as well as acceptance criteria on stories. The QA person might want it perfect and the Product person might want it shipped, so there’s an opportunity to resolve the tension of “good enough”.
+QA sits with UX on design sessions and user interview sessions to learn how users think and figure out what gaps in awareness might exist.
+Devs and QA sit together to discuss the tests on the current, past and upcoming stories, as well as automated testing frameworks, as well as to help track down defects that get released and discovered after the fact.
+QA talks to legal and financial (and other relevant teams) to figure out what underlying needs there might be, or what edge cases there might be that Product didn’t think about, etc.
+QA sits as part of the team in the retrospective to bring their perspective on how we did and what we can do better.
+
+The team should sit with QA occasionally/regularly to understand what exploratory testing means and the rudimentary skills necessary for it.
+
+Any QA-specific tools should at least be a part of the awareness of any team member (some proficiency, at least by devs, would be nice).
+
+In the micro, a story probably can’t be marked as “done done” until QA has accepted the work. The absolute easiest thing to do in that case is for QA to pair with a dev and have a list of unit / acceptance behaviors that should be fulfilled.
+What’s that you say? What if they find a bug in their obligatory round of exploratory testing? Well, don’t tell me QA is doing this round of exploratory testing by themselves… Are they? QA should also have been a part of the conversation with Product where the decision is made of what kind of defect is acceptable for this story and what kind of defect is a show-stopper.

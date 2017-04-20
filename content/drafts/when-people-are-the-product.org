@@ -1,0 +1,19 @@
+#+TITLE:       When people are the product
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2015-01-24T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/when-people-are-the-product
+#+KEYWORDS:    antipattern, high-level
+#+TAGS:        company
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: What it means that the company does not care about its people
+#+DRAFT: true
+
+* Maker vs Manager
+** Difference in schedule
+** What happens when the difference is very large
+** Lack of empathy for difficulty of maker job
+* Company structure: people... Or product?
+** People
+** Product

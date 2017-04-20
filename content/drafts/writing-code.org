@@ -1,0 +1,68 @@
+#+TITLE:       Writing code (working title)
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-04-03T00:00:00-05:00
+#+DRAFT: true
+
+One of the things that we’re arguing about, I believe, can be summed up to this point:
+
+> We still have no idea how to explain to people, in a way that is learnable, what their responsibilities as professional software writers are
+
+There are the software engineers who argue about what THEY want the code to look like because that is how THEY like it. I’d like to place to the side all such situations for now, as they are human behavioral flaws and cannot be fixed within the system of how to teach people what their responsibilities as software writers are.
+
+[1:17]
+I believe the following:
+
+1. If you write code for your own satisfaction, no one gets to tell you what it should look like
+2. If you write code and you want other people to use the resulting tool, it should *work*
+3. If you write code and you want other people to help you with the codebase, it should be *accessible*
+4. If you write code professionally, the code should be suited to the needs of the company
+
+If this is acceptable, I believe that it is responsible to infer that
+
+> the responsibility of a software writer is to maintain a codebase that is suited to the needs of the company
+
+[1:22]
+And from that perspective, I think it’s obvious that OO, FP, dynamically typed, statically typed, Actor model, lambda calculus, Clojure, Scala, Lisp, Ruby, Go, SRP, DRY, YAGNI are a bunch of bullshit. None of them actually help you write code that is suited to the needs of the company. Because they’re all about just the code.
+
+(I have a footnote here that leads to the part where I disagree with what I just wrote and it begins with “But what if we zoomed out?” but that’s not where I’m going so I’m skipping it)
+
+
+So, maybe we can start by defining the needs of the company. This is horrifyingly high-level and I apologize for it, but I think we might be able to zoom down to the part where we discuss good practices (or at least “code things”) fairly quickly.
+
+(you have no idea how much I hate myself for bringing money into this)
+
+A company needs to stay afloat, at the bare minimum. Software generally is written to help with that. I’m not going to try to get into the numbers, because that would seriously derail us.
+
+But, that means that we can rewrite this as:
+
+> the responsibility of a software writer is to maintain a codebase that is suited to the needs of the company
+> the company needs to stay afloat
+> the codebase needs to help the company stay afloat
+
+From there, the only thing that matters *at all* is how well the software does that. Anything else is a bonus.
+
+In other words, if you write the code once and it’s untested, it’s a single function of ten thousand lines, it took you three days, and people use it to do what they need to for ten years, and no one complains, and you never have to touch it again, you have successfully maintained a codebase that is suited to the needs of the company.
+
+This is probably one of the best-case scenarios as far as a company is concerned.
+
+Most of us live in a world where the software is modified regularly. I will not get into whether or not that is the *correct* decision for the company to make. We will for now assume that regularly modified software is what the company needs.
+
+There are various reasons (financial, psychological, etc etc) for why the work should be done with a deadline.
+So this is responsibility number 1. *When you maintain a codebase, you should be able to finish a set of work within a reasonable amount of time.*
+
+Finishing generally means that it is appropriate to the company, and that means that depending on the company’s needs, when you maintain a codebase, there are contracts that you shouldn’t break (e.g. performance metrics, error rate, state maintenance). Since this is highly dependent on the company, it’s very obvious that almost no advice on how to write code will make sense from one company to the next.
+
+
+So, here is my perspective on things like SOLID, DRY and YAGNI.
+
+1. They *cannot* be used like laws
+2. They *are* used like laws
+3. This is *bad*
+4. Their original intent was to distill complex wisdom into short sentences
+5. In other words, you have to be able to unpack the wisdom
+6. This is impossible if you can’t figure it out yourself
+7. See 1
+8. Okay, so what next?
+9. Well, we can use them as starting point to find better ways to teach
+10. Seriously. They do teach important ideas.

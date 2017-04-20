@@ -1,0 +1,42 @@
+#+TITLE:       The value of estimates for a team
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2015-04-02T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/the-value-of-estimates-for-a-team
+#+KEYWORDS:    agile, estimation
+#+TAGS:        agile, estimation
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: How estimating is a valuable practice for teams
+
+* What this entry is and is not about
+This entry talks about estimates in a relatively perfect world. This entry does /not/ talk about problems that teams run into when dealing with estimates in a world where estimates are often misunderstood and where parties try to pile up additional meanings and metrics to estimates.
+* Why talk about estimating at all
+Estimating work to be done before it is done. Great if you know what the work is. Software development teams often have no idea what the work really will be until they do it. Give a sculptor a block of wood and they'll have to work carefully, as they uncover the imperfections within the wood. How long will it take to reveal a bust of Artemis drawing an arrow? The sculptor doesn't really know beforehand.
+
+Yet, there is value in having a way to know at a grander scale how much work can be accomplished. Evaluating this allows us to discuss how much work can be done before a given deadline, as well as the overall health of the team (through *changes to this measurement over time*).
+* What is an estimate
+An estimate is a representation of the team's understanding of the complexity of the work required to accomplish a desired feature. Since it is done with imperfect knowledge, it will be wrong. That is why it is called an estimate.
+
+In order to separate the idea of estimate from the idea of "how long this work will take", the estimate is not given in units of time (e.g. an hour, a day, two weeks...). Since the idea of an estimate is to represent complexity, time does not map well. Some teams use t-shirt sizes (S, M, L, XL), some teams use the Fibonacci series (1, 2, 3, 5, ...). Each unit of work would then be given such a "size".
+
+An estimate can be understood, then, as a completely wrong and overall meaningless number. So why is this a good idea?
+* Estimates over time
+** The velocity
+When you have time boundaries (note: kanban users, this is your red flag), you can stack up the value of the estimates of the units of work accomplished over that period of time and get a number called *velocity*. The velocity tells you how much complexity of work the team has gone through in a given period of time. Remember: this is all based on a number which we know to be wrong and meaningless, by definition.
+
+So far, this all sounds like a load of hard work for no reason at all. So why is this a good idea?
+** Attaining self-consistency
+Over time, a team which is allowed to generate its own estimates based on the units of work they receive will gravitate towards a self-consistent system. This means that units of work will be understood to relate to each other based on complexity (e.g. "Remember when we did X? This is the same kind of work, isn't it?")
+
+Over time, this means that velocity will also become consistent. It will become a wrong and meaningless number created from other wrong and meaningless numbers. However, at this point in time, the team has something it did not have before: self-consistency. The numbers will be wrong in the same way.
+* The value of self-consistent estimates
+I have worked on teams where the velocity was 4 and teams where the velocity was 78. This means that over time, the stable number obtained based on accomplished work complexity during a unit of time turned out to *predictably* be this number. This says /nothing/ about "how fast" or "how slow" the team got work done. It does mean that after estimating a new feature, the team could then have a conversation about the translation of that number to the unit of time.
+
+| Team velocity | Estimate for new feature | Reasonable estimated time to completion |
+|            78 |                       12 | 1/6                                     |
+|             4 |                       12 | 3                                       |
+
+This can then lead to discussing scope. In the first case, that feature translates to a relatively short amount of time. In the second case, it is a choice that will have significant impact (no other work can happen during three units of time).
+* How estimates fit in the team's process ecosystem
+Estimates will always be wrong; that's why they're called estimates. As long as the team is allowed to estimate the work without external pressures, the team will eventually gravitate towards a self-consistent system of estimates. This means that while all estimates are always going to be wrong, they will be right *relative to each other* and that is the only thing that matters. The velocity, built on top of this self-consistent system, is also a number which only makes sense in the system within which it was built, but which allows nonetheless effective conversations to happen and valuable data to be gathered.

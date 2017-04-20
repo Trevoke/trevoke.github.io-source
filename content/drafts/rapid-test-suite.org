@@ -1,0 +1,41 @@
+#+TITLE:       A rapid test suite: a tool to keep the pressure low
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-04-26T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/a-rapid-test-suite-a-tool-to-keep-the-pressure-low
+#+KEYWORDS:    test suite, testing, tdd, pressure, stress, team
+#+TAGS:        tdd
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Keep your test suite snappy
+#+DRAFT: true
+
+* A rapid test suite means refactoring is psychologically easier to entertain as an idea.
+
+And by rapid, I mean the full build runs in under a minute.
+
+Many of the devs I've worked with don't have the resilience of a plumber. That is, they're not happily willing to dive into the bowels of an application, apply or relieve pressure somewhere, and follow the pipes all the way to the leaks. They're also generally not very willing to dive into the bowels of an application, follow all the pipes, and develop an empirical understanding of what is actually happening.
+
+And this is mainly for one important psychological reason: *the cost in time and energy to understanding the plumbing is high, and the return on investment is nebulous*.
+
+There are other reasons, of course, but the psychological reason is the one I've seen hit teams and individuals time and time again. Many folks would love to be James Cook or Fanny Bullock Workman, but in practice it can prove too demanding. There's a reason we know these folks by name: very few people like that exist.
+
+The cost to understanding is high because the tools one can use to gain the understanding tend to be onerous.
+
+In practice, the bare minimum required of a developer is "make this change without breaking anything else in the code", and if you've seen your team's defect rate, you know that's harder than it seems. It's also reducing a developer to significantly less than the value they could provide (that's another topic).
+
+As developers, we learn for a living. We explore. We modify our neural pathways. This is intensive work. When we learn a new language, a new library, or a new tool, there is a very simple pattern that we follow: "Change one thing and see what happens". We can rely on this because we have computers, and computers are really good at doing this very quickly.
+
+In fact, Test-Driven Design is a tool that is meant to enable that practice. Over time, you are building up hundreds of "Change one thing and see what happens". With strict, careful TDD, you build hundreds or thousands of these test cases, letting you build confidence that your system is working as intended. There are many, many principles, guidelines and rules of thumbs to help write effective tests, just like there are many tools and techniques. Books have been written and holy wars have been fought. This is another topic.
+
+With careful pruning and nurturing of the test suite, and making sure that only the elements under test are being used, one can build a test suite that runs very quickly (how often do you *actually* have to test that logging in works? Most teams I've seen test that login works with every single browser-level test they have).
+
+A developer's work is really thought work. The code is just a means to an end. And code needs to be changeable, otherwise it gets in the way of the thought work.
+
+*When you have built a test suite that runs quickly, and you trust that it is representative of the intended behavior of your system, you can go in, make any change, run the test suite, and see what breaks.*
+
+A rapid test suite enables accessible change.
+
+This behavioral change is critical. It transforms painstaking exploration into play. Playing is a very effective way to learn.
+
+When your team can literally play with the codebase, you might be surprised at what other behavioral changes will take place. Learning something new? Spiking new behavior? Making sweeping changes? Nothing is impossible. It is just a matter of tradeoffs.
