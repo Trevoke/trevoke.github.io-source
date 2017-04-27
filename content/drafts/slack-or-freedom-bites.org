@@ -21,4 +21,6 @@ Slack is so damn convenient that people forget it's a communication tool.
 [[./jggift.jpg]]
 * How it's been done before: IRC
 
+* How it's been done before: MUDs
+
 * Discipline? We don't need no stinkin'… Oh, wait.
