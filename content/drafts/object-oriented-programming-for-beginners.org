@@ -1,0 +1,7 @@
+1. No object should have more than three public methods (getters and setters count)
+2. Everything else must be private
+3. If three private methods are doing something similar, then maybe those are the public methods of another class
+4. Never inherit
+5. Always compose
+6. Changeability is the most important thing
+7. If you don’t use good variable names, I will look for you. I will find you. And I will kill you.
