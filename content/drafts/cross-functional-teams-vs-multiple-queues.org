@@ -1,0 +1,36 @@
+I operate under what we will call an axiom here, which is "a colocated cross-functional team is the most efficient kind of team". 
+Colocated simply means "all in the same spot", which ideally means "in the same work environment", so .. As close as possible to "at the same table".
+Cross-functional means "having in-team experts (or highly proficient people) for each level of the vertical stack that we're working with".
+
+
+The assumption here is that we want a low overhead.
+
+
+From this perspective, what we are looking for is not "a platform team" or "an ops team" but something more like "a delivery team that has a member who's an expert in platform things and a member who's an expert in ops".
+
+
+Of course, very quickly we'll discover that this means that ten teams means ten ops and ten platform people, and that's a lot. And also how on earth do these people coordinate their efforts?
+
+
+The traditional answer is to create a team with this single horizontal constraint and route all teams' requests to this new horizontal team.
+
+
+There are two significant problems with this traditional answer. 
+
+
+The first problem is that all teams now need to plan for the lead time of sending a request to a new team because, well, all teams are sending requests to this new team. This is what I was referring to earlier - In our example, the data pod's queued work now depends on the request making it to the top of the ops team's backlog of work and being done. 
+
+
+The second problem is that the team now gets to build a particular system / infrastructure to handle its own problems and help grow the company, and this knowledge becomes entirely siloed to the team, which means that external teams become more and more dependent on this single team existing because they simply CANNOT do the work without that team anymore.
+
+
+The more modern answer is the one that is used at Spotify, the one outlined in Johanna Rothman's "Agile and Lean Program Management" ( https://pragprog.com/book/d-jrlean/agile-and-lean-program-management ), and the one we have started to use quite recently here, the "guild" -- case in point the brand-new Device Graph Guild.
+
+
+In this way of organizing, each team is able to maintain its vertical stack of knowledge and do its own work independently, and each expert is able to synchronize, plan for and retrospect around the infrastructure required for the expertise by chatting with the experts in other teams.
+
+
+The work is still done in each of the vertical teams, within the single queue of work for each team, reducing the delay to delivery.
+
+
+This is not *easy*, mind you. It just leads to better spread of knowledge and less delayed work. It does require constant vigilance and awareness.
