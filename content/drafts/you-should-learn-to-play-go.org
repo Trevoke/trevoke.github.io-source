@@ -1,0 +1,3 @@
+Want to deliver value? Want to write changeable code?
+
+Learn to play Go, and learn the skills of: tradeoffs, opportunity costs, decision making, incomplete information (you don't know the other person's plan or how they'll respond).
