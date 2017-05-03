@@ -1,0 +1,14 @@
+#+TITLE:       Performance
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2017-05-03T00:00:00-05:00
+#+DRAFT: true
+
+I agree with the general thought, but... I'm not sure you can always automate something on which you can put a metric. That's the goal, certainly, but you have to get there.
+This is sort of a continuation of the conversation we started on Twitter about performance: you have to get there.
+
+Performance doesn't matter until it does; then you have to benchmark, find bottleneck, resolve bottleneck, rinse & repeat until performance is no longer a problem... And wait until it is a problem again.
+
+This is true even if you have a performance requirement from the get-go. I saw recently an email client that touts a 100ms response time to all actions. That's a fairly steep requirement.
+And probably it means that there are performance tests that they run very regularly, and it also probably means that they are building a system in which tradeoffs are made for performance reasons.
+I currently still hold the position that first you should build it, then you should stress it, and when it's not good enough you should benchmark, find bottleneck, resolve bottleneck, rinse & repeat until performance is no longer a problem.
