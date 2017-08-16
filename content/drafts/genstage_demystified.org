@@ -1,0 +1,122 @@
+* GenStage demystified
+GenStage is a sort of miracle of UX for developers. The problem is, developers aren't used to it, so they're looking for the trick. Let's go over what GenStage is for, from which perspective to look at it, and see just how simple it is to start using it.
+** Why would you use GenStage?
+GenStage is what you would use if you had "some work" (=events=) that needed to go through one more transformations, which you could easily split into multiple parallelizable steps.
+In the world of GenStage, the =producer= is what will hold the =events= that the =consumers= will then work on.
+** How to think about GenStage
+There is only one trick to understand fundamentally how GenStage works. Every other little fact derives from this principle. Here it is.
+
+#+BEGIN_QUOTE
+Consumers request events from producers. The producers' only job is to feed the consumer when it is hungry. Consumer not hungry? No feeding.
+#+END_QUOTE
+
+in GenStage terms, every time we hit a callback, we should check the demand and make sure we produce enough to match that demand.
+** Let's start using GenStage
+If you're familiar with Elixir, you know how to create a toy project and how to add gen_stage to your dependencies.
+
+I'm not going to cover everything about GenStage here - once you've read this blog entry, you'll be able to read the documentation ( https://hexdocs.pm/gen_stage/GenStage.html ) and know which bits go where, without the shadow of a doubt.
+
+The first thing that we need to consider is the source of the events. It could be anything, such as a stream. To make the example perfectly clear and self-contained, we're going to use a simple list that we'll put in the producer's state.
+
+Here's the code for the producer. Consider that this is only responsible for fulfilling demand. You'll find that in every single callback, whether a cast, a call, or the demand callback, we have to "return events to be produced", so at least for us here it's easier to have a single function that creates our new state as well as the events to return.
+
+This might not be the implementation you want in your code. The GenStage documentation has a slightly more streamlined version of this that always returns =:noreply=, at the cost of a slightly more complex =handle_call= behavior.
+
+#+BEGIN_SRC elixir
+defmodule Producer do
+  use GenStage
+
+  def start_link() do
+    GenStage.start_link(__MODULE__, %{})
+  end
+
+  def init(state) do
+    new_state =
+      state
+      |> Map.put(:events, [])
+      |> Map.put(:demand, 0)
+
+    {:producer, new_state}
+  end
+
+  def handle_cast({:add_events, events}, state) do
+    new_events = state.events ++ events
+    state = Map.put(state, :events, new_events)
+    {events_to_produce, new_state} = prepare_return_values(state.demand, state)
+    {:noreply, events_to_produce, new_state}
+  end
+
+  def handle_call(:queue_size, _from, state) do
+    {events_to_produce, new_state} = prepare_return_values(state.demand, state)
+    {:reply, length(new_state.events), events_to_produce, new_state}
+  end
+
+  def handle_demand(demand, state) when demand > 0 do
+    total_demand = demand + state.demand
+    {events_to_produce, new_state} = prepare_return_values(total_demand, state)
+    {:noreply, events_to_produce, new_state}
+  end
+
+  defp prepare_return_values(demand, state) do
+    {events_to_produce, events_left} = Enum.split(state.events, demand)
+    remaining_demand = demand - length(events_to_produce)
+    new_state =
+      state
+      |> Map.put(:events, events_left)
+      |> Map.put(:demand, remaining_demand)
+    {events_to_produce, new_state}
+  end
+end
+#+END_SRC
+
+There's not much to walk through here, really. We need to pull events from the source, and we need to keep track of unfulfilled demand. It's almost horribly straightforward.
+
+And now let's take a look at what a consumer might look like:
+
+#+BEGIN_SRC elixir
+defmodule Consumer do
+  use GenStage
+
+  def start_link() do
+    GenStage.start_link(__MODULE__, :ok)
+  end
+
+  def init(:ok) do
+    {:consumer, :a_slight_abstraction_leak_here_requires_us_to_return_something}
+  end
+
+  def handle_events(events, _from, state) do
+    # Your code goes here.
+    IO.puts "consumer #{inspect self()} got #{Enum.join(events, ", ")}"
+    Process.sleep(1000)
+    # We are a consumer, so we would never emit items.
+    {:noreply, [], state}
+  end
+end
+#+END_SRC
+
+The consumer is quite simple, isn't it. In the =handle_events= callback, we do the work. Here we artifially sleep to slow it down, and we print out the events we received to get a sense of what each consumer is doing.
+
+So... Wait. Are we done?
+
+#+BEGIN_SRC elixir
+{:ok, p_pid} = Producer.start_link()
+{:ok, c_pid} = Consumer.start_link()
+GenStage.sync_subscribe(c_pid, to: p_pid)
+#+END_SRC
+
+Well, we're clearly in a state where the consumers have asked for events and we couldn't fulfill. Let's give the producer some things to produce.
+
+#+BEGIN_SRC elixir
+GenStage.cast(p_pid, {:add_events, Enum.to_list(1..1000})
+#+END_SRC
+
+
+Well would you look at that. Yes, I'd say we're done. Isn't it beautiful?
+
+What you've just read is the fundamentals of GenStage - it's what I wish I'd read when I started. Summary:
+
+- The consumer asks for events
+- The producer keeps track of the amount of requested events
+- The producer pulls events from the source until demand hits zero or until there's no more events to pull, then waits.
+- The consumer gets whatever the producer is able to send back, and then does hopefully meaningful work.
