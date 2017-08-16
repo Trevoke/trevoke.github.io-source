@@ -1,7 +1,7 @@
 * GenStage demystified
 GenStage is a sort of miracle of UX for developers. The problem is, developers aren't used to it, so they're looking for the trick. Let's go over what GenStage is for, from which perspective to look at it, and see just how simple it is to start using it.
 ** Why would you use GenStage?
-GenStage is what you would use if you had "some work" (=events=) that needed to go through one more transformations, which you could easily split into multiple parallelizable steps.
+GenStage is what you would use if you had "some work" (=events=) that needed to go through one or more transformations, which you could easily split into multiple parallelizable steps.
 In the world of GenStage, the =producer= is what will hold the =events= that the =consumers= will then work on.
 ** How to think about GenStage
 There is only one trick to understand fundamentally how GenStage works. Every other little fact derives from this principle. Here it is.
