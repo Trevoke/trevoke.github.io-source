@@ -10,15 +10,47 @@ There is only one trick to understand fundamentally how GenStage works. Every ot
 Consumers request events from producers. The producers' only job is to feed the consumer when it is hungry. Consumer not hungry? No feeding.
 #+END_QUOTE
 
-in GenStage terms, every time we hit a callback, we should check the demand and make sure we produce enough to match that demand.
-** Let's start using GenStage
-If you're familiar with Elixir, you know how to create a toy project and how to add gen_stage to your dependencies.
+This means that there is a natural backpressure mechanism built into GenStage: work is not pushed to the workers, the workers pull when they are ready for more work.
 
+In GenStage terms, the only complexity is that /every callback should check the demand/ and make sure we produce enough to match that demand. Thankfully, this is always the same work, so it can be extracted to a function.
+** Let's start using GenStage
+*** First, a test project
+=mix new genstage_test=
+=cd genstage_test=
+Edit your mix.exs file and make sure your =deps= look like this:
+
+#+BEGIN_SRC elixir
+  defp deps do
+    [
+      {:gen_stage, "~> 0.12.1"}
+    ]
+#+END_SRC
+
+=mix deps.get=
+*** Now, GenStage
 I'm not going to cover everything about GenStage here - once you've read this blog entry, you'll be able to read the documentation ( https://hexdocs.pm/gen_stage/GenStage.html ) and know which bits go where, without the shadow of a doubt.
 
-The first thing that we need to consider is the source of the events. It could be anything, such as a stream. To make the example perfectly clear and self-contained, we're going to use a simple list that we'll put in the producer's state.
+GenStage is basically broken down into three kinds of processes: =producer=, =producer-consumer=, and =consumer=. A producer will hold the events that will be requested by consumers, and obviously a producer-consumer will request events from a producer and then be able to produce events, which means you can create a chain of transformations very easily.
 
-Here's the code for the producer. Consider that this is only responsible for fulfilling demand. You'll find that in every single callback, whether a cast, a call, or the demand callback, we have to "return events to be produced", so at least for us here it's easier to have a single function that creates our new state as well as the events to return.
+For our example, let us say the "events" will be incoming geolocations in the form of latitude/longitude pairs, that we will need to transform them into the name of the closest city, and then count the number of times a city was found. Let's say each "event" will be of the form ={latitude, longitude}= (e.g. ={42, -72}=)
+
+This seems like it could be represented by a producer, a producer-consumer, and then a consumer! How wonderfully coincidental.
+
+The first thing that we need to consider is the source of the events. It could be anything, such as a =Stream=, or a directory on the filesystem, or a database table. As long as the producer can query it to figure out what to produce, we're fine. To make the example perfectly clear and self-contained, we're going to use a simple list that we'll put in the producer's state.
+
+First, let's write a mock geolocation service:
+
+#+BEGIN_SRC elixir
+defmodule Geolocation do
+  @cities ["New York", "Constantinople", "Istanbul", "Paris", "London"]
+  def call({_lat, _long}) do
+    :timer.sleep(500) # This is a complex operation.
+    Enum.random(@cities)
+  end
+end
+#+END_SRC
+
+Here's the code for the producer. Remember that this is only responsible for fulfilling demand. You'll see what I mentioned earlier: in every single callback, whether a cast, a call, or the demand callback, we have to "return events to be produced", so at least for us here it's easier to have a single function that creates our new state as well as the events to return.
 
 This might not be the implementation you want in your code. The GenStage documentation has a slightly more streamlined version of this that always returns =:noreply=, at the cost of a slightly more complex =handle_call= behavior.
 
@@ -33,86 +65,115 @@ defmodule Producer do
   def init(state) do
     new_state =
       state
-      |> Map.put(:events, [])
+      |> Map.put(:geolocations, [])
       |> Map.put(:demand, 0)
 
     {:producer, new_state}
   end
 
-  def handle_cast({:add_events, events}, state) do
-    new_events = state.events ++ events
-    state = Map.put(state, :events, new_events)
-    {events_to_produce, new_state} = prepare_return_values(state.demand, state)
-    {:noreply, events_to_produce, new_state}
+  def handle_cast({:add_geolocations, geolocations}, state) do
+    new_geolocations = state.geolocations ++ geolocations
+    state = Map.put(state, :geolocations, new_geolocations)
+    {geolocations_to_produce, new_state} = prepare_return_values(state.demand, state)
+    {:noreply, geolocations_to_produce, new_state}
   end
 
   def handle_call(:queue_size, _from, state) do
-    {events_to_produce, new_state} = prepare_return_values(state.demand, state)
-    {:reply, length(new_state.events), events_to_produce, new_state}
+    {geolocations_to_produce, new_state} = prepare_return_values(state.demand, state)
+    {:reply, length(new_state.geolocations), geolocations_to_produce, new_state}
   end
 
   def handle_demand(demand, state) when demand > 0 do
     total_demand = demand + state.demand
-    {events_to_produce, new_state} = prepare_return_values(total_demand, state)
-    {:noreply, events_to_produce, new_state}
+    {geolocations_to_produce, new_state} = prepare_return_values(total_demand, state)
+    {:noreply, geolocations_to_produce, new_state}
   end
 
   defp prepare_return_values(demand, state) do
-    {events_to_produce, events_left} = Enum.split(state.events, demand)
-    remaining_demand = demand - length(events_to_produce)
+    {geolocations_to_produce, geolocations_left} = Enum.split(state.geolocations, demand)
+    remaining_demand = demand - length(geolocations_to_produce)
     new_state =
       state
-      |> Map.put(:events, events_left)
+      |> Map.put(:geolocations, geolocations_left)
       |> Map.put(:demand, remaining_demand)
-    {events_to_produce, new_state}
+    {geolocations_to_produce, new_state}
   end
 end
 #+END_SRC
 
-There's not much to walk through here, really. We need to pull events from the source, and we need to keep track of unfulfilled demand. It's almost horribly straightforward.
+The state needs to keep track of the unfulfilled demand, because when we receive events, we have to be able to produce them and backfill demand - not just wait for the next time we get a request for events. That's what the =:demand= key is for.
 
-And now let's take a look at what a consumer might look like:
+For painfully didactic reasons, I have a =handle_cast= and a =handle_call=, to show you that their return tuple behaves the same was as the =handle_demand='s return tuple. We =cast= to add to the queue because we don't care about the reply (maybe we should, but I'm a bad person), but we do care about knowing the size of the queue, maybe so we can add more consumers, so we use a =call= for that.
+
+Now let's take a look at the next step in the chain: taking the geolocations and converting them to cities.
 
 #+BEGIN_SRC elixir
-defmodule Consumer do
-  use GenStage
+  defmodule ProducerConsumer do
+    use GenStage
 
-  def start_link() do
-    GenStage.start_link(__MODULE__, :ok)
-  end
+    def start_link, do: GenStage.start_link(__MODULE__, %{})
 
-  def init(:ok) do
-    {:consumer, :a_slight_abstraction_leak_here_requires_us_to_return_something}
-  end
+    def init(state) do
+      {:producer_consumer, state}
+    end
 
-  def handle_events(events, _from, state) do
-    # Your code goes here.
-    IO.puts "consumer #{inspect self()} got #{Enum.join(events, ", ")}"
-    Process.sleep(1000)
-    # We are a consumer, so we would never emit items.
-    {:noreply, [], state}
+    def handle_events(geolocations, _from, state) do
+      IO.inspect geolocations
+      cities = Enum.map(geolocations, &Geolocation.call/1)
+      {:noreply, cities, state}
+    end
   end
-end
+#+END_SRC
+
+And now let's take a look at the code for the final stage, counting the cities:
+
+#+BEGIN_SRC elixir
+  defmodule Consumer do
+    use GenStage
+
+    def start_link() do
+      GenStage.start_link(__MODULE__, :ok)
+    end
+
+    def init(:ok) do
+      # A slight abstraction leak here requires us to return something as the state
+      {:consumer, :ok}
+    end
+
+    def handle_events(cities, _from, state) do
+      aggregated_cities = Enum.reduce(
+        cities,
+        %{},
+        fn(city, acc) -> Map.update(acc, city, 1, &(&1 + 1)) end
+      )
+      IO.inspect aggregated_cities
+      # A slight abstraction leak here requires us to return an empty list
+      {:noreply, [], state}
+    end
+  end
 #+END_SRC
 
 The consumer is quite simple, isn't it. In the =handle_events= callback, we do the work. Here we artifially sleep to slow it down, and we print out the events we received to get a sense of what each consumer is doing.
 
-So... Wait. Are we done?
+So... Wait. Are we done? Let's try it. =iex -S mix= ...
 
 #+BEGIN_SRC elixir
 {:ok, p_pid} = Producer.start_link()
+{:ok, pc_pid} = ProducerConsumer.start_link()
 {:ok, c_pid} = Consumer.start_link()
-GenStage.sync_subscribe(c_pid, to: p_pid)
+GenStage.sync_subscribe(c_pid, to: pc_pid, max_demand: 5)
+GenStage.sync_subscribe(pc_pid, to: p_pid, max_demand: 10)
 #+END_SRC
 
-Well, we're clearly in a state where the consumers have asked for events and we couldn't fulfill. Let's give the producer some things to produce.
+Well, we're clearly in a state where the consumers have asked for events and we couldn't fulfill. Let's give the producer some things to produce. They won't be real locations, but then again, our location service is fake anyway.
 
 #+BEGIN_SRC elixir
-GenStage.cast(p_pid, {:add_events, Enum.to_list(1..1000})
+locations = (1..1000) |> Enum.to_list |> Enum.map(fn(x) -> {x, x} end)
+GenStage.cast(p_pid, {:add_geolocations, locations})
 #+END_SRC
 
 
-Well would you look at that. Yes, I'd say we're done. Isn't it beautiful?
+Well would you look at that. Yes, I'd say we're done. Isn't it beautiful? ... And maybe a little surprising? Explaining the rest is beyond the scope of this introduction, unfortunately, but you should now be ready for the gen_stage documentation.
 
 What you've just read is the fundamentals of GenStage - it's what I wish I'd read when I started. Summary:
 
