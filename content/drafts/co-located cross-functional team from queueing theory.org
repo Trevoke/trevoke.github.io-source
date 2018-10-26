@@ -29,3 +29,6 @@ This allows two things:
 
 ** Communication
 Same argument here for a co-located team. If the team's not sitting together, then communication becomes another queue that makes the work harder to measure. "Oh, I asked the question on Slack, I'm waiting for an answer."
+
+* Specialized generalists
+When people have multiple skills required for the building of the product, the bus factor is reduced, and it's possible to make a list of required skills (e.g. Ruby, Javascript, testing, product management, terraform) and compare that to the skillsets the people on the team currently have. From there, you have a list of strengths and weaknesses on the team, which you can make up for by adding people with the skills, going to training, changing the work so it doesn't require the missing skills, or accepting the team will have a loss of performance and require sending its work to another queue.
