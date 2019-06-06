@@ -1,0 +1,25 @@
+#+DRAFT: t
+#+TITLE:       Continuous Improvement
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-02-04T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/continuous-improvement
+#+KEYWORDS:    continuous improvement, habits, programming
+#+TAGS:        habits, programming, continuous improvement
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Self-improvement
+#+DRAFT: t
+
+* Introduction
+So this is the story of a fairly devout man who's been going to church every Sunday for decades. One day he decides to pray to win the lottery; he figures, it can't hurt. He knows this will take a while, so every Sunday he prays to win the lottery. After five years, during prayer, he suddenly gets angry and mentally shouts at god, "Oh come on, how hard can this be, am I not deserving of this? Nothing? Nothing at all?" At that point, this booming voice comes down from the heavens and fills the church: "WHAT IF YOU BOUGHT A TICKET?"
+
+* Imperfection
+
+I don't like not being perfect. It's a pet peeve of mine. It leads to trouble.
+
+Sometimes I wear myself out too thin because, gosh-darn-it, I can do it all, sometimes I'm actively intolerant of others because I've accidentally made up some draconian standard for behavior. And sometimes, without realizing it, I slip into total and complete acceptance of my current state because I delude myself into thinking that I am good enough. And these are just a few of my flaws...
+
+On the other hand, I've fixed lots of flaws. So many of them that I don't remember what they were.
+
+This does not qualify me /ipso facto/ to talk about continuous improvement, but since I'm me, I thought I'd draw on my experiences.

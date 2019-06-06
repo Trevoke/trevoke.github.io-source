@@ -1,0 +1,143 @@
+#+DRAFT: t
+#+TITLE:       Dependency Injection
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-04-26T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/dependency-injection
+#+KEYWORDS:    testing, design patterns, dependency injection
+#+TAGS:        testing
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Dependency Injection is good. You should use it. Here's why and how.
+#+DRAFT: t
+
+Dependency injection is a tool to limit the coupling in a codebase. One of its key benefits is that you can pass any object that fulfills the required interface (in Ruby, that means you can limit the duck type to whatever the method uses) and have complete control over it for testing purposes.
+
+My favorite example of it, because it’s extremely simple to understand AND derives actual production value, is in Avdi Grimm’s Objects on Rails book (http://objectsonrails.com/#sec-8 and the couple of pages that follow it), where he passes in a stub with the limited API of =.now()= to be able to call =DateTime.now= in his code and return a controlled DateTime object. In practice, it means he passes in the =DateTime= class by default as his time provider, instead of passing in a timestamp.
+
+By just using it exactly as in that example, I’ve improved the testability and maintainability of quite a few codebases
+
+And got quite close to fully removing =timecop= sometimes. =timecop= is evil.
+
+
+
+
+
+I recommend the `Design Patterns` book. If you don’t want to burden yourself with the whole thing (it’s not exactly an entertaining read), then `Design Patterns in Ruby` has a significant subset of them using Ruby and Ruby’s stdlib where applicable. Even if it is just to say “Well, I’m ​*never*​ using the Singleton pattern” or “The Observer pattern is clearly evil” (my opinions), I believe it is a necessary read.
+
+Granted, if you’re not touching any OO code at all, that read becomes less necessary.
+
+While the patterns are abstract, their implementation, or the way I work to implement them, is related to business domain logic — otherwise, as you said, they feel empty, and the codebase benefits they provide are lessened because they’re not actively helping the developers reading the code.
+
+
+
+
+Dev work is teamwork, and design patterns, however weak, are the current best language we have for communication for those ideas. You have to write code other people can understand.
+
+
+
+
+
+Sometimes a pattern is The Right Move, and that's worth noting.
+
+As an example, I implemented Event Sourcing for a company tracking the internal currency credits they gave to customers based on refunds. Event Sourcing is how you handle that situation, and that's the end of the story (*). All information is tracked.
+
+-- (*) it's never the end of the story, but bear with me.
+
+
+
+
+
+I'll see if I can come up with examples where using DI or some other patterns actually have significant pragmatic benefits. The only one that I ​*know*​ the DI pattern yields, used properly, is the ability to keep the test suite really snappy because you don't have to use all your logic.
+
+For instance, a few years ago a friend was working on his open source project, and he told me "my tests will drive down all the way to the database". The other perspective I had, and still have today, is that with DI you could decouple. Trusting that the ORM has been tested by other people, you save a TON of time because you're not creating rows, updating rows, deleting rows, truncating tables, etc, for every single test.
+
+
+
+I would have passed an object that had the basic API I needed, matching whatever API was what I used through production (paranoia would lead to the creation of an adapter layer so that I don't bind my tests to activerecord-specific API, but that can just as easily be like shooting a fly with a cannonball), and that would have allowed my tests to remain within  the same layer of abstraction all the time.
+
+
+
+
+
+I think the whole picture is bigger than that. For instance, here's tests I've written which might benefit from using DI by allowing the tests to pass in a stub instead of ​*actually*​ creating a file during testing:
+
+https://github.com/Trevoke/SGFParser/blob/master/spec/writer_spec.rb
+
+And writing the file is necessary because my code looks like
+
+#+BEGIN_SRC ruby
+  def save(root_node, filename)
+    #TODO - accept any I/O object
+    stringify_tree_from root_node
+
+    File.open(filename, 'w') { |f| f << @sgf }
+  end
+#+END_SRC
+
+The method signature could just as easily be `def save(root_node, filename, filesystem_handler=File)` -- and that way, I wouldn't have to write to a file and then delete a file from the filesystem. (edited)
+
+A guy here just said that DI was similar to using an oscilloscope: either you're reading signals or you're injecting signals into it
+
+For procedural code, I have no idea if DI makes sense. I don't even know if they're the same world.
+
+For functional, microservices, etc., yes, DI exists and can be useful.
+
+n Elixir, since you have objects (for lack of a better word) that reference OTP apps, and since you use those to send messages, you pass those objects (generally stored as the variable `pid`, I believe) to other methods that then send messages to it. In this particular example, any other way to do it would imply so much coupling that the code would be really quite ugly.
+
+In Javascript, which has higher-order functions, you can use DI by creating a function and doing subsequent `.bind()` calls to it as you pass it around, and using `.call()` on it at the place you actually want to use it.
+
+
+
+
+
+TODO the javascript code https://gist.github.com/Trevoke/43845b019ae7a1b66454
+
+
+
+
+If you go to the database with your tests and your tests aren't database-level tests, you're by definition creating integration tests of some sort.
+That habit is the reason `Rails` apps tend to get sagging test suites and start using `CircleCI` with 26 parallellized containers (that and `factory girl` makes it too damn easy to add rows to the database).
+
+A test suite should run in under a minute. Browser-level tests are still a pain in my ass but I believe they should be included in that time.
+
+
+From this perspective I'm jumping on a high horse of pragmatism, so let me know if I should get off of it.
+
+Nothing is more important in a codebase than changeability (the right changeability).
+In fact, on the topic, one of my favorite tweets is the following one: https://twitter.com/moss/status/555148884154912769
+
+#+BEGIN_QUOTE
+Just replaced dependency injection with a shared global constant, because it'll make my code easier to change, and that trumps all else. -- Moss Collum
+#+END_QUOTE
+
+
+
+
+
+
+
+My definition of integration test is "any test which verifies that two units/components work properly together"
+
+If I could get a team of six or seven of the best devs I know, we likely could have and maintain a valuable test suite running for a complex project in about that time. It does require being critical at every step. A tool like DI becomes important. In Ruby,  this is also where you might end up with `verifying doubles`, which check that your object still has the API of the API it is doubling for.
+
+There are caveats, but for the Rails world, there are three main things which cause a Rails app's tests to become painful:
+
+1. Writing to the DB
+2. Browser-driven acceptance tests
+3. using VCR
+4. "initializing Rails takes too damn long".  https://www.destroyallsoftware.com/screencasts/catalog/fast-tests-with-and-without-rails
+
+
+And the fact that these three things take time is usually the consequence of deadlines and/or inexperience.
+
+Factories, the leading cause of DB writes, make sense when it's too damn hard to instantiate an object having the correct characteristics because the model has grown too complicated -- and that's because validations and DB relationships are part and parcel of the default model object, when they are usually completely orthogonal to what you care to test.
+
+Browser-level testing is a trickier one to solve. As I mentioned, still a pain in my ass. I have a few ideas but none I've ​*tried*​ so I won't speak to them.
+
+As far as VCR, I'd have separate tests that run once a day or so checking that the API for the external dependency still works, and the code would work against an adapter layer / stubs that are completely controlled.
+
+
+
+
+I highly recommend buying the entire catalog of screencasts, as Gary Bernhardt's Destroy All Software screencasts are all carefully polished gems.

@@ -1,0 +1,31 @@
+#+DRAFT: t
+#+TITLE:       Slack, or, Freedom Bites
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-03-10T00:00:00-05:00
+#+URI:         /blog/%y/%m/%d/slack-or-freedom-bites
+#+KEYWORDS:    slack, irc, communication
+#+TAGS:        slack, irc, communication
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: A perspective on successfully using Slack
+#+DRAFT: t
+
+* Slack: a way of life for… 2016?
+Slack. Everyone's connected, all the time. The power is at your fingertips. You can post something, and others can respond. It's great. It's better than forums.
+
+And then you realize that when you paste a link, it auto-inserts an excerpt. How convenient is that?!
+
+And then there's giphy, and the world goes to hell.
+* Problems
+Slack is so damn convenient that people forget it's a communication tool.
+[[./jggift.jpg]]
+
+Slack should not be used for feedback and getting to know people
+
+
+* How it's been done before: IRC
+
+* How it's been done before: MUDs
+
+* Discipline? We don't need no stinkin'… Oh, wait.

@@ -1,0 +1,14 @@
+#+DRAFT: t
+# When to use a process
+
+http://theerlangelist.com/article/spawn_or_not
+
+Well, I’ve thought about this a ton. I started by basically copying erlmud ( http://zxq9.com/erlmud/ ) which tried to use a process for everything (room, item, mob, as well as connections between rooms and actions of picking up items).
+
+Along the way I came across people who simply suggested that everything just be a data structure.
+
+My current perspective is this:
+
+1. Make it a process if you need to be able to handle a crash as an atomic unit
+2. Make it a process if it needs to do work
+3. Do not make it a process if you're just trying to store state in memory

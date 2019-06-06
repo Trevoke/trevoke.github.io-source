@@ -1,3 +1,0 @@
-"Guess the number" to learn a new programming language
-
-loops, conditionals, randomness, user input, string -> int.

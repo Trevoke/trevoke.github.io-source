@@ -1,0 +1,16 @@
+#+DRAFT: t
+trevoke Do you guys have any idea how much *better* it is to do TDD?
+[11:50]
+
+[11:52]
+trevoke But.. Like… Knowing that the code works and keeps working?
+Having a small-footprint representation of the actual desired behaviour of the system?
+Having constant feedback on the quality of the design of the system?
+
+Running into problems you couldn’t even imagine and having a significantly accelerated learning curve?
+Doing all this WITHOUT HITTING PRODUCTION?
+[11:55]
+
+trevoke I’m just speaking from personal experience here.. Just.. Writing some tests now to make sure that what I think is going on is what’s going on and guess what, *SURPRISE* it isn’t
+And a bunch of those tests are kind of .. base-case tests so I can build up new tests on top of them
+I dunno, it’s … Seriously, I think it’s unprofessional to not do TDD.

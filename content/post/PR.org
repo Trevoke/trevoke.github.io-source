@@ -1,0 +1,23 @@
+#+DRAFT: t
+#+TITLE:       Pull Requests
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2016-04-03T00:00:00-05:00
+#+DRAFT: t
+
+[2:23 PM] : Here are my goals for PR:
+1. Understand architectural choices
+2. Keep an eye out for poorly named new concepts
+3. Keep an eye out for undertested areas (sometimes 2 leads to 3)
+
+[2:25 PM] : Architectural choices - as long as it does not obviously paint the codebase into a corner, in the sense that some particular changes get harder and you're pretty sure we'll have to change the codebase that way, I'm generally OK with it. I'll only suggest a different architecture if this code is something we'll depend on very fast (which means it'll get that much harder to change quickly)
+
+[2:26 PM] : Poor names and undertested areas - generally, I start by looking at all the files that were modified, and then I read the tests first. If I find that some files that were touched don't have corresponding tests, I start my examination there.
+
+[2:26 PM] : Overall, I don't normally write comments until I have done a full pass through of the code, so that I have an idea of how things interact
+
+[2:27 PM] : With Github's new review feature, that's less of a problem, since you can add all the comments you want and delete them before you submit the review if you realize they don't apply
+
+[2:32 PM] :Consider how likely you are to *want* to use this code in the future, and whether any of it would annoy you. Even if you can't articulate a better solution, applying the test of "oh, using this would really annoy me" is a good heuristic
+
+[2:33 PM] : And if you're unclear on the code, that's also a really good sign that there's at the very least a slight divide in the team (or a huge one). Don't be afraid to pull in someone and ask for clarifications. PRs feel like they should be asynchronous because you're staring at pre-written code, but there's *nothing* forcing us to do it that way

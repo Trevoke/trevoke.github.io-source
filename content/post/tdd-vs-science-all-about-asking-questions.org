@@ -1,0 +1,3 @@
+#+DRAFT: t
+My father's science teacher once said (anecdote about asking questions)
+So TDD is the same thing - science, it's asking the right questions, it's that pleasure of seeing a meaningful answer out of the right questions

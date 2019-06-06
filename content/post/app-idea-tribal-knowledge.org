@@ -1,0 +1,2 @@
+#+DRAFT: t
+Closed groups where you write things valuable to share, anecdotes or gotchas. Time-stamped. Can be marked outdated. Searchable. Taggable?

@@ -1,0 +1,136 @@
+#+DRAFT: t
+Want to deliver value? Want to write changeable code?
+
+Learn to play Go, and learn the skills of: tradeoffs, opportunity costs, decision making, incomplete information (you don't know the other person's plan or how they'll respond).
+
+Playing Go / pattern matching / narrowing, removing bad possibilities / finding errors really quickly, visual recognition of new patterns, creating new categories quickly
+
+·      zero-sum, full-knowledge, turn-based (not random)
+
+·      You will never know less…
+
+·      Delay decision until LRM
+
+o   Same mindset
+
+o   Go is a language for decision-making
+
+·      Very short feedback loop
+
+·      In agile, your team is one of the players
+
+·      Explain rules of Go (photos)
+
+·      W is more flexible
+
+·      Loose framework
+
+·      (Show fuseki) (?)
+
+·      Empty board is vision
+
+·      Questionàanswer
+
+o   (photos) talking about meaning of moves, go though opening
+
+·      Black as better position for territory
+
+·      W is more flexible
+
+·      Point system, territory, winning
+
+·      Influence vs. territory
+
+·      EYES
+
+·      Some shapes are more efficient
+
+·      Patterns for
+
+o   TSUMEGO
+
+o   Agile
+
+·      Practice/experience
+
+·      Code KATA
+
+·      Pairing exercises
+
+o   Agile?
+
+·      “You can only learn Agile by doing Agile”
+
+o   practice tools of Agile?
+
+o   Measure success
+
+o   Safe environment to fail
+
+·      TSUMEGOàdecision tree
+
+·      What is a good decision?
+
+o   Gives more options
+
+o   Limits opponent options
+
+o   Success/points
+
+o   Resource MGMT (you/your opponent)
+
+o   Efficient
+
+o   Better than other decisions
+
+o   Setup for another good decision
+
+·      Vocab
+
+o   Sente
+
+o   Gote
+
+·      3 questions
+
+o   Am I ok?
+
+o   Is my opponent ok?
+
+o   What is the biggest move?
+
+·      Agile
+
+o   Is my team ok?  Tension, blockers?
+
+o   Are we doing the right thing?
+
+o   What is best opportunity?
+
+·      Territory
+
+·      Influence
+
+·      Thickness                   (play away from)
+
+·      Tesuji                          code: stay away from really good and really bad
+
+·      Sabaki                         reduce fear slowly
+
+·      Urgent
+
+·      Important                    Tenuki
+
+·      Big                               Moyo
+
+·      Mai
+
+·      Accept potential
+
+·      Accept time to turn potential into reality
+
+·      Stones replaced early on matter more than stones replaced later on
+
+·      Damezumari
+
+Throw-in

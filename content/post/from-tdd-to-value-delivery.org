@@ -1,0 +1,14 @@
+#+DRAFT: t
+The path through to a happy developer
+
+I like doing TDD and pairing with someone else who likes those things. It's fairly simple.
+
+I've learned over the years that many things make that difficult. In the end, all I've learned, I've learned in an effort to unblock myself so I could get back to my happy path.
+Better code
+Better tests
+Better tasks
+Better estimation
+Better stories
+Better evaluation of feedback
+Better choices on what to measure
+Better ways to measure

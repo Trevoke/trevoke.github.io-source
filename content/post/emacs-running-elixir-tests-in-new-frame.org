@@ -1,0 +1,15 @@
+#+DRAFT: t
+#+BEGIN_SRC elisp
+(defadvice alchemist-mix--execute-test (around mosic-test-in-new-frame activate)
+  (require 'cl-lib)
+  (let ((current-frame (selected-frame))
+        (test-frame (or (cl-find-if
+                      (lambda (x) (string-equal "tests" (frame-parameter x 'name)))
+                      (frame-list))
+                        (make-frame '((name . "tests"))))))
+    (select-frame-set-input-focus test-frame)
+    ad-do-it
+    (switch-to-buffer "*alchemist test report*")
+    (delete-other-windows)
+    (select-frame-set-input-focus current-frame)))
+#+END_SRC
