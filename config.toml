@@ -2,7 +2,7 @@ title = "Seven steps"
 theme = "hemingway"
 baseurl = "http://blog.trevoke.net"
 languageCode = "en-us"
-copyright = "&copy; <a href=\"https://github.com/trevoke\">Aldric Giacomoni</a> 2017"
+copyright = "&copy; <a href=\"https://github.com/trevoke\">Aldric Giacomoni</a> 2017-2019"
 
 [params]
 
