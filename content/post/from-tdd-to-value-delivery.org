@@ -10,5 +10,5 @@ Better tasks
 Better estimation
 Better stories
 Better evaluation of feedback
-Better choices on what to measure
 Better ways to measure
+Better choices on what to measure

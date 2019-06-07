@@ -1,0 +1,50 @@
+#+TITLE: The first step in learning any new programming language
+#+DATE: 2019-06-06T17:43:39-04:00
+#+PUBLISHDATE: 2019-06-06T17:43:39-04:00
+#+DRAFT: f
+#+TAGS: learning, programming language
+#+DESCRIPTION: Here's the trick I've used to get started with all programming languages I've learned
+
+
+
+Part of being a professional programmer is learning new languages (seriously — past a certain point, you should be fluent in a couple of languages, but that's another blog post), and part of being a good programmer is being effective at doing so. The very first step in learning a new language is being able to write some code with it. Further steps usually involve mastering the syntax as well as whatever new paradigms the language may throw at you, BUT! If you are able to write some fundamental code with the language, then all other doors open to you, largely because it's so much easier to understand all other resources.
+
+Without further ado, here's the trick I've used to get familiar with a new programming language:
+
+GUESS. THE. NUMBER.
+
+That's right. Good old "guess the number" game. Why?
+
+Well, some elements of programming are common to all programming languages, and many of those are present here:
+
+- loops
+- conditionals
+- random number generation
+- user input
+- printing to the screen
+- casting a type to another type, in this case, a string to an integer
+
+In addition, there are three layers of code structuring which are basically always present, and this program allows you to create those boundaries: I/O, business logic, and the layer between the two.
+
+It's also worth noting that you're getting an important preview into how the programming language handles non-deterministic functions (the "random" function almost definitely does not return the same value every time). This may sound silly now, but that's exactly what the concept of time is: a non-deterministic function, a function which almost definitely does not return the same value every time.
+
+And finally, here's a list of things which this simple little exercise enables:
+
+- finding your way around the documentation,
+- figuring out how to compile or run the code
+- figuring out what separates a project from an orphaned source file
+- figuring out how to set up a test suite and write some tests
+
+That is a LOΤ of bang for your buck.
+
+Now that you're primed, let's take a look in some more detail:
+
+- The program selects a random *integer* between 1 and X (this can be user input or pre-determined)
+- The program loops N times, asking for the user's input
+- The program validates the input (e.g. it's actually an integer)
+- The program compares the input to the stores value
+- The program outputs one of "Your guess is too low", "Your guess is too high", or "You guessed correctly!"
+- The program may break out of the loop or do one more iteration
+
+
+Go forth (no puns intended) and learn new programming languages!

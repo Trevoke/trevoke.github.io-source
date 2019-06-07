@@ -26,7 +26,7 @@ If this is acceptable, I believe that it is responsible to infer that
 [1:22]
 And from that perspective, I think it’s obvious that OO, FP, dynamically typed, statically typed, Actor model, lambda calculus, Clojure, Scala, Lisp, Ruby, Go, SRP, DRY, YAGNI are a bunch of bullshit. None of them actually help you write code that is suited to the needs of the company. Because they’re all about just the code.
 
-(I have a footnote here that leads to the part where I disagree with what I just wrote and it begins with “But what if we zoomed out?” but that’s not where I’m going so I’m skipping it)
+(I have a footnote here that leads to the part where I disagree with what I just wrote and it begins with “But what if we zoomed out?” but that’s not where I’m going so I’m skipping it; TLDR - in the end, it IS all just code, so these ideas allow you to trace a path through the existing code with various amounts of cognitive load, and hint, lower cognitive load is better).
 
 
 So, maybe we can start by defining the needs of the company. This is horrifyingly high-level and I apologize for it, but I think we might be able to zoom down to the part where we discuss good practices (or at least “code things”) fairly quickly.
