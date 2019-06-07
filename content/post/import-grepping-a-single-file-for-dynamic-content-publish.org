@@ -1,0 +1,13 @@
+#+TITLE: Grepping a single file for 'dynamic' content
+#+DATE: 2011-08-31 14:22:14 UTC
+#+PUBLISHDATE: 2011-08-31
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: You can use xargs to grep the same word t
+
+You can use xargs to grep the same word through different files. But how do you use xargs to grep different words through the same file?
+Like this:
+
+echo "your fancy word finder stuff here" | xargs -i bash -c 'grep -n "{}" your/file/here'
+
+Not something that's useful every day, but when you want it, hot damn is it nice to have.

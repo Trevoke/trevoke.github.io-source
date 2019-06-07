@@ -1,0 +1,19 @@
+#+TITLE: Scrivener for Linux
+#+DATE: 2011-02-05 14:09:34 UTC
+#+PUBLISHDATE: 2011-02-05
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: <a title="Scrivener" href="http://www.lit
+
+<a title="Scrivener" href="http://www.literatureandlatte.com/scrivener.php" target="_blank">Scrivener</a> is a wonderful OSX app for writing basically anything you want (novels, plays, theses, etc). There's a beta out for Windows. As it turns out, they're actually developing it using the Qt toolkit.
+
+The <a href="http://www.literatureandlatte.com/scrivenerforwindows/" target="_blank">Windows Beta</a> runs on WINE, if you do a bit of work. I am getting all my information from a Lifehacker tip, just rewriting it and adding some more information for those who don't know enough.
+<ul>
+	<li>Install <a title="WINE Is Not an Emulator" href="http://www.winehq.org/" target="_blank">WINE</a> -- version 1.3.5 or higher.</li>
+	<li>Download <a title="Winetricks" href="http://wiki.winehq.org/winetricks" target="_blank">winetricks</a>.  [code]$ wget http://winetricks.org/winetricks[/code]</li>
+	<li>I also recommend installing the 'cabextract' tool, as indicated in the previous link.</li>
+	<li>run winetricks and install the following runtime libraries: [code]$ sh winetricks vcrun2008 vcrun6 quartz dotnet20[/code]</li>
+	<li>I did not need to do this, but the link also recommends downloading qsvg.dll and qtsvg.dll and copying them to your ~/.wine/drive_c/windows/system32 directory. I'm not actually sure where to find these, and installing Scrivener created a qsvg4.dll file.</li>
+	<li>Finally, install and run the Beta.</li>
+</ul>
+Let me know if you run into any issues following these instructions.

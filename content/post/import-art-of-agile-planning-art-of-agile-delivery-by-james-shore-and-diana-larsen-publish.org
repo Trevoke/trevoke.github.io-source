@@ -1,0 +1,20 @@
+#+TITLE: Art of Agile Planning / Art of Agile Delivery, by James Shore and Diana Larsen
+#+DATE: 2011-11-02 12:44:46 UTC
+#+PUBLISHDATE: 2011-11-02
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: The Art of Agile Planning (#aoap on Twitt
+
+The Art of Agile Planning (#aoap on Twitter, and AOAP from now on) is a 2-day course. The focus is on understanding the higher-level constructs of Agile and how they imbricate. In the course, one learns how the ideal Agile team is composed (hint: it's cross-functional and co-located) and what practices and techniques will be used to organize at all levels, from the developers' standup to the customers' research for the next best value-delivering feature, including how to properly create a feature that developers can work on and how to best break it down into stories (and then into tasks).
+
+The Art of Agile Delivery (#aoad on Twitter, and AOAD from now on) is a 3-day course. The focus expands from AOAP, both into further details in the iteration (how do developers best produce quality code without defects) and into further details for customers (how do we figure out who we seek and who we need to interact with).
+
+Both courses feature activities and mini-games to help accelerate and cement learning. Both courses, of course, feature James and Diana, whose presence is invaluable. It took me a day or two to get accustomed enough to start asking questions – don't wait, you only have those few days, and they can both bring great insight into whatever questions or problems you may have. Their first answer may be a little idealistic or snarky (I heard a once or twice “don't do that”), but after the chuckles die down, they go into further detail and, asking for clarifications where needed, they explain the ideal of the practice(s), skill(s) and/or technique(s) involved and how to try and rectify or adapt to a less-than-ideal situation. Among the small things that make this course great: there are slidebooks given, where the slide is on the left and there is room to take notes on the right, and there are 'facilitational aids' (as Diana Larsen put it, “because toys aren't tax-deductible”) for those of us who need to fiddle with something to learn better.
+
+It is my understanding that both courses can be taken separately. I would probably not recommend doing so, as AOAD truly does build on top of AOAP. I will, however, echo James Shore's recommendation. Take care of yourself. Don't leave after each day and drink/party/work. Get some air, see your family, sleep. Give your body and your mind a rest. This course is five days and very intensive.
+
+I've tried my best to give you the essence without the substance. Any description of the substance would simply be sub-par and ruin the experience. This course has to be lived. Besides, the course evolves based on the feedback it receives, so hopefully when you take the course, it'll be even better than when I took it!
+
+AOAD and AOAP together show that Agile truly is an organizational-scale operation, and can only have limited success if not applied at the manager and customer level.
+
+A last note – this course set can be taken with total strangers, but I took it as a training course with my entire company. They were people with whom I am used to working, people with whom I'll be talking about this course for long after it is over, and it allowed some slightly different dynamics to permeate the courses – in my eyes, for the better, but I'm clearly biased.

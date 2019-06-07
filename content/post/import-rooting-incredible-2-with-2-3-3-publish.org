@@ -1,0 +1,13 @@
+#+TITLE: Rooting Incredible 2 with 2.3.3
+#+DATE: 2011-09-04 12:28:12 UTC
+#+PUBLISHDATE: 2011-09-04
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: If Revolutionary 0.4pre4 --
+Use WINDOWS!
+
+If Revolutionary 0.4pre4 --
+Use WINDOWS! Broken on Linux.
+Follow this process: http://forum.xda-developers.com/showthread.php?t=1219246
+
+revolution, for me, said "oh sure, I'll install CWM for you" and rebooted to Fastboot USB but did NOT actually install it. So you manually push it, then you choose 'bootloader', then 'recovery' and THEN you are in CWM. And then Bob's your uncle.

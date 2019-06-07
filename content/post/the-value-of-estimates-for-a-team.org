@@ -10,11 +10,14 @@
 #+DESCRIPTION: How estimating is a valuable practice for teams
 
 * What this entry is and is not about
+
 This entry talks about estimates in a relatively perfect world. This entry does /not/ talk about problems that teams run into when dealing with estimates in a world where estimates are often misunderstood and where parties try to pile up additional meanings and metrics to estimates.
+
 * Why talk about estimating at all
 Estimating work to be done before it is done. Great if you know what the work is. Software development teams often have no idea what the work really will be until they do it. Give a sculptor a block of wood and they'll have to work carefully, as they uncover the imperfections within the wood. How long will it take to reveal a bust of Artemis drawing an arrow? The sculptor doesn't really know beforehand.
 
 Yet, there is value in having a way to know at a grander scale how much work can be accomplished. Evaluating this allows us to discuss how much work can be done before a given deadline, as well as the overall health of the team (through *changes to this measurement over time*).
+
 * What is an estimate
 An estimate is a representation of the team's understanding of the complexity of the work required to accomplish a desired feature. Since it is done with imperfect knowledge, it will be wrong. That is why it is called an estimate.
 

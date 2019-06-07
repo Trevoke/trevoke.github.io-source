@@ -1,0 +1,8 @@
+#+TITLE: First entry from Blackberry
+#+DATE: 2008-11-04 10:31:52 UTC
+#+PUBLISHDATE: 2008-11-04
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: This blog may yet come alive! I've figure
+
+This blog may yet come alive! I've figured out how to post to this from my Blackberry :) I use an app called bbmetablog (google for 'bbmetablog opencod'), currently version 1.2.2 . I had a bit of an issue getting xmlrpc line set up propery, until I changed their default 'xml-rpc?openagent' to 'xmlrpc.php' .. And I'm live!

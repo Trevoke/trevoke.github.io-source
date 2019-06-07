@@ -1,0 +1,42 @@
+#+TITLE: Inter-array permutations in Ruby
+#+DATE: 2009-12-17 12:51:06 UTC
+#+PUBLISHDATE: 2009-12-18
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: I don't really have a better name for thi
+
+I don't really have a better name for this. It's also not completely clean, but it works. I had, almost a year ago (362 days ago), written a blog post about <a href="http://trevoke.net/blog/2008/12/20/lexicographic-permutations-in-ruby">lexicographic permutations</a>. That was about permutations of elements within one array.
+Someone on ruby-forum asked about permutations between multiple arrays. I <a href="http://stackoverflow.com/questions/710670/c-permutation-of-an-array-of-arraylists">found something in C#</a>, which I was happy to transcribe to Ruby and tweak a little.
+
+[ruby]def array_permutations array, index=0
+  # index is 0 by default : start at the beginning, more elegant.
+  return array[-1] if index == array.size - 1 # Return last element if at end.
+  result = []
+  array[index].each do |element| # For each array
+    array_permutations(array, index + 1).each do |x| # Permute permute permute
+      result &lt;&lt; &quot;#{element}, #{x}&quot;
+    end
+  end
+  return result
+end[/ruby]
+
+So, we get this:
+[ruby]first = ['one', 'two']
+second = ['three', 'four']
+third = 'five', 'six']
+result = array_permutations [first, second, third]
+=&gt; [&quot;one, three, five&quot;, &quot;one, three, six&quot;, &quot;one, four, five&quot;, &quot;one, four, six&quot;, &quot;two, three, five&quot;, &quot;two, thre
+e, six&quot;, &quot;two, four, five&quot;, &quot;two, four, six&quot;][/ruby]
+
+Magic!
+
+------
+Edit - of course, my solution is hackish, and someone came up with a quicker and more elegant solution:
+
+[ruby]def fancy_array_permutation array
+  return array[0] if array.size == 1
+  first = array.shift
+  return first.product( fancy_array_permutation(array) ).map {|x| x.flatten.join(&quot; &quot;)}
+end[/ruby]
+
+This gives the same result as above.

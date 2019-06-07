@@ -1,0 +1,33 @@
+#+TITLE: Github's customer service: bad review
+#+DATE: 2010-03-12 09:39:28 UTC
+#+PUBLISHDATE: 2010-03-12
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: I will readily admit that I don't know al
+
+I will readily admit that I don't know all that much about Github or Git for that matter. I use them, they're handy, and that's where it stops. I read about a git feature called "smart HTTP", which would allow to communicate both ways with git (push and pull) with HTTP or HTTPS. So, I asked Github about it - it would be nice for them to have this feature, because I currently can't push to Github from work. Here's how the exchange went.
+(this first message is from memory, as I used the web interface, so I don't have a copy of it)
+<strong>Me:</strong> <em>
+Hi, I just read about this: http://progit.org/2010/03/04/smart-http.html and I would like to know when Github plans on implementing this, because it would be very useful.
+_______
+<strong>From: Tekkub (Support staff)
+Subject: [Contact] Upgrading git to support smart HTTP ?</strong></em>
+
+You do know that Scott (the guy who wrote Pro Git) works for us, right?  We're well
+aware of smart http...<em>
+_______
+</em><em>I tried to make light of the condescending tone and sent the following reply:</em>
+<strong>Me: </strong>
+Nope.. Had no idea.
+So when will it be implemented? ;)
+_______
+<strong>From: Tekkub (Support staff)
+Subject: [Contact] Upgrading git to support smart HTTP ?</strong>
+
+It will be implemented when it is...
+_______
+
+That's when I just gave up. I don't know if whoever handles the messages is paid or not, but I'm pretty sure Github pays its employees by now. I'm using a free account, so they wouldn't lose anything by me leaving them, and they do provide a great service.
+Am I just being picky when I expect the support staff to be polite? I say this as someone who has worked as support staff for over three years: no. The support staff SHOULD, nay, MUST be polite. I don't care how flat your company hierarchy is, I don't care how young or forward-thinking the company is, and I especially don't care if your target audience is Asperger's syndrome-suffering programmers who laugh at Star Trek jokes and read slash fiction. You're the support, you're polite. Especially over a medium like text, where you can't easily place a slap on the shoulder, a grin and a wink.
+
+This has left a bad taste in my mouth.

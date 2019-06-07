@@ -1,0 +1,35 @@
+#+TITLE: Howto: SFML with Netbeans
+#+DATE: 2009-03-08 18:56:24 UTC
+#+PUBLISHDATE: 2009-03-08
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: <a href="http://www.sfml-dev.org/index.ph
+
+<a href="http://www.sfml-dev.org/index.php">SFML</a>, the Simple and Fast Multimedia Library, has tutorials for Code::Blocks, plain GCC, Visual Studio, but not Netbeans. Well, I like Netbeans. This tutorial isn't perfect - the library names are fine for GNU/Linux and not for Windows, refer to the SFML howto for Windows to determine what library names to use. This will show you how to set up a Netbeans project to use SFML.<!--more-->
+First things first - as I am running Gentoo on an x86_64 system (AMD64), I compiled the libraries myself. Don't forget to do that if that's your thing - I spent two evenings wondering why it wasn't working.
+
+First, go to Tools &gt; Options and find the C/C++ heading. If it's not there, you have to first create a C++ project to activate the feature. I have my SFML headers under '/home/alg/workspace/SFML-1.4/include - replace that path with the INCLUDE path of wherever you downloaded the SFML libs. Don't use the 'SFML' subdirectory - use the 'INCLUDE' directory.
+
+[caption id="attachment_81" align="alignnone" width="475" caption="Tools &gt; Options &gt; Code Assistance &gt; C++ Compiler"]<a href="http://trevoke.net/blog/wp-content/uploads/2009/03/001.jpg"><img class="size-full wp-image-81" title="Enabling Code Assistance" src="http://trevoke.net/blog/wp-content/uploads/2009/03/001.jpg" alt="Tools &gt; Options &gt; Code Assistance &gt; C++ Compiler" width="475" height="295" /></a>[/caption]
+
+Next, on to the project itself. Right-click on the project in the project list and go to Properties.
+
+[caption id="attachment_82" align="alignnone" width="321" caption="Right click on project - go to properties"]<a href="http://trevoke.net/blog/wp-content/uploads/2009/03/002.jpg"><img class="size-full wp-image-82" title="Project Properties" src="http://trevoke.net/blog/wp-content/uploads/2009/03/002.jpg" alt="Right click on project - go to properties" width="321" height="579" /></a>[/caption]
+
+Now, you need to be aware that there are at least two configurations - Debug and Release. Unless you want to debug output from SFML, you should change the Configuration to "All Configurations" so that both testing and release get affected by the following changes, otherwise when you compile the release.. It'll break and you may have forgotten why.
+
+[caption id="attachment_83" align="alignnone" width="435" caption="Configuration - All configurations"]<a href="http://trevoke.net/blog/wp-content/uploads/2009/03/004.jpg"><img class="size-full wp-image-83" title="Configuration  - All Configurations." src="http://trevoke.net/blog/wp-content/uploads/2009/03/004.jpg" alt="Configuration - All configurations" width="435" height="113" /></a>[/caption]
+
+Go to Build &gt; C++ Compiler, and enter/select the SFML include directory in the 'Include Directories' option.
+
+[caption id="attachment_85" align="alignnone" width="785" caption="Setting the project&#39;s include directories"]<a href="http://trevoke.net/blog/wp-content/uploads/2009/03/003.jpg"><img class="size-full wp-image-85" title="Project include directories" src="http://trevoke.net/blog/wp-content/uploads/2009/03/003.jpg" alt="Setting the project's include directories" width="785" height="124" /></a>[/caption]
+
+The next and last step is to go to the linker and add the libraries themselves. The button on the right comes in very handy here.
+
+[caption id="attachment_86" align="alignnone" width="736" caption="On which line do we add it? The one that says Libraries!"]<a href="http://trevoke.net/blog/wp-content/uploads/2009/03/005a.jpg"><img class="size-full wp-image-86" title="Linker window" src="http://trevoke.net/blog/wp-content/uploads/2009/03/005a.jpg" alt="On which line do we add it? The one that says Libraries!" width="736" height="149" /></a>[/caption]
+
+So, if you click on the three dots, you get the following window. I chose to store the libraries as full paths, it probably doesn't make a huge difference in the context of creating the program - but maybe in the outside world you just want to have the libraries in the same folder to make your life easier.
+
+[caption id="attachment_87" align="alignnone" width="680" caption="Adding libraries!"]<a href="http://trevoke.net/blog/wp-content/uploads/2009/03/005b.jpg"><img class="size-full wp-image-87" title="Where the libraries are" src="http://trevoke.net/blog/wp-content/uploads/2009/03/005b.jpg" alt="Adding libraries!" width="680" height="130" /></a>[/caption]
+
+This should be all you need to do... Now you're on your own, all alone with the internet to help you. Happy hacking! Please let me know if anything is incorrect or if you have any additions to make.

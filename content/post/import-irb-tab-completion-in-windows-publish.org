@@ -1,0 +1,17 @@
+#+TITLE: irb tab completion in Windows
+#+DATE: 2009-03-30 15:20:04 UTC
+#+PUBLISHDATE: 2009-03-30
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: This is good for 1.8.6
+In your ruby\bin 
+
+This is good for 1.8.6
+In your ruby\bin directory, there should be an 'irb.bat' and an 'irb' file. Edit that 'irb' file.
+all you have to do is add :
+require "irb/completion" 
+under 'require "irb" ' and you're set.
+
+If you have 1.8.7, it looks like that's in the irb.bat file instead..
+
+And if you have 1.9, it looks like the tab completion is automatically enabled, lucky us! (unless I made a change and forgot about it).

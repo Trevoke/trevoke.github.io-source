@@ -1,0 +1,21 @@
+#+TITLE: Git : moving a remote branch
+#+DATE: 2009-12-29 17:08:43 UTC
+#+PUBLISHDATE: 2009-12-29
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: One can't actually move a remote branch, 
+
+One can't actually move a remote branch, but you can copy a branch and delete a branch, so...
+
+Copy oldbranch in repo to newbranch.
+[code]git push {repo} {oldbranch}:heads/{newbranch}[/code]
+Ex: git push origin foobranch:barbranch
+renames foobranch to barbranch
+
+Remove a remote branch: it’s all about the colon:
+
+[code]git push &lt;remote_repo&gt; :heads/&lt;branch&gt;[/code]
+
+Example: git push origin :heads/some-branch removes some-branch from the remote repo (apparently git push origin :some-branch works as well).
+
+This works for removing a tag as well: git push origin :sometag

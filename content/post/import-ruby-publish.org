@@ -1,0 +1,64 @@
+#+TITLE: Ruby
+#+DATE: 2011-01-27 20:26:14 UTC
+#+PUBLISHDATE: 2011-01-27
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: First, <a title="official Ruby site" href
+
+First, <a title="official Ruby site" href="http://www.ruby-lang.org/en/" target="_blank">get Ruby</a>. Install it as explained on the website. Once you're more comfortable with it, in a few weeks, you can check out <a href="http://rvm.beginrescueend.com/" target="_blank">RVM</a>. Not now though - you'd just confuse yourself.
+
+The two important command-line tools are going to be "irb" and "ruby". For development, you will be able to use tools like emacs, vim, Jetbrains Rubymine, or Eclipse. Ruby support is quite widespread.
+
+Create a temporary directory and get cozy inside.
+
+Right off the bat, how would you write a test?
+You would create a file called "my_test.rb" (It is a good naming convention, 'something_test.rb').
+
+[ruby]require 'test/unit'
+class MyTest &lt; Test::Unit::TestCase
+def test_addition_is_not_broken
+assert_equal(10, 5+5)
+end
+  def test_addition_is_not_broken_but_i_am
+    assert_equal(10, 5)
+  end
+end
+[/ruby]
+
+A couple of things of note:
+<ul>
+	<li>"require" is how you load external libraries.</li>
+	<li>The test class name ("SomethingTest") is a convention. Follow it and avoid pain.</li>
+	<li>The test method name also follows a convention : "test_" . Again, follow it and avoid pain.</li>
+	<li>Indentation is two spaces by convention. Follow, Avoid.</li>
+	<li>Parentheses for method calls are optional, but it's good form to put parentheses if there are two or more arguments to a method. Also, parentheses will save you if the parser has issues parsing. Remember that.</li>
+</ul>
+To run that, you would simply call "ruby my_test.rb" and see one test succeed and one test fail.
+
+How would you write a simple program?
+Create a file called "myprog.rb" and put the following inside:
+
+[ruby]
+def palindromize input
+  input.reverse
+end
+
+puts &quot;Give me something and we'll see if it's a palindrome!&quot;
+input = gets.chomp
+puts palindromize(input)
+[/ruby]
+
+
+This would be run, like the test, with "ruby myprog.rb"
+Some things to note:
+<ul>
+	<li>"gets.chomp" -- Ruby, by default, captures the return key being pressed. Chomp is necessary to remove that special character.</li>
+	<li>Did you notice how I put parentheses around "palindromize(input)" ? It's so that both the Ruby parser and human readers stay sane when reading the code.</li>
+</ul>
+Things of note:
+
+Ruby documentation: <a href="http://ruby-doc.org/" target="_blank">http://ruby-doc.org/</a>, <a href="http://ruby-doc.org/core" target="_blank">http://ruby-doc.org/core</a> -- that will get you started. The documentation is excellent until you get to some arcane features -- so not to worry, for now.
+
+Wanna talk to people? You can go to <a href="http://www.ruby-forum.com/" target="_blank">http://www.ruby-forum.com/</a> (Ruby big names, such as David Black, JEG2 and even Matz, the creator of the language) are active there, and everyone is nice. You can also go to the Freenode server on IRC, channel #ruby.
+
+Let me know if you think I could add things to this tutorial or if you have questions!

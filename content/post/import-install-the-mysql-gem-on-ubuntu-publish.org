@@ -1,0 +1,11 @@
+#+TITLE: install the mysql gem on Ubuntu
+#+DATE: 2009-04-19 21:46:03 UTC
+#+PUBLISHDATE: 2009-04-19
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: $ sudo apt-get install libmysqlclient15-d
+
+$ sudo apt-get install libmysqlclient15-dev
+$ sudo gem install mysql
+
+Easy! But .. gotta know it.

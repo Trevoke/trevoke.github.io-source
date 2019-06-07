@@ -1,0 +1,32 @@
+#+TITLE: Windows Vista : Corrupt user profile
+#+DATE: 2008-12-07 12:22:35 UTC
+#+PUBLISHDATE: 2008-12-07
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: I'm taking this from <a href="http://blog
+
+I'm taking this from <a href="http://blog.tiensivu.com/aaron/archives/932-Dealing-with-corrupt-user-profiles-in-Vista-and-saving-the-contents.html" target="_blank">this page</a> but thought I should try to propagate it a little since it took me forever to find it.
+
+Assume in this example that the username is 'atiensivu', the domain is 'staff', and the user profile is located in %systemdrive%\users\atiensivu. %systemdrive% is typically C: on standard Vista installs. Replace every instance 'atiensivu' with the username of the corrupt profile.
+<!--more-->
+1. If you can log into the profile, make note of the %USERPROFILE% environment variable value. Most likely it will be 'C:\Users\atiensivu' or 'C:\Users\atiensivu.staff'. Logoff.
+
+2. If you have logged in with the profile at any point since your last reboot or you suspect there are files in use within the profile, reboot. The important part is to make sure there are no open files within the broken profile directory.
+
+3. Login as administrator or another account with local admin rights.
+
+4. Run 'takeown /r /a /d y /f %systemdrive%\users\atiensivu'.
+(Note : before doing step 4, remove things like the IE cache if you can, save yourself some time).
+5. From %systemdrive%\users, rename 'atiensivu' to 'atiensivu.old'.
+
+6. Within %systemdrive%\users, create a directory called 'atiensivu'.
+
+7. Run 'takeown /r /u staff\atiensivu /f %systemdrive%\users\atiensivu'.
+
+8. Run regedit and go to HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList and delete the SID key for the corrupt profile. Easiest way to find the correct SID is to search from the 'ProfileList' key for the directory mentioned in %USERPROFILE% in step #1.
+
+9. Logoff.
+
+10. Log into the 'atiensivu' account. A new profile should be created. Copy over any files you might want from the old profile directory.
+
+The 'takeown' commands might be overkill but I don't like getting permission errors.

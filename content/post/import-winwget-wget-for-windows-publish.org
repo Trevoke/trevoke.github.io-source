@@ -1,0 +1,10 @@
+#+TITLE: WinWget - wget for Windows
+#+DATE: 2008-11-24 16:08:26 UTC
+#+PUBLISHDATE: 2008-11-24
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: <a href="http://lifehacker.com/5086682/wi
+
+<a href="http://lifehacker.com/5086682/winwget-makes-automated-downloads-a-breeze">WinWget on Lifehacker</a>
+
+Very handy graphical download tool.

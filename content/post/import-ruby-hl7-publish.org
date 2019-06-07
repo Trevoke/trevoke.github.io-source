@@ -1,0 +1,9 @@
+#+TITLE: Ruby HL7
+#+DATE: 2008-12-17 09:15:20 UTC
+#+PUBLISHDATE: 2008-12-17
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: And right on schedule on this blog, behin
+
+And right on schedule on this blog, behind <a title="Ruby DICOM" href="http://trevoke.net/blog/2008/12/16/ruby-dicom/" target="_blank">Ruby DICOM</a>, here comes<a title="Ruby HL7" href="http://ruby-hl7.rubyforge.org/" target="_blank"> </a><a title="Ruby HL7" href="http://ruby-hl7.rubyforge.org/" target="_blank">Ruby-HL7</a>!
+Gots to love the Ruby. A lot of potential.. And to think they're revamping the language.

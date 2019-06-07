@@ -1,0 +1,10 @@
+#+TITLE: Ruby callbacks (hooks)
+#+DATE: 2010-03-31 12:28:13 UTC
+#+PUBLISHDATE: 2010-03-31
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: Hooks are a fascinating bit of Ruby magic
+
+Hooks are a fascinating bit of Ruby magic. They are methods you can define with actions to run when something happens. You can put triggers in your code.
+
+<a href="http://www.khelll.com/blog/ruby/ruby-callbacks/">This blog post</a> explains them very well; and for more information, get "Metaprogramming Ruby", which is a great book - not only about the callbacks, but about a host of information.

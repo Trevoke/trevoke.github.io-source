@@ -1,0 +1,34 @@
+#+TITLE: Is Rails dying?
+#+DATE: 2013-02-02 17:29:28 UTC
+#+PUBLISHDATE: 2013-02-02
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: More to the point, should Rails die?
+
+R
+
+More to the point, should Rails die?
+
+Rails brought a lot of great things - it made it dumb easy to package an entire app together. It abstracted the complexity of the storage layer. It created an entire market. Things like Heroku, Railsonfire/codeship and other companies turned a profit by extending the benefits of Rails. And things like Capistrano were born.
+
+Everything that can be automated should be automated.
+
+&nbsp;
+
+This has brought great things. And people wrote more tests, and life was good. But then, Rails apps grew, and people realized they had written them badly - because they interleaved their code within Rails, instead of using Rails as a layer and building their code on top of it, carefully segmenting the access points to that layer. Gosh, that sounds like work! Enter things like Avdi Grimm's Object On Rails. And the Rails community re-learns things that the Java community has suffered through and grown past. Dependency Injection is making a comeback, Ruby-style. People use TDD as an indicator of design smells - if you have to boot up Rails to run your tests, you're doing something wrong! Although of course SOME tests require the entire Rails stack, but we call these Capybara tests, because "end-to-end" is ugly, and capybaras are much prettier to look at.
+
+And then, on the other hand, you have Sinatra, and Backbone.js, and other things that are focused on doing one thing and doing it well.
+
+Now we have everything that Rails has taught the Ruby world - segment your logic, stay away from expensive code (the only currency here is time, and this is a very important thing to realize). Your TDD loop should be very short - you can watch some of Gary Bernhardt's screencasts on Destroy All Software to learn mor about this. We have Capistrano, and Capybara. We have RSpec. We have Opal, a Ruby-to-Javascript compiler.
+
+And in case Opal is too weird for you, you've got the Backbone.js world, where you have to make all these exact decisions over again.
+
+You've got Sinatra, a wonderful "controller". Sinatra is a great place to put your API and test it. Because that is the only thing Sinatra gives you, you feel the pain every time you add something -- you have to add it.
+
+And your storage is now distributed. Imagine ... Backbone.js front-end, Sinatra in the middle, and your distributed storage of choice on the other side: Google Drive, Apple Cloud, Dropbox, MediaFire ... You pick it, you store to it. Users now carry their data everywhere. Virtually speaking, of course. Gosh, sounds like you're even reducing costs.
+
+&nbsp;
+
+So now, we face the challenge the health world has been trying to solve for over a decade - how do you share information between proprietary systems? After all, the user is the one who's suffering.
+
+This is an entirely different blog post - how much of "your" data really is yours? How much could be shared? You know.. Like one of those virtual business cards, I suppose. You'd have a JSON object behind a secure server where the user stores THEIR information, and you ask for permission to read that one object.

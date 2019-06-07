@@ -1,0 +1,51 @@
+#+TITLE: Auto-vivifying hashes in Ruby
+#+DATE: 2009-11-06 08:27:09 UTC
+#+PUBLISHDATE: 2010-03-31
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: An auto-vivifying hash is a hash that let
+
+An auto-vivifying hash is a hash that lets you create sub-hashes automatically. This means that the following code becomes possible:
+
+[code]def cnh # silly name &quot;create nested hash&quot;
+  Hash.new {|h,k| h[k] = Hash.new(&amp;h.default_proc)}
+end
+my_hash = cnh
+my_hash[1][2][3] = 4
+my_hash # =&gt; { 1 =&gt; { 2 =&gt; { 3 =&gt;4 } } }
+[/code]
+
+This is useful because it reduces the amount of logic in the code. No more "If sub-hash doesn't exist, create it!"
+
+Courtesy of Robert Klemme on www.ruby-forum.com
+
+_____
+
+Update:
+
+Facets has a way of doing an auto-vivifying hash, too! Thanks to <a href="http://stackoverflow.com/questions/1503671/ruby-hash-autovivification-facets">Stackoverflow</a>.
+<div>
+<div>[code]
+# Monkey patching Hash class:
+# File lib/core/facets/hash/autonew.rb, line 19
+  def self.autonew(*args)
+    leet = lambda { |hsh, key| hsh[key] = new( &amp;leet ) }
+    new(*args,&amp;leet)
+  end
+[/code]
+
+</div>
+</div>
+<div>
+<div>
+<div>
+
+The standard <a rel="nofollow" href="http://ruby-doc.org/core/classes/Hash.html#M002840">new  method for Hash</a> accepts a block. This block is called in the event  of trying to access a key in the Hash which does not exist. The block is  passed the Hash itself and the key that was requested (the two  parameters) and should return the value that should be returned for the  requested key.
+
+You will notice that the <code>leet</code> lambda does 2 things. It  returns a new Hash with <code>leet</code> itself as the block for  handling defaults. This is the behaviour which allows <code>autonew</code> to work for Hashes of arbitrary depth. It also assigns this new Hash to  <code>hsh[key]</code> so that next time you request the same key you  will get the existing Hash rather than a new one being created.
+
+Sweet deal!
+
+</div>
+</div>
+</div>

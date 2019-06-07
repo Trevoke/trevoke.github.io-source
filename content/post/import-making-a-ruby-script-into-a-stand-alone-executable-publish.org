@@ -1,0 +1,12 @@
+#+TITLE: Making a ruby script into a stand-alone executable
+#+DATE: 2009-01-23 17:05:39 UTC
+#+PUBLISHDATE: 2009-01-23
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: Erik Veenstra created two scripts, tar2ru
+
+Erik Veenstra created two scripts, tar2rubyscript and rubyscript2exe, which essentially grab what you wrote, wrap it up with some other code, bundle it with the ruby executable, and spit out a finished, executable package - which will run on that same OS -- so compile it on Windows, get a Windows executable, compile on Linux, get Linux executable, etc.
+<a href="http://www.erikveen.dds.nl/tar2rubyscript/index.html">tar2rubyscript</a>
+<a href="http://www.erikveen.dds.nl/rubyscript2exe/">rubyscript2exe</a>
+
+As I'm a newb, it took me a while to figure out that I need .. 'stuff' in the init.rb file. Since I'm writing scripts, I just stuffed the whole simple script in init.rb.. This also means I don't really understand how to do bigger programs, but I think that with more knowledge than mine, these pages are worth their weight in pixels. Made of gold.

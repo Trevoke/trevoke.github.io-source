@@ -1,0 +1,9 @@
+#+TITLE: Ruby SgfParser now really working!
+#+DATE: 2009-12-31 13:18:51 UTC
+#+PUBLISHDATE: 2009-12-31
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: Thanks @alfmikula, it saves properly and 
+
+Thanks @alfmikula, it saves properly and has even been gemified. I will soon push it to gemcutter and maybe put a homesite on Rubyforge, not sure.
+It can be found at http://github.com/Trevoke/SGFParser for now, get the code while it's hot! :-)

@@ -1,0 +1,16 @@
+#+TITLE: Ruby: gem ffi on OSX Mountain Lion 10.8
+#+DATE: 2012-08-21 12:38:30 UTC
+#+PUBLISHDATE: 2012-08-21
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: EASY!
+
+sudo ln -s /usr/bin/gcc /usr/bin
+
+EASY!
+
+sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
+
+&nbsp;
+
+That's it. You can now install ffi 1.5.

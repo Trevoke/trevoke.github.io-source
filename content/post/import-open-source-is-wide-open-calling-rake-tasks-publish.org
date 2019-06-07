@@ -1,0 +1,10 @@
+#+TITLE: Open source is wide open: Calling RAKE tasks
+#+DATE: 2009-12-15 14:38:25 UTC
+#+PUBLISHDATE: 2009-12-15
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: <a href="http://railsblogger.blogspot.com
+
+<a href="http://railsblogger.blogspot.com/2009/03/in-queue_15.html">Open source is wide open: Calling RAKE tasks</a>.
+
+Good to know.

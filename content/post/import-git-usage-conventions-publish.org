@@ -1,0 +1,22 @@
+#+TITLE: git usage conventions
+#+DATE: 2011-08-30 12:46:12 UTC
+#+PUBLISHDATE: 2011-08-30
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: We've been using git at work for a greenf
+
+We've been using git at work for a greenfield project and, so far, this has worked for us. It could be a useful template to get another team started.
+We have gotten rid of the name 'master', which is only a convention anyway, and instead are using a few permanent branches:
+<ul>
+	<li>production (only stable code which gets deployed to production goes there. The only branch to be merged in, EVER, is 'stable')</li>
+	<li>stable (only stable code which goes to the staging environment goes there. The only branch to be merged in, EVER, is 'integration'))</li>
+	<li>integration (code from other branches goes here - tests should, of course, pass before merging in.)</li>
+</ul>
+And then we have, of course, other branches for work in progress and other stuff. we've used these prefixes to help with the naming, and called this the 'buffers' convention (look at the first letters - BFRS):
+<ul>
+	<li>bug_</li>
+	<li>feature_</li>
+	<li>refactor_</li>
+	<li>spike_</li>
+</ul>
+<div>How have you organized your git repositories?</div>

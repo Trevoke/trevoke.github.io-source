@@ -1,0 +1,56 @@
+#+TITLE: Connecting to Sybase with Rails on Windows XP
+#+DATE: 2009-09-11 11:05:24 UTC
+#+PUBLISHDATE: 2009-09-11
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: This is known to work on ASE 12.5.1<span 
+
+This is known to work on ASE 12.5.1<span style="font-size: x-small;"><span style="font-family: Verdana;"> - you're welcome to let me know what else worked, I am particularly curious about later versions of Sybase ASE, such as 15.
+</span></span>
+
+Prerequisites:
+<ol>
+	<li><a title="Sybase PC Client" href="http://trevoke.net/sybase/pcclient_1252.zip">Sybase PC Client 12.52</a></li>
+	<li><a title="Ruby Sybase connection" href="http://trevoke.net/sybase/ruby-sybase-winxp.zip">The Ruby Sybase  files</a></li>
+	<li>gem install activerecord-sybase-adapter -s http://gems.rubyonrails.org</li>
+</ol>
+Put the Sybase files in C:\ruby\lib\ruby\site_ruby\1.8\i386-msvcrt .
+
+Copy all the DLLs in %SYBASE%\OCS-12_5\dll and put them in %RUBY%\bin (if you are not familiar with Windows notation, this simply means to go where you installed each of Sybase and Ruby and then go to the proper subdirectory). Why all of them? Well, because I'm too lazy to know which ones we -do- need.
+
+Set some environment variables, just to make sure Sybase works fine:
+
+Right-click on My Computer, Properties &gt; Advanced &gt; Environment Variables
+If you have full permissions, go ahead and add those as SYSTEM VARIABLES.. Otherwise, well, only for your user (but aren't you doing this on a server?).
+
+SYBASE=c:\sybase    (where you installed Sybase).
+
+JDBC_HOME=c:\sybase\jConnect-6_0   (again, where you installed Sybase, then the subdirectory).
+
+CLASSPATH=%JDBC_HOME%\classes\jconn3.jar (just make sure that's the right number).
+
+If you're going to create a user on your Sybase server for specific Rails usage, it needs to have SELECT permissions on the following : <strong>sysobjects, syscolumns, systypes, syscomments</strong>.
+
+Edit your %SYBASE%\ini\sql.ini and add the information for your server in there.
+
+Next.. In Rails, the magic will look like this in database.yml :
+
+[code lang="ruby"]
+production:
+adapter: sybase
+database: &lt;YOUR_DB_HERE&gt;
+username: &lt;USERNAME&gt;
+password: &lt;PASSWORD&gt;
+host: &lt;NAME_GIVEN_IN_SQL_INI_HERE&gt;
+[/code]
+
+And that should be pretty much it!
+
+Don't forget to edit your model if you're working with legacy data:
+
+[code lang="ruby"]
+class Patient &lt; ActiveRecord::Base
+set_table_name &quot;some_odd_name&quot;
+set_primary_key &quot;some_primary_key_column&quot;
+end
+[/code]

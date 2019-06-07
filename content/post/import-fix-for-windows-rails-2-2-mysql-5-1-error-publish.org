@@ -1,0 +1,11 @@
+#+TITLE: Fix for Windows + Rails 2.2 + Mysql 5.1 = error
+#+DATE: 2009-09-25 09:58:28 UTC
+#+PUBLISHDATE: 2009-09-25
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: If you get this error : <em>Mysql::Error:
+
+If you get this error : <em>Mysql::Error: query: not connected:</em> or one just like it, it's because you need an older DLL.. Which I just happen to have found, because I needed to fix this problem too!
+<a href="http://trevoke.net/blog/wp-content/uploads/2009/09/libmySQL.dll">libmySQL.dll</a>
+
+Enjoy.

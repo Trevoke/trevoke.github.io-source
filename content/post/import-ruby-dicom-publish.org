@@ -1,0 +1,10 @@
+#+TITLE: Ruby DICOM
+#+DATE: 2008-12-16 11:20:14 UTC
+#+PUBLISHDATE: 2008-12-17
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: I am pretty excited about <a title="Ruby 
+
+I am pretty excited about <a title="Ruby DICOM" href="http://dicom.rubyforge.org/" target="_blank">this</a> -- a Ruby library to edit <a title="DICOM homepage" href="http://medical.nema.org" target="_blank">DICOM</a> data!
+
+It's ridiculously geeky but.. Well, that's what I love about Ruby, it's got pretty much everything!

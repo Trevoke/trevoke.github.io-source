@@ -1,0 +1,14 @@
+#+TITLE: MIMVista and auto-deletion of archived studies
+#+DATE: 2008-11-04 16:56:03 UTC
+#+PUBLISHDATE: 2008-11-04
+#+DRAFT: t
+#+TAGS: untagged
+#+DESCRIPTION: The MIM keeps 60 days by default. That ma
+
+The MIM keeps 60 days by default. That may be too much for you..
+
+By default, the folder C:\Program Files\MIM\config should make you really happy, it's got lots of plain text files with configuration for all kinds of settings.
+
+cleanup.txt has "ARCHIVE LEFTOVER AGE (DAYS) := 60
+
+Change that to whatever you feel is appropriate for you needs.
