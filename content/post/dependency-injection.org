@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       Dependency Injection
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-04-26T00:00:00-05:00
+#+DATE: 2016-04-25
 #+URI:         /blog/%y/%m/%d/dependency-injection
 #+KEYWORDS:    testing, design patterns, dependency injection
 #+TAGS:        testing

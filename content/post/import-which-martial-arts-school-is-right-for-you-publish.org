@@ -1,9 +1,6 @@
 #+TITLE: Which martial arts school is right for you?
-#+DATE: 2008-03-20 06:34:55 UTC
-#+PUBLISHDATE: 2012-01-31
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: So, you've decided to start taking a mart
+#+DATE: 2008-03-20
+#+TAGS: martial arts
 
 So, you've decided to start taking a martial arts class. Good for you!
 

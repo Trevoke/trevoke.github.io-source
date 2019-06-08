@@ -1,7 +1,7 @@
 #+TITLE:       Emacs email gpg part 1
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-04-26T00:00:00-05:00
+#+DATE: 2016-04-24
 #+URI:         /blog/%y/%m/%d/emacs-email-gpg-part-1
 #+KEYWORDS:    emacs, email, gpg
 #+TAGS:        emacs, email, gpg

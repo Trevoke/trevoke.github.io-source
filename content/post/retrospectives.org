@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       How to run retrospectives
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-04-26T00:00:00-05:00
+#+DATE: 2016-04-26
 #+URI:         /blog/%y/%m/%d/how-to-run-retrospectives
 #+KEYWORDS:    retrospectives
 #+TAGS:        retrospectives

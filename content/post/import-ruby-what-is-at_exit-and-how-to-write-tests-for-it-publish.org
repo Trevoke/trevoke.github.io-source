@@ -1,14 +1,11 @@
 #+TITLE: Ruby: What is at_exit and how to write tests for it.
-#+DATE: 2012-01-06 11:35:03 UTC
-#+PUBLISHDATE: 2012-01-06
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: Ruby has a neat feature called at_exit wh
+#+DATE: 2012-01-06
+#+TAGS: ruby, at_exit, testing
 
 Ruby has a neat feature called at_exit which takes a block and then executes the contents of this block when the program ends. There are a couple of VERY important details:
 <ol>
-	<li>It takes a block and converts it into a Proc object at the time of parsing. This means that the data has to be available in the binding, or you'll run into errors. Example: instance variables need to be set before you can use them in that block. Better idea: don't use instance variables in there at all.</li>
-	<li>You can 'chain' at_exit calls, and they will be resolved in a First In, Last Out (FILO) order.</li>
+        <li>It takes a block and converts it into a Proc object at the time of parsing. This means that the data has to be available in the binding, or you'll run into errors. Example: instance variables need to be set before you can use them in that block. Better idea: don't use instance variables in there at all.</li>
+        <li>You can 'chain' at_exit calls, and they will be resolved in a First In, Last Out (FILO) order.</li>
 </ol>
 Once you know this, using at_exit and writing tests for it becomes a little easier:
 

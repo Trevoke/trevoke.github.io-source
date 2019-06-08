@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       Opening the Stride Open Space
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-02-04T00:00:00-05:00
+#+DATE: 2016-02-04
 #+URI:         /blog/%y/%m/%d/opening-the-stride-open-space
 #+KEYWORDS:    stride, open space
 #+TAGS:        stride, open space

@@ -1,15 +1,14 @@
 #+TITLE: Devise + rspec error: undefined method 'name'
-#+DATE: 2012-06-11 10:14:58 UTC
-#+PUBLISHDATE: 2012-06-11
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: If you're using Devise and rspec on Rails
+#+DATE: 2012-06-11
+#+TAGS: ruby, rails, devise, rspec
 
 If you're using Devise and rspec on Rails 3, and you want to override a controller, and you end up with an error that makes no sense whatsoever:
 
 "Undefined method 'name' for nil:NilClass", well then, you probably want to add the following line to your tests:
 
+#+BEGIN_SRC ruby
 @request.env["devise.mapping"] = Devise.mappings[:admin]
+#+END_SRC
 
 Yeah... That took me way longer than expected.
 

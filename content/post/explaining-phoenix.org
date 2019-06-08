@@ -1,4 +1,9 @@
+#+TITLE: Unpacking Elixir's Phoenix
+#+DATE: 2017-11-12
 #+DRAFT: t
+#+TAGS: elixir, phoenix, plug, cowboy
+
+
 * Unpacking Elixir's Phoenix
 
 So, basically, Phoenix is just Plug. To unpack this statement: Plug is like Rack, in the sense that it’s a fairly open-ended HTTP request processor. Rack isn’t a web server, it needs puma or unicorn. Similarly, Phoenix uses cowboy as a web-server, so Phoenix is “Plug sitting on cowboy”. To continue unpacking: when a request makes it from cowboy to Plug, it gets crunched into a complex data structure that you can work with. Phoenix gives you pre-chewed patterns that can simplify how you reason about those transformations, from the “router” down to the “controller” (all combinations of Plugs, in fact the controller is just the last plug). To help with the work of the controller, there’s a few helpful functions and packages that are built-in, such as `json/2` ( https://hexdocs.pm/phoenix/Phoenix.Controller.html#json/2 ) and all of the work that was put into the HTML rendering logic as well as the javascript/css asset pipeline. (edited)

@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       Pull Requests
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-04-03T00:00:00-05:00
+#+DATE: 2016-04-03
 #+DRAFT: t
 
 [2:23 PM] : Here are my goals for PR:

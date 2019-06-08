@@ -1,4 +1,8 @@
+#+TITLE: Sharing and receiving feedback
+#+DATE: 2016-10-18
 #+DRAFT: t
+#+TAGS: feedback
+
 You're always giving feedback - but you can control messages you send and check what messages you receive.
 
 Recipe:

@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       Performance
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2017-05-03T00:00:00-05:00
+#+DATE: 2017-05-03
 #+DRAFT: t
 
 I agree with the general thought, but... I'm not sure you can always automate something on which you can put a metric. That's the goal, certainly, but you have to get there.

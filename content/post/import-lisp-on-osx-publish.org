@@ -1,10 +1,7 @@
 #+TITLE: Lisp on OSX
-#+DATE: 2009-05-15 12:32:05 UTC
-#+PUBLISHDATE: 2009-09-01
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: Just a link to a page.. Got me started wi
+#+DATE: 2009-05-15
+#+TAGS: lisp, osx
 
 Just a link to a page.. Got me started with barely any trouble (just make sure you know how to read a .emacs file - I learned on the fly on his page, it wasn't too tricky).
 
-http://www.david-steuber.com/Lisp/OSX/
+[[http://www.david-steuber.com/Lisp/OSX/]]

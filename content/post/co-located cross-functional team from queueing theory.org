@@ -1,4 +1,8 @@
+#+TITLE: Co-located cross-functional teams are good, says queueing theory
+#+DATE: 2019-06-15
 #+DRAFT: t
+#+TAGS: delivering value, queueing theory, lean, agile, cross-functional teams
+
 * Ideal state
 A team that repeatably delivers a consistent amount of value.
 * Basic needs

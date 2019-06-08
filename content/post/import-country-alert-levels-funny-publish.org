@@ -1,9 +1,6 @@
-#+TITLE: Country alert levels #funny
-#+DATE: 2010-01-20 12:39:25 UTC
-#+PUBLISHDATE: 2010-01-20
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: Let's break the monotony with something f
+#+TITLE: Country alert levels
+#+DATE: 2010-01-20
+#+TAGS: funny
 
 Let's break the monotony with something funny:
 

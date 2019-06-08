@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       Email in emacs: offlineimap, notmuch, smtpmulti, gpg, keybase
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-03-01T00:00:00-05:00
+#+DATE: 2016-03-01
 #+URI:         /blog/%y/%m/%d/email-in-emacs-offlineimap,-notmuch,-smtpmulti,-gpg,-keybase
 #+KEYWORDS:    keybase, gpg, emacs, email, notmuch, offlineimap
 #+TAGS:        emacs, gpg, email, notmuch

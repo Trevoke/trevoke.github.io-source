@@ -1,11 +1,6 @@
 #+TITLE: Choosing the right editor
-#+DATE: 2015-01-20 19:35:05 UTC
-#+PUBLISHDATE: 2015-01-20
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: <h1>Choosing the right editor</h1>
-
-<h2>I
+#+DATE: 2019-06-08
+#+TAGS: vim, emacs, text editors, programming, rubymine, sublime
 
 <h1>Choosing the right editor</h1>
 
@@ -21,7 +16,7 @@ When I decided I wanted to try and write Real Programs (trademark pending), I tr
 
 When I did become a developer, I became quite good at Rubymine because many around me used it. I also decided to get quite good at Vim, because a few around me used it, and in late 2013 I decided to ... Go full-circle and try emacs (though that was not how I thought of it at the time).
 
-So, as you can see, I have been around the block, as they say. Let's take a look at the three main players in my life as a developer, chronologically. There will be an honorable mention for Sublime Text at the end, since I have just started using it and it's, like, the cool kid on the block.
+So, as you can see, I have been around the block, as they say. Let's take a look at the three main players in my life as a developer, chronologically. I will also briefly mention Sublime Text, Atom, and VSCode.
 
 <h2>Rubymine</h2>
 
@@ -46,9 +41,13 @@ Like Vim, emacs has plugins for many of the newer languages out there, so it is 
 
 For me, the power of Emacs lies in one's ability to create one's own workflow. This wasn't possible for me until Vim had taught me some discipline.
 
-<h2>Honorable mention: Sublime Text</h2>
+<h2>Honorable mention: Sublime Text / Atom</h2>
 
 Sublime Text is fairly easily configurable and has reasonable documentation. It has a package manager you can install, and a number of fairly good plugins. I haven't figured out how to do a proper TDD workflow, so it doesn't do much for me at the moment. It is however a super-easy starting point, since the keys will do basically what you expect them to do if all you've ever used before were other non-text-editor-ish software.
+
+<h2>Honorable mention: VSCode</h2>
+
+Microsoft's VSCode is a great editor. Years of research on creating good IDEs and allowing programmers to be more effective led to the creation of the Language Server Protocol: a communication protocol between the editor and a local server, analyzing the project, and providing very useful tools for the programmer. The spec is open, which means other editors, such as Rubymine, emacs, vim, etc., can implement their own client plugins. The advantage VSCode has is that LSP is built-in. In other respects, VSCode is very similar to Sublime Text or Atom.
 
 <h1>Configuring your editor: howto</h1>
 
@@ -58,7 +57,7 @@ This is worth an entirely different blog entry, but the short of it is, use the 
 
 I've touched on workflow before. "Saving keystrokes" is a micro-optimization. The key here is examining the work you do, what steps you need, and how you want to do them.
 
-I have friends who like Rubymine. Some who like Vim. Some who like Emacs.
+I have friends who like Rubymine. Some who like Vim. Some who like Emacs. Etc.
 It doesn't matter. As long as you get done what you need to get done effectively, and you're using a tool that doesn't get in your way. So, if you are following a strict TDD workflow for instance, you need to do the following:
 
 <ol>

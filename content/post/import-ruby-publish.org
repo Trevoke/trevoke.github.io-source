@@ -1,9 +1,6 @@
-#+TITLE: Ruby
-#+DATE: 2011-01-27 20:26:14 UTC
-#+PUBLISHDATE: 2011-01-27
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: First, <a title="official Ruby site" href
+#+TITLE: Get started with Ruby
+#+DATE: 2011-01-27
+#+TAGS: ruby, learning
 
 First, <a title="official Ruby site" href="http://www.ruby-lang.org/en/" target="_blank">get Ruby</a>. Install it as explained on the website. Once you're more comfortable with it, in a few weeks, you can check out <a href="http://rvm.beginrescueend.com/" target="_blank">RVM</a>. Not now though - you'd just confuse yourself.
 
@@ -27,11 +24,11 @@ end
 
 A couple of things of note:
 <ul>
-	<li>"require" is how you load external libraries.</li>
-	<li>The test class name ("SomethingTest") is a convention. Follow it and avoid pain.</li>
-	<li>The test method name also follows a convention : "test_" . Again, follow it and avoid pain.</li>
-	<li>Indentation is two spaces by convention. Follow, Avoid.</li>
-	<li>Parentheses for method calls are optional, but it's good form to put parentheses if there are two or more arguments to a method. Also, parentheses will save you if the parser has issues parsing. Remember that.</li>
+        <li>"require" is how you load external libraries.</li>
+        <li>The test class name ("SomethingTest") is a convention. Follow it and avoid pain.</li>
+        <li>The test method name also follows a convention : "test_" . Again, follow it and avoid pain.</li>
+        <li>Indentation is two spaces by convention. Follow, Avoid.</li>
+        <li>Parentheses for method calls are optional, but it's good form to put parentheses if there are two or more arguments to a method. Also, parentheses will save you if the parser has issues parsing. Remember that.</li>
 </ul>
 To run that, you would simply call "ruby my_test.rb" and see one test succeed and one test fail.
 
@@ -52,8 +49,8 @@ puts palindromize(input)
 This would be run, like the test, with "ruby myprog.rb"
 Some things to note:
 <ul>
-	<li>"gets.chomp" -- Ruby, by default, captures the return key being pressed. Chomp is necessary to remove that special character.</li>
-	<li>Did you notice how I put parentheses around "palindromize(input)" ? It's so that both the Ruby parser and human readers stay sane when reading the code.</li>
+        <li>"gets.chomp" -- Ruby, by default, captures the return key being pressed. Chomp is necessary to remove that special character.</li>
+        <li>Did you notice how I put parentheses around "palindromize(input)" ? It's so that both the Ruby parser and human readers stay sane when reading the code.</li>
 </ul>
 Things of note:
 

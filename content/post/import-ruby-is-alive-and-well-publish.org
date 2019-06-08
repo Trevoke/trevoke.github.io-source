@@ -1,11 +1,6 @@
 #+TITLE: Ruby is alive and well
-#+DATE: 2013-11-11 21:18:17 UTC
-#+PUBLISHDATE: 2013-11-13
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: I'm back from Rubyconf.
-
-Some people sa
+#+DATE: 2013-11-11
+#+TAGS: ruby, rubyconf
 
 I'm back from Rubyconf.
 

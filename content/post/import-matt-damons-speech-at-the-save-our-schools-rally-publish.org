@@ -1,9 +1,6 @@
 #+TITLE: Matt Damon's Speech at the Save Our Schools Rally
-#+DATE: 2011-08-04 03:24:09 UTC
-#+PUBLISHDATE: 2011-08-04
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: I flew overnight from Vancouver to be wit
+#+DATE: 2011-08-04
+#+TAGS: matt damon, speech, save our schools
 
 I flew overnight from Vancouver to be with you today. I landed in New York a few hours ago and caught a flight down here because I needed to tell you all in person that I think you’re awesome.
 I was raised by a teacher. My mother is a professor of early childhood education. And from the time I went to kindergarten through my senior year in high school, I went to public schools. I wouldn’t trade that education and experience for anything.

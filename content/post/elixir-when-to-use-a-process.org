@@ -1,5 +1,7 @@
+#+TITLE: When to use a process
+#+DATE: 2017-10-18
 #+DRAFT: t
-# When to use a process
+#+TAGS: elixir, processes
 
 http://theerlangelist.com/article/spawn_or_not
 

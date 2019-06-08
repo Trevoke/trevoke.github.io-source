@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       Slack, or, Freedom Bites
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-03-10T00:00:00-05:00
+#+DATE: 2016-03-10
 #+URI:         /blog/%y/%m/%d/slack-or-freedom-bites
 #+KEYWORDS:    slack, irc, communication
 #+TAGS:        slack, irc, communication

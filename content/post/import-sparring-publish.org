@@ -1,10 +1,6 @@
 #+TITLE: Sparring
-#+DATE: 2013-05-15 21:05:17 UTC
-#+PUBLISHDATE: 2013-05-15
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: <h1>What Sparring Is</h1>
-Sparring is a 
+#+DATE: 2013-05-15
+#+TAGS: martial arts, sparring
 
 <h1>What Sparring Is</h1>
 Sparring is a playful and explorative interaction.
@@ -36,9 +32,9 @@ Why are we wearing gloves? Headgear? A mouthpiece?  These aren't excuses to hi
 
 There are two excellent articles coming from the world of the Russian martial art called Systema. The first is called <a title="The Kickboxing Trap" href="http://russianmartialart.org/ikfkicktrap.html" target="_blank">The Kickboxing Trap</a>. It talks about the following three traps:
 <ol>
-	<li><em>Trying NOT to lose</em> (which is not exactly trying to win, but equally dangerous and much more subtle)</li>
-	<li><em>Trying to move faster than the opponent </em>(in Systema, sparring is done at a slower speed)</li>
-	<li><em>Having undefined goals</em> (WHY are you sparring? Which aspect of your practice are you working on improving?)</li>
+        <li><em>Trying NOT to lose</em> (which is not exactly trying to win, but equally dangerous and much more subtle)</li>
+        <li><em>Trying to move faster than the opponent </em>(in Systema, sparring is done at a slower speed)</li>
+        <li><em>Having undefined goals</em> (WHY are you sparring? Which aspect of your practice are you working on improving?)</li>
 </ol>
 You should go read it.
 
@@ -46,9 +42,9 @@ The second article is called <a title="Slow Sparring Game of Russian Martial Ar
 <blockquote>The basic premise of the Slow Sparring Game (SSG) is <strong>to create an environment where all technical aspects of hand to hand combat can be explored in relative safety</strong>, while providing the body a chance to execute and cultivate true spontaneity. To facilitate this, the <strong>SSG must be viewed as a slow motion representation of combat</strong>.</blockquote>
 Here are some things it talks about:
 <ol>
-	<li><span style="line-height: 13px;">Changing speed, whether speeding up or slowing down during the movement</span></li>
-	<li>Changing trajectory, just because you can when you're going slow</li>
-	<li>The defender moving faster than the attacker</li>
+        <li><span style="line-height: 13px;">Changing speed, whether speeding up or slowing down during the movement</span></li>
+        <li>Changing trajectory, just because you can when you're going slow</li>
+        <li>The defender moving faster than the attacker</li>
 </ol>
 You should go read it.
 <div></div>
@@ -79,4 +75,3 @@ Much can be learned during sparring. Usually after the fact. I can think of a ha
 So, to steal unashamedly from a great man... <a title="UnderstandGoodPlay - the book" href="http://www.bushinbooks.com/about.html" target="_blank">Understand? Good. Play!</a>
 
 </div>
-Collapse this post

@@ -1,11 +1,6 @@
 #+TITLE: New gem: ListBrowser
-#+DATE: 2010-01-15 19:01:19 UTC
-#+PUBLISHDATE: 2010-01-15
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: ~~~~ ListBrowser README ~~~~
-
-I was wor
+#+DATE: 2010-01-15
+#+TAGS: ruby, listbrowser
 
 ~~~~ ListBrowser README ~~~~
 
@@ -18,13 +13,16 @@ It can be used in irb, and really should be used there - when you call it on a t
 
 In my particular, special case, I would do something like this:
 
+
+#+BEGIN_SRC ruby
 require ‘sgf_parser’ # For my tree structure require ‘list_browser’ # For this.
 
 tree = SgfParser::Tree.new :filename => "kogo.sgf"
 
 ListBrowser.new tree.root, ‘parent’, ‘children’, ‘properties’
-
 # And follow the menu!
+#+END_SRC
+
 
  In my particular case, I would not need to enter those strings, as they
  just happen to be the names I chose for my tree structure, but they should

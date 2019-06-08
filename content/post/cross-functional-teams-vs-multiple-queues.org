@@ -1,4 +1,8 @@
+#+TITLE: Cross-functional teams vs. multiple queues
+#+DATE: 2019-05-02
 #+DRAFT: t
+#+TAGS: cross-functional teams
+
 I operate under what we will call an axiom here, which is "a colocated cross-functional team is the most efficient kind of team".
 Colocated simply means "all in the same spot", which ideally means "in the same work environment", so .. As close as possible to "at the same table".
 Cross-functional means "having in-team experts (or highly proficient people) for each level of the vertical stack that we're working with".

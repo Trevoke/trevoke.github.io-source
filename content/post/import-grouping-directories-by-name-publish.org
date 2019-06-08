@@ -1,13 +1,11 @@
 #+TITLE: Grouping directories by name
-#+DATE: 2009-01-27 14:20:43 UTC
-#+PUBLISHDATE: 2009-01-27
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: As is, this code will create an array of 
+#+DATE: 2009-01-27
+#+TAGS: ruby, script, grouping directories
 
 As is, this code will create an array of arrays - Directories with the same 6 first characters will be grouped in the same sub-array. I am using this for log directories, name format 20081125 for instance - you can just replace the logic to be whatever you need, of course.
 
-[sourcecode]dirs = []
+#+BEGIN_SRC ruby
+dirs = []
 Dir['*'].each do |item| 
   if File.directory?(item)
     if dirs.empty?
@@ -23,4 +21,5 @@ Dir['*'].each do |item|
     end
     dirs << [item] if !inserted
   end
-end[/sourcecode]
+end
+#+END_SRC

@@ -1,15 +1,12 @@
 #+TITLE: The schism in martial training paradigms
-#+DATE: 2012-06-19 21:52:17 UTC
-#+PUBLISHDATE: 2012-06-19
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: <h2>You're training wrong! No, YOU're tra
+#+DATE: 2012-06-19
+#+TAGS: martial arts
 
 <h2>You're training wrong! No, YOU're training wrong!</h2>
 A recent set of conversations have led me to examine the major difference in martial training. I'm going to start by separating training in two categories, making an imperfect black-and-white model of the martial world:
 <ul>
-	<li>Traditional eastern training</li>
-	<li>Jeet Kune Do-like training</li>
+        <li>Traditional eastern training</li>
+        <li>Jeet Kune Do-like training</li>
 </ul>
 Now, let's start to talk about the <em><strong>PURPOSE</strong></em><strong><em> </em></strong>of each, in a fairly roundabout way.
 
@@ -21,7 +18,7 @@ Okay, good point. You win. It's a silly drill. No, but seriously - superficially
 
 Let's look at it a little differently. People use their hands often, every day, for a number of fairly varied tasks. They use their hands with purpose, like grabbing a mug, drinking from it, driving, texting, typing on a keyboard, opening a door... People are used to relating to the world through their hands. It is more natural than, say, lying down on the ground and trying to get a knee or ankle lock on someone with both of your feet, so it is an easier starting point. So there's the grabbing part.
 
-Why the wrist? Well, actually, use the exact same argument as the last paragraph. People relate better to what they feel near their hands, they already have a relatively solid mind-body connection there, so new movements can be put together with fewer mental leaps. You can feel the resistance, in any direction, more easily. You can 'listen' more easily with your hands than, as a beginner, you can with other, bigger, less-trained muscles.
+Why the wrist? Well, what if someone were trying to take out a knife to stab you, wouldn't you try and stop them? Possibly by grabbing their wrist? 
 <h2>2. Why grab someone's wrist and let them do whatever they want?</h2>
 Yeah, I mean, why? They're gonna start moving your hand, arm, wrist, elbow, shoulder, body, this way and that, and you're just gonna let it happen? What kind of an idiot are you?
 

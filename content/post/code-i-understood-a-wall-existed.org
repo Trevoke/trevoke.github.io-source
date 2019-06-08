@@ -1,4 +1,8 @@
-#+DRAFT: t
-The code didn't demonstrate that I hit a wall, just that I understood a wall existed. - Josh B.
+#+TITLE: The code showed that I understood a wall existed
+#+DATE: 2015-03-18
+#+TAGS: dialogue with code, tdd
 
-(possible meaning: instead of just a "happy path", this is about a test that proves there is a problem in the code)
+Someone I worked with once said, "The code didn't demonstrate that I hit a wall, just that I understood a wall existed."
+
+This colleague had been using the technique of Test-Driven Design (TDD) to methodically get the codebase up to a point where it could be refactorable and, at the same time, to a point where a problem with the current design decisions could surface.
+He was happy because now that he was up to that point, the future decisions for the refactors were much more clear.

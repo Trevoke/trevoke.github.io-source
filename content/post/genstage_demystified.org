@@ -1,4 +1,8 @@
+#+TITLE: GenStage demistifying
+#+DATE: 2016-12-18
 #+DRAFT: t
+#+TAGS: elixir, genstage
+
 * GenStage demystified
 GenStage is a sort of miracle of UX for developers. The problem is, developers aren't used to it, so they're looking for the trick. Let's go over what GenStage is for, from which perspective to look at it, and see just how simple it is to start using it.
 ** Why would you use GenStage?

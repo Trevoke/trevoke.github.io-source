@@ -1,9 +1,6 @@
 #+TITLE: MIMVista and auto-deletion of archived studies
-#+DATE: 2008-11-04 16:56:03 UTC
-#+PUBLISHDATE: 2008-11-04
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: The MIM keeps 60 days by default. That ma
+#+DATE: 2008-11-04
+#+TAGS: mim, mimvista, archive
 
 The MIM keeps 60 days by default. That may be too much for you..
 

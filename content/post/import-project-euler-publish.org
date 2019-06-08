@@ -1,8 +1,0 @@
-#+TITLE: Project Euler
-#+DATE: 2009-01-06 20:50:35 UTC
-#+PUBLISHDATE: 2009-01-06
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: So.. I've solved a few problems from <a h
-
-So.. I've solved a few problems from <a href="http://projecteuler.net">Project Euler</a> .. And I wonder.. Is it cheating to use threads .. ?

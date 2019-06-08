@@ -1,19 +1,18 @@
 #+TITLE: Auto-vivifying hashes in Ruby
-#+DATE: 2009-11-06 08:27:09 UTC
-#+PUBLISHDATE: 2010-03-31
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: An auto-vivifying hash is a hash that let
+#+DATE: 2009-11-06
+#+TAGS: ruby, hashes, auto-vivifying hashes
 
 An auto-vivifying hash is a hash that lets you create sub-hashes automatically. This means that the following code becomes possible:
 
-[code]def cnh # silly name &quot;create nested hash&quot;
+#+BEGIN_SRC ruby
+def cnh # silly name &quot;create nested hash&quot;
   Hash.new {|h,k| h[k] = Hash.new(&amp;h.default_proc)}
 end
 my_hash = cnh
 my_hash[1][2][3] = 4
 my_hash # =&gt; { 1 =&gt; { 2 =&gt; { 3 =&gt;4 } } }
-[/code]
+#+END_SRC
+
 
 This is useful because it reduces the amount of logic in the code. No more "If sub-hash doesn't exist, create it!"
 
@@ -25,14 +24,16 @@ Update:
 
 Facets has a way of doing an auto-vivifying hash, too! Thanks to <a href="http://stackoverflow.com/questions/1503671/ruby-hash-autovivification-facets">Stackoverflow</a>.
 <div>
-<div>[code]
+<div>
+
+#+BEGIN_SRC ruby
 # Monkey patching Hash class:
 # File lib/core/facets/hash/autonew.rb, line 19
   def self.autonew(*args)
     leet = lambda { |hsh, key| hsh[key] = new( &amp;leet ) }
     new(*args,&amp;leet)
   end
-[/code]
+#+END_SRC
 
 </div>
 </div>

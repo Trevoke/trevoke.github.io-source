@@ -1,9 +1,6 @@
 #+TITLE: Poulsbo + Xorg 1.7 = (Hope you like downgrading)
-#+DATE: 2010-05-11 15:52:46 UTC
-#+PUBLISHDATE: 2010-05-11
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: If you happen to use Gentoo on a Notebook
+#+DATE: 2010-05-11
+#+TAGS: gentoo, poulsbo, xorg
 
 If you happen to use Gentoo on a Notebook, you may already know this. If not..
 

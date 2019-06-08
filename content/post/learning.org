@@ -1,4 +1,8 @@
+#+TITLE: How people learn
+#+DATE: 2015-10-18
 #+DRAFT: t
+#+TAGS: learning
+
 Memorize, understand, analyze, criticize.
 
 Observation

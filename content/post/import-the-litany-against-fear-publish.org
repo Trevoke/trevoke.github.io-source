@@ -1,9 +1,6 @@
 #+TITLE: The Litany Against Fear
-#+DATE: 2013-11-18 22:28:58 UTC
-#+PUBLISHDATE: 2013-11-18
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: So, the litany against fear goes like thi
+#+DATE: 2013-11-18
+#+TAGS: litany against fear, musing, meditation
 
 So, the litany against fear goes like this:
 

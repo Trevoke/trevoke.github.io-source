@@ -1,13 +1,11 @@
 #+TITLE: Random constrained permutations in Ruby
-#+DATE: 2009-12-17 13:50:20 UTC
-#+PUBLISHDATE: 2009-12-17
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: Look, Ma, these are my baby steps in algo
+#+DATE: 2009-12-17
+#+TAGS: ruby, permutations, random, constrained permutations
 
 Look, Ma, these are my baby steps in algorithms!
 
-[ruby]# list is the elements to be permuted
+#+BEGIN_SRC ruby
+# list is the elements to be permuted
 # y is the number of results desired
 # z is the number of elements per result
 # equalizer keeps track of who got used how many times
@@ -44,8 +42,8 @@ def constrained_permutations list, y, z
 end
 
 constrained_permutations [0,1,2,3,4,5,6], 6, 2
-=&gt; [[4, 0], [1, 3], [2, 5], [6, 0], [2, 5], [3, 6]]
+#=> [[4, 0], [1, 3], [2, 5], [6, 0], [2, 5], [3, 6]]
 constrained_permutations [0,1,2,3,4,5,6], 6, 2
-=&gt; [[4, 5], [6, 3], [0, 2], [1, 6], [5, 4], [3, 0]]
-[/ruby]
+#=> [[4, 5], [6, 3], [0, 2], [1, 6], [5, 4], [3, 0]]
+#+END_SRC
 

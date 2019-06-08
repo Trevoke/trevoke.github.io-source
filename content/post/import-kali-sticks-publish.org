@@ -1,8 +1,6 @@
 #+TITLE: Kali sticks
-#+DATE: 2008-05-15 08:13:39 UTC
-#+PUBLISHDATE: 2008-05-15
-#+DRAFT: t
-#+TAGS: untagged
+#+DATE: 2008-05-15
+#+TAGS: martial arts, escrima
 #+DESCRIPTION: Yesterday we had a small class, so we wer
 
 Yesterday we had a small class, so we were able to each work on what we needed. I, hopefully, now have the full chatan yara no sai form, so I just need to work it..

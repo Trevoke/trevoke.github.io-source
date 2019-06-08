@@ -1,8 +1,6 @@
 #+TITLE: Installing the mysql gem on OSX
-#+DATE: 2009-04-17 22:25:44 UTC
-#+PUBLISHDATE: 2009-04-17
-#+DRAFT: t
-#+TAGS: untagged
+#+DATE: 2009-04-17
+#+TAGS: ruby, mysql, osx, gem
 #+DESCRIPTION: Taken straight from <a href="http://www.e
 
 Taken straight from <a href="http://www.eclips3media.com/workshop/2008/10/installing-the-mysql-gem-on-os-x/">this blog</a>

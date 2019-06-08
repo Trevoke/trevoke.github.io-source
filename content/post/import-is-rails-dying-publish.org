@@ -1,11 +1,6 @@
 #+TITLE: Is Rails dying?
-#+DATE: 2013-02-02 17:29:28 UTC
-#+PUBLISHDATE: 2013-02-02
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: More to the point, should Rails die?
-
-R
+#+DATE: 2013-02-02
+#+TAGS: rails, ruby
 
 More to the point, should Rails die?
 

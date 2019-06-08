@@ -1,9 +1,6 @@
 #+TITLE: Closures in Ruby
-#+DATE: 2009-10-28 09:22:42 UTC
-#+PUBLISHDATE: 2009-10-28
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: I found a <a href="http://innig.net/softw
+#+DATE: 2009-10-28
+#+TAGS: ruby, closures
 
 I found a <a href="http://innig.net/software/ruby/closures-in-ruby.rb">script</a> that explains everything really well.
 Credit goes to:
@@ -11,4 +8,4 @@ Credit goes to:
 # Email: username "cantrell", domain name "pobox.com"
 Along with <a href="http://eli.thegreenplace.net/2006/04/18/understanding-ruby-blocks-procs-and-methods/">this blog entry</a>, it's made the whole deal much easier to figure out.
 
-Now.. Why didn't I get that when I was looking at LISP? 
+Now.. Why didn't I get that when I was looking at LISP?

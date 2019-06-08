@@ -1,10 +1,7 @@
-#+TITLE: Open source is wide open: Calling RAKE tasks
-#+DATE: 2009-12-15 14:38:25 UTC
-#+PUBLISHDATE: 2009-12-15
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: <a href="http://railsblogger.blogspot.com
+#+TITLE: Calling Rake tasks within the Rails env
+#+DATE: 2009-12-15
+#+TAGS: rails, rake
 
-<a href="http://railsblogger.blogspot.com/2009/03/in-queue_15.html">Open source is wide open: Calling RAKE tasks</a>.
+<a href="http://railsblogger.blogspot.com/2009/03/in-queue_15.html">Calling RAKE tasks within the Rails environment</a>.
 
 Good to know.

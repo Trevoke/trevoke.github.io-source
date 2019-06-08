@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       When people are the product
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2015-01-24T00:00:00-05:00
+#+DATE: 2015-01-24
 #+URI:         /blog/%y/%m/%d/when-people-are-the-product
 #+KEYWORDS:    antipattern, high-level
 #+TAGS:        company

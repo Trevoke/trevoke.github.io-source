@@ -1,9 +1,6 @@
 #+TITLE: Rails, HAML, alternatible CSS for tables
-#+DATE: 2009-09-02 11:31:32 UTC
-#+PUBLISHDATE: 2009-09-02
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: If you've done any kind of table display 
+#+DATE: 2009-09-02
+#+TAGS: ruby, rails, haml, css, cycle, alternating row styles
 
 If you've done any kind of table display in Rails, you've probably discovered the useful 'cycle' method:
 

@@ -1,7 +1,7 @@
 #+TITLE:       Why Elixir is the next Great Tech
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-03-31T00:00:00-05:00
+#+DATE: 2016-03-31
 #+URI:         /blog/%y/%m/%d/why-elixir-is-the-next-great-tech
 #+KEYWORDS:    elixir, phoenix
 #+TAGS:        elixir, phoenix

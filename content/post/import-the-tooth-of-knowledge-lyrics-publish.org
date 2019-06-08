@@ -1,9 +1,6 @@
 #+TITLE: The Tooth of Knowledge (Lyrics)
-#+DATE: 2012-04-26 21:32:16 UTC
-#+PUBLISHDATE: 2012-04-26
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: This song is at least as old as 1973 and 
+#+DATE: 2012-04-26
+#+TAGS: lyrics, knowledge, musing
 
 This song is at least as old as 1973 and is originally from Italy (Giorgio Gaber - Dente della conoscenza). If you like finding patterns, making analogies and metaphors, and overall pondering, then examine the tooth of knowledge in the contexts of: science, religion, culture, society (etiquette, etc), and finally, the internet.
 

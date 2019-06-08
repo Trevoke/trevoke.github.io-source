@@ -1,24 +1,23 @@
 #+TITLE: On re-reading old code
-#+DATE: 2009-12-09 12:07:51 UTC
-#+PUBLISHDATE: 2009-12-09
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: I came across this beauty:
+#+DATE: 2009-12-09
+#+TAGS: learning, ruby
 
-[ruby]def s
+I came across this beauty in some old code of mine:
 
-I came across this beauty:
-
-[ruby]def same_modality? list
+#+BEGIN_SRC ruby
+def same_modality? list
   check = list[0][0]
   list.each do |i|
     return false if check != i[0]
   end
   return true
-end[/ruby]
+end
+#+END_SRC
 This was "necessary" because I got an array of one-element arrays back, and I wanted to check whether or not that one element was the same across the array.
 
 Three seconds of thinking made me realize that just maybe, I could do this:
-[ruby]list.uniq.size == 1[/ruby]
+#+BEGIN_SRC ruby
+list.uniq.size == 1
+#+END_SRC
 
 I -like- Ruby.

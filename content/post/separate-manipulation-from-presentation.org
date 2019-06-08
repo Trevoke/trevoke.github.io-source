@@ -1,7 +1,7 @@
 #+TITLE:       Lesson from emacs: keep data easy to manipulate and easy to present
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2015-01-27T00:00:00-05:00
+#+DATE: 2015-01-27
 #+URI:         /blog/%y/%m/%d/Lesson-from-emacs-keep-data-easy-to-manipulate-and-easy-to-present
 #+KEYWORDS:    emacs, srp, coding, data
 #+TAGS:        emacs, srp, coding, sanity

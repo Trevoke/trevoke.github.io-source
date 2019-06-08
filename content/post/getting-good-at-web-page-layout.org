@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       Getting good at web page layout
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-04-03T00:00:00-05:00
+#+DATE: 2016-04-03
 #+DRAFT: t
 
 Read diveintohtml5.info for resources on the latest HTML5 tags. Use caniuse.com to know on how many browsers features work.

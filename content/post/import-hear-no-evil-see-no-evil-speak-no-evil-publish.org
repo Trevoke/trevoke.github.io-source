@@ -1,9 +1,6 @@
 #+TITLE: Hear no evil. See no evil. Speak no evil.
-#+DATE: 2012-07-12 22:00:57 UTC
-#+PUBLISHDATE: 2012-07-15
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: I had an epiphany tonight about something
+#+DATE: 2012-07-12
+#+TAGS: musing, lesson, three monkeys
 
 I had an epiphany tonight about something that just about everyone knows: the three monkeys. And I wanted to share it with you.
 

@@ -1,9 +1,6 @@
 #+TITLE: Dojo tonight
-#+DATE: 2009-09-16 21:50:39 UTC
-#+PUBLISHDATE: 2009-09-16
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: I had a good time in the dojo tonight. Ma
+#+DATE: 2009-09-16
+#+TAGS: martial arts, teaching
 
 I had a good time in the dojo tonight. Managed to bring a kid back from the verge of tears to feeling good and performing kata with solid focus and intent.. And then good sparring. Kid's 6, by the way.
 My class wasn't that good, though I got a compliment on my push-ups from sensei. Went through my kicks.. Then sparred..

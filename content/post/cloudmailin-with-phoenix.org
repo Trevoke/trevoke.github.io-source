@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       CloudMailIn with Phoenix
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-04-03T00:00:00-05:00
+#+DATE: 2016-04-03
 #+URI:         /blog/%y/%m/%d/cloudmailin-with-phoenix
 #+KEYWORDS:    phoenix, elixir, email, cloudmailin
 #+TAGS:        cloudmailin, phoenix, elixir

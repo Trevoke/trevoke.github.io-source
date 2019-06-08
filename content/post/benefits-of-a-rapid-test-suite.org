@@ -1,7 +1,7 @@
 #+TITLE:       Benefits of a rapid test suite
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-04-18T00:00:00-05:00
+#+DATE: 2016-04-18
 #+URI:         /blog/%y/%m/%d/benefits-of-a-rapid-test-suite
 #+KEYWORDS:    development, engineering, psychology, test suite, tdd, stress
 #+TAGS:        stress, development, tdd, psychology, testing

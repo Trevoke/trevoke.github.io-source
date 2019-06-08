@@ -1,9 +1,6 @@
 #+TITLE: Society's focus on knowledge
-#+DATE: 2011-10-20 08:23:34 UTC
-#+PUBLISHDATE: 2011-10-20
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: Here is a thought with which I've been wr
+#+DATE: 2011-10-20
+#+TAGS: worldview, musing, society, knowledge
 
 Here is a thought with which I've been wrestling for quite a while - the focus of society on knowledge and what it could be doing to us as people, human beings, and members of society, as well as to society itself.
 <h4><strong>Knowledge is power</strong><em> - knowing more can only help you</em></h4>

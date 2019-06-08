@@ -1,22 +1,19 @@
 #+TITLE: Nidan test
-#+DATE: 2010-03-19 12:33:42 UTC
-#+PUBLISHDATE: 2011-03-03
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: On February 28th, 2010, I took the test t
+#+DATE: 2010-03-19
+#+TAGS: martial arts, nidan test
 
 On February 28th, 2010, I took the test to become a second-degree black belt.
 
 Here is a summary of what I had to do, besides the calisthenics:
 <ul>
-	<li>All my empty-hand forms, opposite side. There are eight of them. This meant that if the first step was with the left foot, I had to do it with the right foot. I suppose you could also call that 'mirror'. The names are : seisan, seiuchin, naihanchi, wonsu, chinto, kusanku, sunsu, and sanchin. I admit we did not do sanchin opposite side, but that's not too surprising. It's not a complex form, but there's nothing to be gained from being able to do it regular and opposite side.</li>
-	<li>My first weapon form, opposite side. This is a bo (long staff) form. The name is tokumine no kun.</li>
-	<li>My third weapon form. This is a bo form. The name is urashi bo (sometimes called urashi no kun).</li>
-	<li>My fourth weapon form. This is a sai form. the name is chatan yara no sai.</li>
-	<li>The fifth weapon form. Note that I said "The" and not "My" ... Because I hadn't learned it. I was told to stay with the group and keep up. I did. That is my proud moment. :) It is a tonfa form. The name is hamahiga no tonfa.</li>
-	<li>Self-defense, including bunkai (analysis) from the various empty-hand forms.</li>
-	<li>Knife defenses</li>
-	<li>Sparring. This was actually rather fun, about thirty people in line and we (everyone testing for nidan) fought them one after another.</li>
+        <li>All my empty-hand forms, opposite side. There are eight of them. This meant that if the first step was with the left foot, I had to do it with the right foot. I suppose you could also call that 'mirror'. The names are : seisan, seiuchin, naihanchi, wonsu, chinto, kusanku, sunsu, and sanchin. I admit we did not do sanchin opposite side, but that's not too surprising. It's not a complex form, but there's nothing to be gained from being able to do it regular and opposite side.</li>
+        <li>My first weapon form, opposite side. This is a bo (long staff) form. The name is tokumine no kun.</li>
+        <li>My third weapon form. This is a bo form. The name is urashi bo (sometimes called urashi no kun).</li>
+        <li>My fourth weapon form. This is a sai form. the name is chatan yara no sai.</li>
+        <li>The fifth weapon form. Note that I said "The" and not "My" ... Because I hadn't learned it. I was told to stay with the group and keep up. I did. That is my proud moment. :) It is a tonfa form. The name is hamahiga no tonfa.</li>
+        <li>Self-defense, including bunkai (analysis) from the various empty-hand forms.</li>
+        <li>Knife defenses</li>
+        <li>Sparring. This was actually rather fun, about thirty people in line and we (everyone testing for nidan) fought them one after another.</li>
 </ul>
 It was tough, but it was mostly a mind exercise. I must admit not remembering any thoughts or feelings during the test; I heard the instructions and executed them, and waited for the next instructions.
 

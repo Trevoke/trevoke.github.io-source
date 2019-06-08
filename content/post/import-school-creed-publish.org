@@ -1,9 +1,6 @@
 #+TITLE: School creed
-#+DATE: 2013-04-27 19:58:04 UTC
-#+PUBLISHDATE: 2013-04-27
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: In the dojo where I spent my formative ye
+#+DATE: 2013-04-27
+#+TAGS: martial arts, meditation, setting intention
 
 In the dojo where I spent my formative years as a martial artist, there is a school creed. A quick search online has revealed that many schools have a similar creed. Every class says it as we begin, after bowing in, before calisthenics. I hear it and/or say it about three times per dojo night.
 
@@ -24,9 +21,9 @@ Why do we make people repeat these words? We sometimes ask kids if they know wha
 
 Well, the point is practice. These sentences are to be pronounced not only as assertions, but mindfully, pronouncing your desire to grow in that direction. They are simple precepts:
 <ol>
-	<li><span style="line-height: 13px;">Always aim for the things in life that will allow you to grow, always avoid the things that will make you shrink. Trick: sometimes you have to shrink in order to grow. Are those decisions mistakes? Are they following this code?</span></li>
-	<li>Always try to be the best you can be, always try to allow others around you to be the best they can be. Trick: can you do both at the same time? Do you sometimes have to not be the best you can be to prod people into being the best they can be?</li>
-	<li>What you are learning martially is meant for good. Possibly along the path of the Life-Giving Sword, but not necessarily. Simple application: don't get into bar fights. Trick application: everything you do must come from Love.</li>
+        <li><span style="line-height: 13px;">Always aim for the things in life that will allow you to grow, always avoid the things that will make you shrink. Trick: sometimes you have to shrink in order to grow. Are those decisions mistakes? Are they following this code?</span></li>
+        <li>Always try to be the best you can be, always try to allow others around you to be the best they can be. Trick: can you do both at the same time? Do you sometimes have to not be the best you can be to prod people into being the best they can be?</li>
+        <li>What you are learning martially is meant for good. Possibly along the path of the Life-Giving Sword, but not necessarily. Simple application: don't get into bar fights. Trick application: everything you do must come from Love.</li>
 </ol>
 &nbsp;
 

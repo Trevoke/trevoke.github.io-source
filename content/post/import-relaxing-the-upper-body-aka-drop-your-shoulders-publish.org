@@ -1,9 +1,6 @@
 #+TITLE: Relaxing the upper body.. aka "drop your shoulders"
-#+DATE: 2009-02-24 15:33:42 UTC
-#+PUBLISHDATE: 2009-02-24
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: A friend of mine wrote about shoulder rel
+#+DATE: 2009-02-24
+#+TAGS: martial arts, shoulders, relaxation
 
 A friend of mine wrote about shoulder relaxation.. Apparently we both had the same mental block, but he solved it first - shoulder relaxation (and by extension, all relaxation) can be done up/down and ... forward/back!
 

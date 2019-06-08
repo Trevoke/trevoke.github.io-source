@@ -1,8 +1,5 @@
 #+TITLE: Martial arts while sick
-#+DATE: 2008-11-12 17:41:04 UTC
-#+PUBLISHDATE: 2008-11-12
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: On Monday I went to the dojo as usual, th
+#+DATE: 2008-11-12
+#+TAGS: martial arts
 
 On Monday I went to the dojo as usual, though I'd had a cold over the week-end and wasn't quite over it (I'm still not over it now..). During form practice, I was constantly correcting myself - I guess that goes to show I need to practice a lot more, if I dedicate this much mindpower to each form.. :)

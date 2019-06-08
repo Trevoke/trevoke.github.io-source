@@ -1,9 +1,6 @@
 #+TITLE: New position at Cyrus
-#+DATE: 2010-04-22 20:54:28 UTC
-#+PUBLISHDATE: 2010-04-22
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: On Monday, April 26th, I am starting a ne
+#+DATE: 2010-04-22
+#+TAGS: cyrus innovation
 
 On Monday, April 26th, I am starting a new job at Cyrus Innovation. It may well be fair that I am starting a new career - it's a hop, skip and jump for me. I'm switching from Systems Administration / Tech Support / Hell desk (not a typo, sadly) to Development / Programming.
 

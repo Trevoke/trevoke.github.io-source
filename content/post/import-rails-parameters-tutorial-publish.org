@@ -1,8 +1,0 @@
-#+TITLE: Rails parameters tutorial
-#+DATE: 2009-09-14 10:22:02 UTC
-#+PUBLISHDATE: 2009-09-14
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: http://www.spacevatican.org/2008/7/18/par
-
-http://www.spacevatican.org/2008/7/18/parametrised-to-the-max

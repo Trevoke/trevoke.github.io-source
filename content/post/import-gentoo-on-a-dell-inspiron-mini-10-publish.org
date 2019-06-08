@@ -1,10 +1,6 @@
 #+TITLE: Gentoo on a Dell Inspiron Mini 10
-#+DATE: 2010-03-01 11:06:11 UTC
-#+PUBLISHDATE: 2010-03-04
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: There are a few gotchas:
-1) If you have 
+#+DATE: 2010-03-01
+#+TAGS: gentoo, dell inspiron mini 10
 
 There are a few gotchas:
 1) If you have a SSD drive, you need to <em>modprobe pata_sch</em> to see it.

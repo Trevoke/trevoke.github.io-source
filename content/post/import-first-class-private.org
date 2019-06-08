@@ -1,11 +1,6 @@
 #+TITLE: First Class
-#+DATE: 2013-06-11 21:17:07 UTC
-#+PUBLISHDATE: 2013-06-11
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: The first class went really well.
-
-My t
+#+DATE: 2013-06-11
+#+TAGS: martial arts, teaching
 
 The first class went really well.
 

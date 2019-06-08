@@ -1,8 +1,7 @@
-#+DRAFT: t
 #+TITLE:       Continuous Improvement
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-02-04T00:00:00-05:00
+#+DATE: 2016-02-04
 #+URI:         /blog/%y/%m/%d/continuous-improvement
 #+KEYWORDS:    continuous improvement, habits, programming
 #+TAGS:        habits, programming, continuous improvement

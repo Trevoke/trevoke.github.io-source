@@ -1,9 +1,6 @@
 #+TITLE: So, you want to spar?
-#+DATE: 2008-03-21 15:27:53 UTC
-#+PUBLISHDATE: 2008-03-21
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION:  Sparring can be one of the many reasons 
+#+DATE: 2008-03-21
+#+TAGS: sparring
 
  Sparring can be one of the many reasons one wants to join a martial arts school, sometimes even their only interest. Unless you join a school based on street defense, you may not do as much as you'd like. Besides, the insurances and legality issues being what they are, usually you are limited to sparring gear which lets you mostly throw punches and kicks.
 

@@ -1,9 +1,0 @@
-#+TITLE: Redcar 0.1 on Ubuntu with Ruby 1.8 - success
-#+DATE: 2009-04-22 15:33:29 UTC
-#+PUBLISHDATE: 2009-04-22
-#+DRAFT: t
-#+TAGS: untagged
-#+DESCRIPTION: And all I did was follow the instructions
-
-And all I did was follow the instructions in the readme.. Now to play with the software!
-www.redcareditor.com

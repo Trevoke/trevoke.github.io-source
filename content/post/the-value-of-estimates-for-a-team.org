@@ -1,7 +1,7 @@
 #+TITLE:       The value of estimates for a team
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2015-04-02T00:00:00-05:00
+#+DATE: 2015-04-02
 #+URI:         /blog/%y/%m/%d/the-value-of-estimates-for-a-team
 #+KEYWORDS:    agile, estimation
 #+TAGS:        agile, estimation
