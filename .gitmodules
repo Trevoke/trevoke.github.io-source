@@ -2,3 +2,6 @@
 	path = public
 	url = git@github.com:Trevoke/trevoke.github.io.git
 	branch = master
+[submodule "themes/kiss"]
+	path = themes/kiss
+	url = https://github.com/ribice/kiss.git
