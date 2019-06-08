@@ -1,4 +1,4 @@
-#+TITLE: A few hard, black-and-white rules for getting started with Object-Oriente Programming
+#+TITLE: Hard-and-fast, black-and-white rules for getting started with Object-Oriented Programming
 #+DATE: 2012-10-18
 #+TAGS: object-oriented programming, rules
 
