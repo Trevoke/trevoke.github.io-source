@@ -1,6 +1,7 @@
 #+TITLE: Art of Agile Planning / Art of Agile Delivery, by James Shore and Diana Larsen
 #+DATE: 2011-11-02
-#+TAGS: james shore, jim shore, diana larsen, art of agile, agile, aoap
+#+CATEGORIES: process
+#+TAGS: james-shore jim-shore diana-larsen art-of-agile agile aoap
 
 The Art of Agile Planning (#aoap on Twitter, and AOAP from now on) is a 2-day course. The focus is on understanding the higher-level constructs of Agile and how they imbricate. In the course, one learns how the ideal Agile team is composed (hint: it's cross-functional and co-located) and what practices and techniques will be used to organize at all levels, from the developers' standup to the customers' research for the next best value-delivering feature, including how to properly create a feature that developers can work on and how to best break it down into stories (and then into tasks).
 

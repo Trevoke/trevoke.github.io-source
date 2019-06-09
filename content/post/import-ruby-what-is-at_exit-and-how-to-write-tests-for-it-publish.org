@@ -1,6 +1,7 @@
 #+TITLE: Ruby: What is at_exit and how to write tests for it.
 #+DATE: 2012-01-06
-#+TAGS: ruby, at_exit, testing
+#+CATEGORIES: programming
+#+TAGS: ruby at_exit testing
 
 Ruby has a neat feature called at_exit which takes a block and then executes the contents of this block when the program ends. There are a couple of VERY important details:
 <ol>
@@ -9,7 +10,8 @@ Ruby has a neat feature called at_exit which takes a block and then executes the
 </ol>
 Once you know this, using at_exit and writing tests for it becomes a little easier:
 
-[ruby]class Piddler
+#+BEGIN_SRC ruby
+class Piddler
    def initialize
      create_pid_file
    end
@@ -21,17 +23,21 @@ Once you know this, using at_exit and writing tests for it becomes a little easi
      File.new(pid_file, 'w')
      at_exit { FileUtils.rm_f pid_file }
    end
-end[/ruby]
+end
+#+END_SRC
+
 
 What you'll notice is that the at_exit block is defined RIGHT AFTER I create what I will need to resolve/undo/finish - not separately, right inside the method.
 
 &nbsp;
 
-[ruby]def test_clears_pid_file_when_it_exits
+#+BEGIN_SRC ruby
+def test_clears_pid_file_when_it_exits
    at_exit { assert_equal 0, Dir['/tmp/piddler/*].size}
    Piddler.new
 end
-[/ruby]
+#+END_SRC
+
 
 The advantage of that is that I know exactly when it gets defined. For this example, it gets defined at the end of the 'initialize &gt; create_pid_file' call. This means that any at_exit blocks defined BEFORE that will be resolved AFTER.
 

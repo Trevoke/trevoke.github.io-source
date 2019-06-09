@@ -1,6 +1,7 @@
 #+TITLE: Extending Ruby for Fun and Profit
 #+DATE: 2009-10-27
-#+TAGS: dave thomas, metaprogramming, ruby
+#+CATEGORIES: programming
+#+TAGS: dave-thomas metaprogramming ruby
 
 Wow. I just watched Dave Thomas' talk <a href="http://www.infoq.com/presentations/metaprogramming-ruby">Ruby Metaprogramming: Extending Ruby for Fun and Profit</a> and it explained so many things.
 

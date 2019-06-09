@@ -3,8 +3,8 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2015-01-27
 #+URI:         /blog/%y/%m/%d/Lesson-from-emacs-keep-data-easy-to-manipulate-and-easy-to-present
-#+KEYWORDS:    emacs, srp, coding, data
-#+TAGS:        emacs, srp, coding, sanity
+#+CATEGORIES: programming
+#+TAGS: emacs single-responsibility-principle programming sanity
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: A lesson from emacs about the dangers of trying to do everything at once

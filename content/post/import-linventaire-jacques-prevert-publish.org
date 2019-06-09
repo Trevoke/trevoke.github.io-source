@@ -1,6 +1,7 @@
 #+TITLE: L'inventaire - Jacques Prevert
 #+DATE: 2011-07-10
-#+TAGS: poetry, french, prevert
+#+CATEGORIES: poetry
+#+TAGS: french prevert
 
 Une pierre
 deux maisons

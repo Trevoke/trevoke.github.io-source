@@ -1,6 +1,7 @@
 #+TITLE: Ruby is alive and well
 #+DATE: 2013-11-11
-#+TAGS: ruby, rubyconf
+#+CATEGORIES: programming
+#+TAGS: ruby rubyconf
 
 I'm back from Rubyconf.
 

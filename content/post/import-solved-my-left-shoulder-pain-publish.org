@@ -1,6 +1,7 @@
 #+TITLE: Solved my left shoulder pain?
 #+DATE: 2008-04-15
-#+TAGS: martial arts
+#+CATEGORIES: martial-arts
+#+TAGS: pain alignment
 
 Is it a worrying trend that I write mostly about pain in here? :)
 

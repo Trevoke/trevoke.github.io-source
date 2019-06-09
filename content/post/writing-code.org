@@ -1,8 +1,9 @@
 #+TITLE:       Writing code (working title)
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2016-04-03
 #+DRAFT: t
+#+DATE: 2016-04-03
+
 
 One of the things that we’re arguing about, I believe, can be summed up to this point:
 

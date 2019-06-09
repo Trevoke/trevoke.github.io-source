@@ -1,10 +1,13 @@
 #+TITLE: Recursively iterate through every file/subfolder  - VBScript
 #+DATE: 2008-12-30
+#+CATEGORIES: programming
 #+TAGS: vbscript
 
 This is actually a lot simpler than I expected (gimme a break, this is my second foray into VBS!)
 
-[sourcecode language='vb']Set fs = WScript.CreateObject ("Scripting.FileSystemObject")
+
+#+BEGIN_SRC vbscript
+Set fs = WScript.CreateObject ("Scripting.FileSystemObject")
 
 Sub ShowSubFolders(Folder)
         For Each Subfolder In Folder.SubFolders
@@ -16,4 +19,5 @@ Sub ShowSubFolders(Folder)
         Next
 End Sub
 
-ShowSubFolders fs.GetFolder("C:\your\path\here")[/sourcecode]
+ShowSubFolders fs.GetFolder("C:\your\path\here")
+#+END_SRC

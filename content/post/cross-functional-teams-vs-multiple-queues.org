@@ -1,6 +1,7 @@
 #+TITLE: Cross-functional teams vs. multiple queues
 #+DATE: 2019-05-02
 #+DRAFT: t
+#+CATEGORIES: process
 #+TAGS: cross-functional teams
 
 I operate under what we will call an axiom here, which is "a colocated cross-functional team is the most efficient kind of team".

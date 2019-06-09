@@ -1,6 +1,7 @@
 #+TITLE: install the mysql gem on Ubuntu
 #+DATE: 2009-04-19
-#+TAGS: ruby, ubuntu, mysql, gem
+#+CATEGORIES: programming
+#+TAGS: ruby ubuntu mysql gem
 
 $ sudo apt-get install libmysqlclient15-dev
 $ sudo gem install mysql

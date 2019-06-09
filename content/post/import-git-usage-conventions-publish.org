@@ -1,5 +1,6 @@
 #+TITLE: git usage conventions
 #+DATE: 2011-08-30
+#+CATEGORIES: programming
 #+TAGS: git
 
 We've been using git at work for a greenfield project and, so far, this has worked for us. It could be a useful template to get another team started.

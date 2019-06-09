@@ -1,6 +1,7 @@
 #+TITLE: Inter-array permutations in Ruby
 #+DATE: 2009-12-17
-#+TAGS: ruby, permutations
+#+CATEGORIES: programming
+#+TAGS: ruby permutations
 
 I don't really have a better name for this. It's also not completely clean, but it works. I had, almost a year ago (362 days ago), written a blog post about <a href="http://trevoke.net/blog/2008/12/20/lexicographic-permutations-in-ruby">lexicographic permutations</a>. That was about permutations of elements within one array.
 Someone on ruby-forum asked about permutations between multiple arrays. I <a href="http://stackoverflow.com/questions/710670/c-permutation-of-an-array-of-arraylists">found something in C#</a>, which I was happy to transcribe to Ruby and tweak a little.

@@ -1,10 +1,12 @@
 #+TITLE: School creed
 #+DATE: 2013-04-27
-#+TAGS: martial arts, meditation, setting intention
+#+CATEGORIES: martial-arts
+#+TAGS: meditation intention
 
 In the dojo where I spent my formative years as a martial artist, there is a school creed. A quick search online has revealed that many schools have a similar creed. Every class says it as we begin, after bowing in, before calisthenics. I hear it and/or say it about three times per dojo night.
 
 It's a simple creed, and clearly not unique. Here's what it says:
+
 <blockquote>I intend to develop myself in a positive manner
 and avoid anything that would reduce my mental
 growth or physical health.
@@ -15,6 +17,7 @@ constructively and defensively, to help myself
 and others and never be abusive or offensive.
 
 &nbsp;</blockquote>
+
 Kids and adults alike learn this creed and repeat it, together. All are taught to pronounce it powerfully, in the manner of an assertion. In that way, it is very similar to the few sentences American children have to repeat in their schools at the beginning of each day, and which sickened me for how similar it was to unadulterated brainwashing. Speaking of which, <a title="The Kafka Shuffle" href="http://the-programmers-stone.com/2008/01/05/the-kafka-shuffle/">this</a> is a very interesting and potentially disturbing read on the reading materials in school, but I digress.
 
 Why do we make people repeat these words? We sometimes ask kids if they know what some words in there mean, like self-discipline. But certainly we're not teaching vocabulary to adults. So what's the point?

@@ -1,6 +1,7 @@
 #+TITLE: Nidan test
 #+DATE: 2010-03-19
-#+TAGS: martial arts, nidan test
+#+CATEGORIES: martial-arts life-event
+#+TAGS: nidan-test belt-test
 
 On February 28th, 2010, I took the test to become a second-degree black belt.
 

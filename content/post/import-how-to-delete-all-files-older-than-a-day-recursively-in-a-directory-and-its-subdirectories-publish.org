@@ -1,6 +1,7 @@
 #+TITLE: How to delete all files older than a day recursively in a directory and its subdirectories
 #+DATE: 2008-11-04
-#+TAGS: ruby, script, delete files
+#+CATEGORIES: programming
+#+TAGS: ruby script delete-files
 
 Whoo! I haven't done a post that long in a while!
 

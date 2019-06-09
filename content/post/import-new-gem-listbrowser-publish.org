@@ -1,6 +1,7 @@
 #+TITLE: New gem: ListBrowser
 #+DATE: 2010-01-15
-#+TAGS: ruby, listbrowser
+#+CATEGORIES: programming
+#+TAGS: ruby listbrowser
 
 ~~~~ ListBrowser README ~~~~
 

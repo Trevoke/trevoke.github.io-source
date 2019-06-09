@@ -1,6 +1,7 @@
 #+TITLE: Choosing the right editor
 #+DATE: 2019-06-08
-#+TAGS: vim, emacs, text editors, programming, rubymine, sublime
+#+CATEGORIES: programming
+#+TAGS: vim emacs text-editors rubymine sublime vscode
 
 <h1>Choosing the right editor</h1>
 

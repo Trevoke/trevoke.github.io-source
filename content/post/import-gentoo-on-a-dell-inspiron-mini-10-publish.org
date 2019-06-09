@@ -1,6 +1,7 @@
 #+TITLE: Gentoo on a Dell Inspiron Mini 10
 #+DATE: 2010-03-01
-#+TAGS: gentoo, dell inspiron mini 10
+#+CATEGORIES: sysadmin
+#+TAGS: gentoo dell-inspiron-mini-10
 
 There are a few gotchas:
 1) If you have a SSD drive, you need to <em>modprobe pata_sch</em> to see it.

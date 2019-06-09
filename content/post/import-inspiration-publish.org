@@ -1,6 +1,7 @@
 #+TITLE: A scene from a story: martial arts training
 #+DATE: 2010-10-18
-#+TAGS: story idea, fighting, martial arts, training, senses, mushin
+#+CATEGORIES: writing
+#+TAGS: fighting training senses mushin
 
 The Master had been clear on this point - the room was treated so the five physical senses would be useless. When Scott asked how, the Master laughed and told him it was magic. Scott had chuckled and shaken his head. Clearly, no point in arguing - not today's knowledge.
 

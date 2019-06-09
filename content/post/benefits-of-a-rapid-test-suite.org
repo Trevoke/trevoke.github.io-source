@@ -3,11 +3,11 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2016-04-18
 #+URI:         /blog/%y/%m/%d/benefits-of-a-rapid-test-suite
-#+KEYWORDS:    development, engineering, psychology, test suite, tdd, stress
-#+TAGS:        stress, development, tdd, psychology, testing
+#+CATEGORIES: programming
+#+TAGS:        stress development tdd psychology testing test-suite
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
-#+DESCRIPTION: A rapid test suite means your developers can play with the codebase. This is a good thing.
+
 
 * The value of a rapid test suite
 ** Developers and codebases

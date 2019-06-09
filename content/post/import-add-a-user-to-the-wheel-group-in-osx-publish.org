@@ -1,6 +1,7 @@
 #+TITLE: Add a user to the wheel group in OSX
 #+DATE: 2013-02-07
-#+TAGS: osx, wheel group
+#+CATEGORIES: sysadmin programming
+#+TAGS: osx wheel
 
 Why are these things always so weird? Someday I'll understand why OSX is set up that way. And on that day, I'll probably weep.
 <blockquote>$ sudo /usr/bin/dscl . -append /groups/wheel GroupMembership <em>username</em>

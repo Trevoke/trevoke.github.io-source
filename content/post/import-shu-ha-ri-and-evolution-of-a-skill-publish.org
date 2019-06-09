@@ -1,13 +1,17 @@
 #+TITLE: Shu ha ri and evolution of a skill
 #+DATE: 2014-02-18
-#+TAGS: shu ha ri, learning, growth, agile, martial arts
+#+CATEGORIES: martial-arts process
+#+TAGS: shu-ha-ri learning growth
 
-Shu Ha Ri comes from the world of Japanese Noh theater, and has been since attached to the world of martial arts and <a title="Alistair Cockburn's words on Shu Ha Ri" href="http://alistair.cockburn.us/Shu+Ha+Ri">Agile development</a>. Roughly, "shu ha ri" means "learn / detach / transcend". The link has some words about that meaning. I'd like to talk about my particular take on Shu Ha Ri, which came out of a parking-lot conversation with a martial arts teacher friend of mine:
+Shu Ha Ri comes from the world of Japanese Noh theater, and has been since attached to the world of martial arts and <a title="Alistair Cockburn's words on Shu Ha Ri" href="http://alistair.cockburn.us/Shu+Ha+Ri">Agile development</a>. Roughly, "shu ha ri" means "learn / detach / transcend". The link has some words about that meaning. I'd like to talk about my particular take on Shu Ha Ri, which came out of a parking-lot
+conversation with a martial arts teacher friend of mine:
+
 <ol>
         <li>Shu. Do the damn technique.</li>
         <li>Ha. Vary the damn technique.</li>
         <li>Ri. You don't need the damn technique.</li>
 </ol>
+
 And here is the slightly longer interpretation.
 
 SHU: right foot in front, grab the left wrist from the front with the right hand. Study the particular wrist escape that has been taught in this situation. In Agile words: be rigorous about your Agile practice. Do it "dumbly" until you get good at it and everyone in your team is OK with it.

@@ -1,6 +1,7 @@
 #+TITLE: The schism in martial training paradigms
 #+DATE: 2012-06-19
-#+TAGS: martial arts
+#+CATEGORIES: martial-arts
+#+TAGS: wrist-grab punches boxing drills
 
 <h2>You're training wrong! No, YOU're training wrong!</h2>
 A recent set of conversations have led me to examine the major difference in martial training. I'm going to start by separating training in two categories, making an imperfect black-and-white model of the martial world:

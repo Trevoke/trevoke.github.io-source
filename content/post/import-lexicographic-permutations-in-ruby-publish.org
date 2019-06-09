@@ -1,6 +1,7 @@
 #+TITLE: (Lexicographic) Permutations in Ruby
 #+DATE: 2008-12-20
-#+TAGS: ruby, permutations
+#+CATEGORIES: programming
+#+TAGS: ruby permutations
 
 Taking the code from <a title="Permutations in Ruby and Python" href="http://abachman.disqus.com/simple_permutations_in_python_and_ruby/" target="_blank">this other blog</a> ... It's pretty elegant Ruby!
 

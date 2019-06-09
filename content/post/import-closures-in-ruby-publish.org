@@ -1,6 +1,7 @@
 #+TITLE: Closures in Ruby
 #+DATE: 2009-10-28
-#+TAGS: ruby, closures
+#+CATEGORIES: programming
+#+TAGS: ruby closures
 
 I found a <a href="http://innig.net/software/ruby/closures-in-ruby.rb">script</a> that explains everything really well.
 Credit goes to:

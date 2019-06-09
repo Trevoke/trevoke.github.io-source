@@ -1,6 +1,7 @@
 #+TITLE: Is Rails dying?
 #+DATE: 2013-02-02
-#+TAGS: rails, ruby
+#+CATEGORIES: programming
+#+TAGS: rails ruby
 
 More to the point, should Rails die?
 

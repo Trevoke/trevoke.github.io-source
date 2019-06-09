@@ -1,6 +1,7 @@
 #+TITLE: Ruby: gem ffi on OSX Mountain Lion 10.8
 #+DATE: 2012-08-21
-#+TAGS: ruby, ffi, osx 10.8
+#+CATEGORIES: programming
+#+TAGS: ruby ffi osx-10.8
 
 EASY!
 

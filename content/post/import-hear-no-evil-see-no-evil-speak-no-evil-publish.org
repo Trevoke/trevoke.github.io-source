@@ -1,13 +1,16 @@
 #+TITLE: Hear no evil. See no evil. Speak no evil.
 #+DATE: 2012-07-12
-#+TAGS: musing, lesson, three monkeys
+#+CATEGORIES: philosophy
+#+TAGS: three-monkeys
 
 I had an epiphany tonight about something that just about everyone knows: the three monkeys. And I wanted to share it with you.
 
 The three monkeys are accompanied by the words: "See no evil. Hear no evil. Speak no evil." The funny thing is that one monkey is covering his eyes, one monkey is covering his ears, and one monkey is covering his mouth! Let's examine that for a second.
 
 See no evil -&gt; Don't look
+
 Hear no evil -&gt; Don't listen
+
 Speak no evil -&gt; Don't talk
 
 That's kind of an odd transposition, isn't it? How does it work?

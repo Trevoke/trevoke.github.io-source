@@ -3,11 +3,10 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2016-10-23
 #+URI:         /blog/%y/%m/%d/maintainability-is-relative
-#+KEYWORDS:    code, maintainability, testing
-#+TAGS:        maintainability
+#+TAGS: maintainability code testing
+#+CATEGORIES: programming
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
-#+DESCRIPTION: How maintainable does your code need to be? It depends
 
 I just found a great example of the variability of the need of creating maintainable code.
 
@@ -17,7 +16,7 @@ I temporarily wasn't sure of where that script was. I remembered it was running 
 
 The original:
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC bash
   #!/bin/bash
 
   cd /home/user/www/tao

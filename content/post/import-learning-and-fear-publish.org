@@ -1,6 +1,7 @@
 #+TITLE: Learning and fear
 #+DATE: 2013-11-18
-#+TAGS: learning, fear, junot diaz
+#+CATEGORIES: philosophy
+#+TAGS: learning fear junot-diaz
 
 <blockquote>
 <div>“Life is going to present to you a series of transformations. And the point of education should be to transform you. To teach you how to be transformed so you can ride the waves as they come. But today, the point of education is not education. It’s accreditation. The more accreditation you have, the more money you make. That’s the instrumental logic of neoliberalism. And this instrumental logic comes wrapped in an envelope of fear. And my Ivy League, my MIT students are the same. All I feel coming off of my students is fear. That if you slip up in school, if you get one bad grade, if you make one fucking mistake, the great train of wealth will leave you behind. And that’s the logic of accreditation. If you’re at Yale, you’re in the smartest 1% in the world. […] And the brightest students in the world are learning in fear. I feel it rolling off of you in waves. But you can’t learn when you’re afraid. You cannot be transformed when you are afraid.”</div>
