@@ -26,6 +26,6 @@ cd ..
 # add source changes to git
 git add -A
 
-git commit -am "update source"
+git commit -am "update generated site submodule"
 
 git push origin master
