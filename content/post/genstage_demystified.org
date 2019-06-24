@@ -1,23 +1,23 @@
 #+TITLE: GenStage demistifying
-#+DATE: 2016-12-18
-#+DRAFT: t
+#+DATE: 2019-06-23
 #+TAGS: elixir, genstage
 
 * GenStage demystified
-GenStage is a sort of miracle of UX for developers. The problem is, developers aren't used to it, so they're looking for the trick. Let's go over what GenStage is for, from which perspective to look at it, and see just how simple it is to start using it.
+GenStage is a miracle of UX for developers. There's only one catch: because of its purpose, it's built for the machine, not for the developer. Let's go over what GenStage is for, and see just how simple it is to start using it.
 ** Why would you use GenStage?
 GenStage is what you would use if you had "some work" (=events=) that needed to go through one or more transformations, which you could easily split into multiple parallelizable steps.
 In the world of GenStage, the =producer= is what will hold the =events= that the =consumers= will then work on.
 ** How to think about GenStage
-There is only one trick to understand fundamentally how GenStage works. Every other little fact derives from this principle. Here it is.
+GenStage is based on two fundamental principles:
 
-#+BEGIN_QUOTE
-Consumers request events from producers. The producers' only job is to feed the consumer when it is hungry. Consumer not hungry? No feeding.
-#+END_QUOTE
+1. Consumers request events from producers. The producers' only job is to feed the consumer when it is hungry. Consumer not hungry? No feeding.
+2. GenStage "stages" exist to be split in a way that benefits the computer's constraints, not the programmer's constraints
 
-This means that there is a natural backpressure mechanism built into GenStage: work is not pushed to the workers, the workers pull when they are ready for more work.
+In other words:
 
-In GenStage terms, the only complexity is that /every callback should check the demand/ and make sure we produce enough to match that demand. Thankfully, this is always the same work, so it can be extracted to a function.
+1. GenStage has a built-in a backpressure mechanism: work is not pushed to the workers, the workers pull when they are ready for more work. The only complexity is that /every callback should check the demand/ and make sure we produce enough to match that demand. Thankfully, this is always the same work, so it can be extracted to a function.
+2. Use producers, producer-consumers, and consumers to use computing resources (e.g. CPU, I/O, RAM) effectively. Do not use them to organize your domain model.
+
 ** Let's start using GenStage
 *** First, a test project
 =mix new genstage_test=
@@ -35,7 +35,7 @@ Edit your mix.exs file and make sure your =deps= look like this:
 *** Now, GenStage
 I'm not going to cover everything about GenStage here - once you've read this blog entry, you'll be able to read the documentation ( https://hexdocs.pm/gen_stage/GenStage.html ) and know which bits go where, without the shadow of a doubt.
 
-GenStage is basically broken down into three kinds of processes: =producer=, =producer-consumer=, and =consumer=. A producer will hold the events that will be requested by consumers, and obviously a producer-consumer will request events from a producer and then be able to produce events, which means you can create a chain of transformations very easily.
+GenStage is basically broken down into three kinds of processes: =producer=, =producer-consumer=, and =consumer=. A producer will hold the events that will be requested by consumers, and a producer-consumer will request events from a producer and then be able to produce events, which means you can create a chain of transformations very easily.
 
 For our example, let us say the "events" will be incoming geolocations in the form of latitude/longitude pairs, that we will need to transform them into the name of the closest city, and then count the number of times a city was found. Let's say each "event" will be of the form ={latitude, longitude}= (e.g. ={42, -72}=)
 
@@ -49,7 +49,7 @@ First, let's write a mock geolocation service:
 defmodule Geolocation do
   @cities ["New York", "Constantinople", "Istanbul", "Paris", "London"]
   def call({_lat, _long}) do
-    :timer.sleep(500) # This is a complex operation.
+    :timer.sleep(500) # This operation takes a while
     Enum.random(@cities)
   end
 end
