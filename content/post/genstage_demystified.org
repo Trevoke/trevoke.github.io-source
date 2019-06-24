@@ -1,6 +1,6 @@
-#+TITLE: GenStage demistifying
+#+TITLE: GenStage demystified
 #+DATE: 2019-06-23
-#+TAGS: elixir, genstage
+#+TAGS: elixir genstage
 #+CATEGORIES: programming
 
 * GenStage demystified
