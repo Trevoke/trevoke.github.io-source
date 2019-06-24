@@ -7,7 +7,7 @@ hugo -t even
 
 # Go To Public folder
 cd public
-# Add changes to git.
+# Add generated changes to git.
 git add -A
 
 # Commit changes.
@@ -22,3 +22,10 @@ git push origin master
 
 # Come Back
 cd ..
+
+# add source changes to git
+git add -A
+
+git commit -am "update source"
+
+git push origin master
