@@ -1,7 +1,7 @@
 #+TITLE: Unpacking Elixir's Phoenix
 #+DATE: 2017-11-12
 #+DRAFT: t
-#+TAGS: elixir, phoenix, plug, cowboy
+#+TAGS: elixir phoenix plug cowboy
 
 
 * Unpacking Elixir's Phoenix

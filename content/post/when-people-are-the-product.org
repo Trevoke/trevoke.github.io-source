@@ -3,8 +3,7 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2015-01-24
 #+URI:         /blog/%y/%m/%d/when-people-are-the-product
-#+KEYWORDS:    antipattern, high-level
-#+TAGS:        company
+#+TAGS: company
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: What it means that the company does not care about its people

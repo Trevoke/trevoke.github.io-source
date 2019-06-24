@@ -4,7 +4,7 @@
 #+DATE: 2016-03-01
 #+URI:         /blog/%y/%m/%d/email-in-emacs-offlineimap,-notmuch,-smtpmulti,-gpg,-keybase
 #+KEYWORDS:    keybase, gpg, emacs, email, notmuch, offlineimap
-#+TAGS:        emacs, gpg, email, notmuch
+#+TAGS: emacs gpg email notmuch
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: How I brought my email into emacs and remembered how email is supposed to work

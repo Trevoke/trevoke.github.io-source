@@ -3,8 +3,7 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2016-04-24
 #+URI:         /blog/%y/%m/%d/emacs-email-gpg-part-1
-#+KEYWORDS:    emacs, email, gpg
-#+TAGS:        emacs, email, gpg
+#+TAGS: emacs email gpg
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Reading your mail with emacs

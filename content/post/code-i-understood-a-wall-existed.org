@@ -1,6 +1,7 @@
 #+TITLE: The code showed that I understood a wall existed
 #+DATE: 2015-03-18
-#+TAGS: dialogue with code, tdd
+#+TAGS: tdd
+#+CATEGORIES: programming
 
 Someone I worked with once said, "The code didn't demonstrate that I hit a wall, just that I understood a wall existed."
 

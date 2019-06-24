@@ -2,7 +2,7 @@
 #+DATE: 2019-05-02
 #+DRAFT: t
 #+CATEGORIES: process
-#+TAGS: cross-functional teams
+#+TAGS: cross-functional-teams
 
 I operate under what we will call an axiom here, which is "a colocated cross-functional team is the most efficient kind of team".
 Colocated simply means "all in the same spot", which ideally means "in the same work environment", so .. As close as possible to "at the same table".

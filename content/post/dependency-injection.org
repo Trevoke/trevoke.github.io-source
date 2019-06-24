@@ -3,8 +3,8 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2016-04-25
 #+URI:         /blog/%y/%m/%d/dependency-injection
-#+KEYWORDS:    testing, design patterns, dependency injection
-#+TAGS:        testing
+#+KEYWORDS: testing design-patterns dependency-injection
+#+TAGS: testing
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Dependency Injection is good. You should use it. Here's why and how.
