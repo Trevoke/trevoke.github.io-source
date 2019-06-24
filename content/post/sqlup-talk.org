@@ -3,7 +3,6 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2016-04-03
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t reveal_title_slide:nil reveal_slide_number:nil reveal_progress:t reveal_history:t reveal_center:t
-#+REVEAL_THEME: solarized
 #+DRAFT: t
 
 * Sqlup.el : the story of the minor mode that could

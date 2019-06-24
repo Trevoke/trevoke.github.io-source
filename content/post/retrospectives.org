@@ -3,8 +3,7 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2016-04-26
 #+URI:         /blog/%y/%m/%d/how-to-run-retrospectives
-#+KEYWORDS:    retrospectives
-#+TAGS:        retrospectives
+#+TAGS: retrospectives
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: How to run retrospectives
