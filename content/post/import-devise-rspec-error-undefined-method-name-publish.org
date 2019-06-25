@@ -5,7 +5,11 @@
 
 If you're using Devise and rspec on Rails 3, and you want to override a controller, and you end up with an error that makes no sense whatsoever:
 
-"Undefined method 'name' for nil:NilClass", well then, you probably want to add the following line to your tests:
+#+BEGIN_SRC
+Undefined method 'name' for nil:NilClass
+#+END_SRC
+
+well then, you probably want to add the following line to your tests:
 
 #+BEGIN_SRC ruby
 @request.env["devise.mapping"] = Devise.mappings[:admin]

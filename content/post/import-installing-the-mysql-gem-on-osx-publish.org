@@ -5,9 +5,13 @@
 
 Taken straight from <a href="http://www.eclips3media.com/workshop/2008/10/installing-the-mysql-gem-on-os-x/">this blog</a>
 
-in a terminal.. First do a 'locate mysql_config' and then replace the path in the following command with where that file is.
+in a terminal.. First do a ~locate mysql_config~ and then replace the path in the following command with where that file is.
 
-$ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config
+
+~$ sudo gem install mysql -- --with-mysql-config=/usr/local/mysql/bin/mysql_config~
+
+#+BEGIN_SRC
 Building native extensions.  This could take a while...
 Successfully installed mysql-2.7
 1 gem installed
+#+END_SRC

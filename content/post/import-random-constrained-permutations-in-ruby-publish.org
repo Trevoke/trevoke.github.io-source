@@ -17,27 +17,27 @@ def constrained_permutations list, y, z
 
   results = []
   # Do this until we get as many results as desired
-  while results.size &lt; y
+  while results.size < y
     pool = []
     puts pool
     least_used = equalizer.each_value.min
     # Find how used the least used element was
-    while pool.size &lt; z
+    while pool.size < z
       # Do this until we have enough elements in this resultset
       element = nil
       while element.nil?
-        # If we run out of &quot;least used elements&quot;, then we need to increment
-        # our definition of &quot;least used&quot; by 1 and keep going.
+        # If we run out of 'least used elements', then we need to increment
+        # our definition of 'least used' by 1 and keep going.
         element = list.shuffle.find do |x|
-          !pool.include?(x) &amp;&amp; equalizer[x] == least_used
+          !pool.include?(x) && equalizer[x] == least_used
         end
         least_used += 1 if element.nil?
       end
       equalizer[element] += 1
       # This element has now been used one more time.
-      pool &lt;&lt; element
+      pool << element
     end
-    results &lt;&lt; pool
+    results << pool
   end
   return results
 end

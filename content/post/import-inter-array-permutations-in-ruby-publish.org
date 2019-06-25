@@ -13,7 +13,7 @@ def array_permutations array, index=0
   result = []
   array[index].each do |element| # For each array
     array_permutations(array, index + 1).each do |x| # Permute permute permute
-      result &lt;&lt; &quot;#{element}, #{x}&quot;
+      result << "#{element}, #{x}"
     end
   end
   return result
@@ -39,7 +39,7 @@ Edit - of course, my solution is hackish, and someone came up with a quicker and
 def fancy_array_permutation array
   return array[0] if array.size == 1
   first = array.shift
-  return first.product( fancy_array_permutation(array) ).map {|x| x.flatten.join(&quot; &quot;)}
+  return first.product( fancy_array_permutation(array) ).map {|x| x.flatten.join(' ')}
 end
 #+END_SRC
 

@@ -21,4 +21,4 @@ Three seconds of thinking made me realize that just maybe, I could do this:
 list.uniq.size == 1
 #+END_SRC
 
-I -like- Ruby.
+I _like_ Ruby.

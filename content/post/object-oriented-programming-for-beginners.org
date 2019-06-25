@@ -11,4 +11,7 @@
 6. Always compose
 7. Changeability is the most important thing
 8. A "good" variable name is a name that describes unambiguously what the variable contains, without describing the implementation
-9. If you don’t use good variable names, I will look for you. I will find you. And I will kill you.
+9. If you don’t use good variable names, I will look for you. I will find you. And I will kill you.[fn:1]
+
+
+[fn:1] This is a reference to the movie "Taken".

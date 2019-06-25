@@ -6,12 +6,12 @@
 An auto-vivifying hash is a hash that lets you create sub-hashes automatically. This means that the following code becomes possible:
 
 #+BEGIN_SRC ruby
-def cnh # silly name &quot;create nested hash&quot;
-  Hash.new {|h,k| h[k] = Hash.new(&amp;h.default_proc)}
+def cnh # silly name "create nested hash"
+  Hash.new {|h,k| h[k] = Hash.new(&h.default_proc)}
 end
 my_hash = cnh
 my_hash[1][2][3] = 4
-my_hash # =&gt; { 1 =&gt; { 2 =&gt; { 3 =&gt;4 } } }
+my_hash # => { 1 => { 2 => { 3 => 4 } } }
 #+END_SRC
 
 
@@ -31,8 +31,8 @@ Facets has a way of doing an auto-vivifying hash, too! Thanks to <a href="http:/
 # Monkey patching Hash class:
 # File lib/core/facets/hash/autonew.rb, line 19
   def self.autonew(*args)
-    leet = lambda { |hsh, key| hsh[key] = new( &amp;leet ) }
-    new(*args,&amp;leet)
+    leet = lambda { |hsh, key| hsh[key] = new( &leet ) }
+    new(*args, &leet)
   end
 #+END_SRC
 

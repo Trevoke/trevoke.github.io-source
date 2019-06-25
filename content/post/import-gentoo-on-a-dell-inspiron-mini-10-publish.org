@@ -4,6 +4,7 @@
 #+TAGS: gentoo dell-inspiron-mini-10
 
 There are a few gotchas:
+
 1) If you have a SSD drive, you need to <em>modprobe pata_sch</em> to see it.
 2) when using GRUB, install it on whatever drive the hard drive is, even if it's /dev/sdc -- and let your FSTAB use /dev/sda. Chances are that /dev/sda is your liveUSB.
 3) In the kernel, in the I2C options, don't let it pick automatically - instead, select the algorithm options in the menu that appears (I don't know it off-hand, will edit this post later to add the important information). This will allow you to install the kernel driver for the poulsbo card (kmod-psb, I believe).
@@ -16,21 +17,25 @@ Enable the "B43" driver in the kernel.
 Then, follow the instructions given <a href="http://linuxwireless.org/en/users/Drivers/b43#fw-b43-lp">here</a>:
 
 
-<blockquote>git clone http://git.bu3sch.de/git/b43-tools.git
+#+BEGIN_SRC
+git clone http://git.bu3sch.de/git/b43-tools.git
 cd b43-tools/fwcutter
 make
 cd ..
-</blockquote>
+#+END_SRC
+
 Use version 4.174.64.19 of Broadcom's proprietary driver. (The tarball is mislabeled as "4.178.10.4", but it is actually 4.174.64.19.)
+
 Download and extract the firmware from this driver tarball (Gentoo's installation directory for this is /lib/firmware):
 
 
-
-<blockquote>export FIRMWARE_INSTALL_DIR="/lib/firmware"
+#+BEGIN_SRC
+export FIRMWARE_INSTALL_DIR="/lib/firmware"
 wget http://downloads.openwrt.org/sources/broadcom-wl-4.178.10.4.tar.bz2
 tar xjf broadcom-wl-4.178.10.4.tar.bz2
 cd broadcom-wl-4.178.10.4/linux
 sudo ../../fwcutter/b43-fwcutter -w "$FIRMWARE_INSTALL_DIR" wl_apsta.o
-</blockquote>
+#+END_SRC
+
 
 At the time of this writing, although the b43-firmware is available and promises to give us what we need, the b43-fwcutter tool is only at version 12, and not 13, so it can't be used. This is why we need to use <em>git</em> to download the latest version and correctly build the firmware by hand.

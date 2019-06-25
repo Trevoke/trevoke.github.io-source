@@ -9,7 +9,7 @@ I won't waste your time repeating what the guy wrote in his blog - you're welcom
 
 #+BEGIN_SRC ruby
 def permutations array
-  if array.size &lt; 2
+  if array.size < 2
     yield array
   else
     array.each do |element|

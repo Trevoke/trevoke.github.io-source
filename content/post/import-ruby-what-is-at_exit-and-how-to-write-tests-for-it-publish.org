@@ -3,11 +3,13 @@
 #+CATEGORIES: programming
 #+TAGS: ruby at_exit testing
 
-Ruby has a neat feature called at_exit which takes a block and then executes the contents of this block when the program ends. There are a couple of VERY important details:
+Ruby has a neat feature called ~at_exit~ which takes a block and then executes the contents of this block when the program ends. There are a couple of VERY important details:
+
 <ol>
-        <li>It takes a block and converts it into a Proc object at the time of parsing. This means that the data has to be available in the binding, or you'll run into errors. Example: instance variables need to be set before you can use them in that block. Better idea: don't use instance variables in there at all.</li>
-        <li>You can 'chain' at_exit calls, and they will be resolved in a First In, Last Out (FILO) order.</li>
+        <li>It takes a block and converts it into a ~Proc~ object at the time of parsing. This means that the data has to be available in the binding, or you'll run into errors. Example: instance variables need to be set before you can use them in that block. Better idea: don't use instance variables in there at all.</li>
+        <li>You can 'chain' ~at_exit~ calls, and they will be resolved in a First In, Last Out (FILO) order.</li>
 </ol>
+
 Once you know this, using at_exit and writing tests for it becomes a little easier:
 
 #+BEGIN_SRC ruby
@@ -19,7 +21,7 @@ class Piddler
    private
 
    def create_pid_file
-     pid_file = &quot;/tmp/piddler/my_pid&quot; #Simplified for example purposes
+     pid_file = '/tmp/piddler/my_pid' #Simplified for example purposes
      File.new(pid_file, 'w')
      at_exit { FileUtils.rm_f pid_file }
    end
@@ -33,7 +35,7 @@ What you'll notice is that the at_exit block is defined RIGHT AFTER I create wha
 
 #+BEGIN_SRC ruby
 def test_clears_pid_file_when_it_exits
-   at_exit { assert_equal 0, Dir['/tmp/piddler/*].size}
+   at_exit { assert_equal 0, Dir['/tmp/piddler/*'].size}
    Piddler.new
 end
 #+END_SRC
@@ -41,4 +43,3 @@ end
 
 The advantage of that is that I know exactly when it gets defined. For this example, it gets defined at the end of the 'initialize &gt; create_pid_file' call. This means that any at_exit blocks defined BEFORE that will be resolved AFTER.
 
-&nbsp;

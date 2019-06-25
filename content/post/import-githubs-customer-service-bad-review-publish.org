@@ -4,20 +4,28 @@
 
 I will readily admit that I don't know all that much about Github or Git for that matter. I use them, they're handy, and that's where it stops. I read about a git feature called "smart HTTP", which would allow to communicate both ways with git (push and pull) with HTTP or HTTPS. So, I asked Github about it - it would be nice for them to have this feature, because I currently can't push to Github from work. Here's how the exchange went.
 (this first message is from memory, as I used the web interface, so I don't have a copy of it)
+
 <strong>Me:</strong> <em>
 Hi, I just read about this: http://progit.org/2010/03/04/smart-http.html and I would like to know when Github plans on implementing this, because it would be very useful.
+
 _______
+
 <strong>From: Tekkub (Support staff)
 Subject: [Contact] Upgrading git to support smart HTTP ?</strong></em>
 
 You do know that Scott (the guy who wrote Pro Git) works for us, right?  We're well
 aware of smart http...<em>
+
 _______
+
 </em><em>I tried to make light of the condescending tone and sent the following reply:</em>
+
 <strong>Me: </strong>
 Nope.. Had no idea.
 So when will it be implemented? ;)
+
 _______
+
 <strong>From: Tekkub (Support staff)
 Subject: [Contact] Upgrading git to support smart HTTP ?</strong>
 

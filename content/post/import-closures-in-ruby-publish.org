@@ -5,8 +5,11 @@
 
 I found a <a href="http://innig.net/software/ruby/closures-in-ruby.rb">script</a> that explains everything really well.
 Credit goes to:
+#+BEGIN_QUOTE
 # CLOSURES IN RUBY     Paul Cantrell    http://innig.net
 # Email: username "cantrell", domain name "pobox.com"
+#+END_QUOTE
+
 Along with <a href="http://eli.thegreenplace.net/2006/04/18/understanding-ruby-blocks-procs-and-methods/">this blog entry</a>, it's made the whole deal much easier to figure out.
 
 Now.. Why didn't I get that when I was looking at LISP?

@@ -3,12 +3,11 @@
 #+CATEGORIES: programming
 #+TAGS: ruby listbrowser
 
-~~~~ ListBrowser README ~~~~
 
 I was working on a parser for a very specific tree structure, and was frustrated that there wasn’t a simple way to parse it in irb. "What??", I thought. "I have to use my brain?! God forbid!". So I set to using my brain a little more to create this tool. It’s not much, but maybe it’ll make someone’s life a little easier.
 
 Install: (set up gemcutter)
-gem install ListBrowser
+~gem install ListBrowser~
 
 It can be used in irb, and really should be used there - when you call it on a tree structure, you’ll get a menu with a list of choices on how you want to go through whatever structure you gave it.
 
@@ -16,11 +15,11 @@ In my particular, special case, I would do something like this:
 
 
 #+BEGIN_SRC ruby
-require ‘sgf_parser’ # For my tree structure require ‘list_browser’ # For this.
+require 'sgf_parser' # For my tree structure require ‘list_browser’ # For this.
 
-tree = SgfParser::Tree.new :filename => "kogo.sgf"
+tree = SgfParser::Tree.new(:filename => "kogo.sgf")
 
-ListBrowser.new tree.root, ‘parent’, ‘children’, ‘properties’
+ListBrowser.new(tree.root, 'parent', 'children', 'properties')
 # And follow the menu!
 #+END_SRC
 

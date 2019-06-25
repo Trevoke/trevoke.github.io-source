@@ -3,7 +3,10 @@
 #+CATEGORIES: programming
 #+TAGS: ruby ubuntu mysql gem
 
-$ sudo apt-get install libmysqlclient15-dev
-$ sudo gem install mysql
+#+BEGIN_SRC bash
+sudo apt-get install libmysqlclient15-dev
+sudo gem install mysql
+#+END_SRC
+
 
 Easy! But .. gotta know it.

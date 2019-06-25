@@ -5,7 +5,7 @@
 
 EASY!
 
-sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
+~sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2~
 
 &nbsp;
 

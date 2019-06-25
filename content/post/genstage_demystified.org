@@ -3,12 +3,14 @@
 #+CATEGORIES: programming
 #+TAGS: elixir genstage
 
-* GenStage demystified
 GenStage is a miracle of UX for developers. There's only one catch: because of its purpose, it's built for the machine, not for the developer. Let's go over what GenStage is for, and see just how simple it is to start using it.
-** Why would you use GenStage?
+
+* Why would you use GenStage?
+
 GenStage is what you would use if you had "some work" (=events=) that needed to go through one or more transformations, which you could easily split into multiple parallelizable steps.
 In the world of GenStage, the =producer= is what will hold the =events= that the =consumers= will then work on.
-** How to think about GenStage
+
+* How to think about GenStage
 GenStage is based on two fundamental principles:
 
 1. Consumers request events from producers. The producers' only job is to feed the consumer when it is hungry. Consumer not hungry? No feeding.
@@ -22,7 +24,9 @@ In other words:
 ** Let's start using GenStage
 *** First, a test project
 =mix new genstage_test=
+
 =cd genstage_test=
+
 Edit your mix.exs file and make sure your =deps= look like this:
 
 #+BEGIN_SRC elixir
@@ -33,6 +37,7 @@ Edit your mix.exs file and make sure your =deps= look like this:
 #+END_SRC
 
 =mix deps.get=
+
 *** Now, GenStage
 I'm not going to cover everything about GenStage here - once you've read this blog entry, you'll be able to read the documentation ( https://hexdocs.pm/gen_stage/GenStage.html ) and know which bits go where, without the shadow of a doubt.
 

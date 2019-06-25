@@ -60,9 +60,9 @@ The new script is in Ruby. I say new because I learned Ruby after Bash, and once
 
   tao = File.open('tao.txt', 'r') { |f| f.readlines('%') }
   beatrice = File.open('beatricetao.txt', 'r') { |f| f.readlines('%') }
-  Disclaimer="The first version is from the Fortune files - a program for random quotes on GNU/Linux.\n The second version is the Beatrice Tao, available online, reproduced here with permission.."
+  disclaimer="The first version is from the Fortune files - a program for random quotes on GNU/Linux.\n The second version is the Beatrice Tao, available online, reproduced here with permission.."
 
-  File.open('.body', 'w') { |f| f << "#{tao[counter]}\n\n________________\n\n#{beatrice[counter]}\n\n#{Disclaimer}" }
+  File.open('.body', 'w') { |f| f << "#{tao[counter]}\n\n________________\n\n#{beatrice[counter]}\n\n#{disclaimer}" }
 
   `cat .body | ./clive -u username -w password -j daily_tao -s "Tao Te Ching: Chapter #{counter+1}" --charset utf8`
   counter = 0 if (counter +=1 ) > 80
