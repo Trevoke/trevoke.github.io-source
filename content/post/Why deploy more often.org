@@ -1,0 +1,9 @@
+#+TITLE:       Why deploy more often?
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2019-07-29
+#+DRAFT: t
+
+ The chief reasons for deploying more often are:
+1. Product-related. If you can deploy more often, you can start collecting information and learning more often, which allows you to learn faster and make better decisions faster, including pivoting if necessary. Obviously this is only necessary if your organization needs this and it’s only possible if the product  experts are good enough.
+2. Tech-related. In order to deploy more often, you need to have higher trust in the codebase, higher trust in the continuous integration/continuous delivery process, higher trust in the test suite, and higher trust in your colleagues. You also often need to use feature flags when you get closer to continuous delivery, because things that you work on may not in fact get released when they get deployed. There’s also additional things to work out with releasing more often: how do you adjust if something “goes wrong” ? Do you roll back, do you roll forward? Having those things figured out reduces a large amount of cognitive load and stress, and the less stress the programmers feel, the better the quality of the code, generally, and that usually rolls into higher sustained pace of delivery.
