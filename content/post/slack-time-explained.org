@@ -1,0 +1,31 @@
+#+TITLE: slack-time-explained
+#+DATE: 2019-11-18T18:10:10-05:00
+#+PUBLISHDATE: 2019-11-18T18:10:10-05:00
+#+DRAFT: t
+#+TAGS: agile velocity tech-debt refactor slack slack-time
+#+DESCRIPTION: An answer to the question "how do you plan ALL the work when you use velocity?"
+
+* Slack time
+
+** A couple of graphs
+
+#+caption:Velocity per iteration, that should be "clear"
+[[file:/images/slack-time-01.png]]
+
+#+caption:Hours per iteration
+[[file:/images/slack-time-02.png]]
+
+#+caption:Hours that velocity mapped to
+[[file:/images/slack-time-03.png]]
+
+| iteration | velocity | hours |
+|-----------+----------+-------|
+|         0 |        0 |    39 |
+|         1 |        5 |    39 |
+|         2 |        2 |    40 |
+|         3 |       10 |    40 |
+|         4 |        7 |    38 |
+|         5 |        5 |    37 |
+|         6 |        7 |    39 |
+|         7 |        8 |    35 |
+|         8 |        9 |    39 |
