@@ -1,22 +1,67 @@
-#+TITLE: slack-time-explained
+#+TITLE: Slack time explained
 #+DATE: 2019-11-18T18:10:10-05:00
 #+PUBLISHDATE: 2019-11-18T18:10:10-05:00
-#+DRAFT: t
+#+DRAFT: f
 #+TAGS: agile velocity tech-debt refactor slack slack-time
 #+DESCRIPTION: An answer to the question "how do you plan ALL the work when you use velocity?"
 
-* Slack time
 
-** A couple of graphs
+* What problem are we trying to solve?
+You're a software product team. Your job is to steadily deliver working product. Generally this means there's two types of work you're going to do:
 
-#+caption:Velocity per iteration, that should be "clear"
-[[file:/images/slack-time-01.png]]
+1. Work that directly correlates to delivering value to the customer
+2. Work that directly correlates to the ability to keep on delivering value at the same pace
+
+In "agile" terminology, those categories are labeled, respectively, "stories" and "tech debt".
+
+There is tension between these two. We want to deliver as much value as possible ALL THE TIME. In a perfect world, with perfect knowledge and perfect skill, we would never need to do any of the second category of work. However, as James Shore[fn:1] once said, "as soon as our fingers touch the keyboard, we add tech debt."
+
+#+begin_quote
+As soon as our fingers touch the keyboard, we add tech debt.
+
+— James Shore
+#+end_quote
+
+This means that, unerringly, unfailingly, the team will need to do some of the second category of work.
+
+Given this, the problem statement is as follows:
+
+What is the simplest way to manage both types of work that the team needs to do which allows the team to maintain a focus on the delivery of work that is valuable to the customer?
+
+** Let's define a tool that we'll call "velocity"
+
+We'll define "velocity" as "the amount of work, deliverable by the team in a given unit of time, which directly correlates to value to the customer." In other words, ~velocity = work / time~ [fn:2].
+
+This provides a baseline, a point of calibration, for the team's ability to deliver work that correlates to value. We can now say "The team is able to deliver X work in Y time."
+
+The easy next question is, how do we define the time? Well, often we just use one- or two-week timespans. We don't have to search too hard for this.
+
+The harder next question is, how do we define "amount of work?". I've written [[./post/the-value-of-estimates-for-a-team.org][a blog entry]] on the answer to that question, so I'll say it in one sentence here: we choose an internally self-consistent method of evaluating the complexity of given units of work, relative to other units of work, and we call this "estimates."
+
+What this allows us to do is add these estimates together and obtain something self-consistent that can be used to understand how the team's delivery of work is evolving.
+
+Our new formula is: ~velocity = estimates / time~ .
+
+** Let's explore some of the consequences of doing this
+
+Using the estimates to measure velocity, as explained above, can yield the following graph when we look at how much work a squad can deliver.
+
+#+caption:Velocity per iteration
+[[file:/images/velocity-per-iteration.png]]
+
+To note, this does not say anything about how much people work, it just says how much estimated complexity of work was delivered.
+
+Without knowing anything about your team, I feel confident in stating that the next graph is probably a conservative estimate of how many hours every single person on your team worked per iteration (assuming a one-week iteration):
 
 #+caption:Hours per iteration
-[[file:/images/slack-time-02.png]]
+[[file:/images/hours-worked-per-iteration.png]]
 
-#+caption:Hours that velocity mapped to
-[[file:/images/slack-time-03.png]]
+What is more interesting to look at is how many hours it took to deliver the estimated work:
+
+#+caption:Hours mapped to velocity
+[[file:/images/map-hours-velocity.png]]
+
+I'm mapping it to a table below as well:
 
 | iteration | velocity | hours |
 |-----------+----------+-------|
@@ -29,3 +74,12 @@
 |         6 |        7 |    39 |
 |         7 |        8 |    35 |
 |         8 |        9 |    39 |
+|-----------+----------+-------|
+
+What we see here is that the team always delivered on its commitment without working overtime. Go, team! We also see that sometimes, the commitments were reached before the end of the iteration. This left the team with time that wasn't committed to story work. This is PERFECT time to do tech debt! Guess what we call this time? We call it *slack time*.
+
+* Footnotes
+
+[fn:2] This, of course, is related to the physics term, where "velocity" is defined to be a change of position in a given direction over time. We could just say that it's "speed", but speed is just distance over time, irrespective of direction, and we very much care that we're going in a direction where we deliver more value.
+
+[fn:1] Author of "Art of Agile Development"
