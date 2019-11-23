@@ -76,7 +76,13 @@ I'm mapping it to a table below as well:
 |         8 |        9 |    39 |
 |-----------+----------+-------|
 
-What we see here is that the team always delivered on its commitment without working overtime. Go, team! We also see that sometimes, the commitments were reached before the end of the iteration. This left the team with time that wasn't committed to story work. This is PERFECT time to do tech debt! Guess what we call this time? We call it *slack time*.
+What we see here is that the team always delivered on its commitment without working overtime. Go, team! We also see that sometimes, the commitments were reached before all the time was spent. This left the team with time that wasn't committed to story work. This is PERFECT time to do tech debt! Guess what we call this time? We call it *slack time*.
+
+** Let's round this out a bit
+
+We don't want to try maximize time spent, because time spent does not directly correlate to value delivered.
+
+We don't want to estimate tech debt and add it to the velocity because the velocity is only for story work -- by creating this restriction, we maintain a correlation between velocity (story work done) and value delivered, to get a sense of how valuable overall the decisions that have led to the work have been.
 
 * Footnotes
 
