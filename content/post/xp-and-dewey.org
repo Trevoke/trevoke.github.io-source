@@ -1,0 +1,4 @@
+ codebase is like a library and a programming team is like a librarian.
+A good codebase is a library that uses the Dewey decimal system, and a good programming team is a librarian that knows the Dewey decimal system.
+Also, the Dewey decimal system is XP practices. (duh :p)
+As the library grows, it becomes literally impossible to find your way around without using some version of the Dewey decimal system. If your first engineer was named Matt, it’s possible that the library is using the Matt decimal system, and that means only Matt can find his way around or even make changes safely.
