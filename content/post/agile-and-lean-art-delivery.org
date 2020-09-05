@@ -1,0 +1,118 @@
+#+TITLE: Agile and lean art delivery
+#+DATE: 2020-09-05T10:26:00-04:00
+#+PUBLISHDATE: 2020-09-05T10:26:00-04:00
+#+DRAFT: t
+#+TAGS: agile lean
+#+DESCRIPTION: A great, concrete example of iterative, waste-limiting process in the context of art commission
+
+I've been helping teams and organizations improve their approach to agile and lean delivery for a decade now, and by far one of the most difficult things to wrap one's head around is the idea of iterative delivery of value. I don't know about you, but I'm tired of these various hypothetical images depicting what agile delivery is supposed to look like. Is it a skateboard that becomes a car? Is it a tree swing? Fortunately, I came across a real-world example, and it's actually images! It's wonderful because you can literally *see*:
+
+- what value is being delivered
+- how the wasted effort is limited
+- how the delivered value is reused for the next step
+
+Consider this as you compare and contrast the deliverables from step to step.
+
+* Process
+** Pre-sketch: the transaction/business agreement
+I commissioned a new avatar from [[https://twitter.com/plushiesaber][@plushiesaber]].
+
+First, they explained the various tiers of price. Unsurprisingly, more expensive is more complex. Since I'd never ordered art before, they had to explain some of the concepts to me so I could make my decision.
+
+What I was looking for was a phoenix, so first Ι explained some of the symbolic elements that attract me to the phoenix (that's not necessarily a best practice, that's just me). This started a short conversation to hash out some key elements; for instance, Plushiesaber is a furry artist, so basically I had the option of "a bird phoenix" or "a humanoid phoenix".
+
+All of this helped me figure out what price tier I should be looking at.
+
+Before I paid, Plushiesaber explained that they could make three changes for free past the final sketch phase, and that additional changes requested would cost $5. Since the level of effort at that level would be much higher, that makes sense.
+
+Once I decided and paid, they added my request to their [[https://t.co/ANWfRPYcxo?amp=1][Trello board]]. If you're unfamiliar with Trello, it's essentially a kanban board: it's a board with columns and cards, and the intended usage is to display the work at various stages of completion. In this case, I was added to the queue, and they also told me there were two requests in the queue ahead of me.
+
+The next message I got was a notification that there was one request left ahead of me.
+
+And the next message after that was the first sketch.
+
+** First step (monochrome sketch, with supporting frame):
+
+The first step is the one where there is the most potential divergence, so the best thing to do is to spend as little energy as possible sketching out a potential direction so that there is something concrete to use as a conversation point.
+
+Put another way, if the world of potentiality is a circle and we're all standing in the center, then first we want to make sure we're both looking towards the same arc before we make too much progress in the wrong direction. Given the first conversation, this was first deliverable.
+
+[[file:/images/art-delivery-sketch-01.png]]
+
+I really liked this already. There was one thing I really liked from some prior phoenix art I'd explored, which was multiple long and thin tails, so I gave that feedback.
+
+This led to the next sketch.
+
+** Second step (bichromatic sketch, with supporting frame)
+
+At this step, we have some tails! The sketch is much closer to what I want the final product to be.
+
+[[file:/images/art-delivery-sketch-02.png]]
+
+This being said, those make me think too much about a nine-tailed fox from Japanese lore, and I said so. This started a conversation about concerns that this would unbalance the final image by putting too much emphasis on one particular part of the image, which frankly was something Ι hadn't considered. They summarized the conversation with two possible paths forward, I chose one, and that led us to the third sketch.
+
+** Third step (different sketch: colors, exploration of the tail)
+
+This was Plushiesaber exploring how to make the tail work based on our conversations. I know that this is hand-drawn because they were having issues with their tablet, but it also looks like they were trying to play with keeping the image balanced (and one must admit the artwork has great balance).
+
+[[file:/images/art-delivery-sketch-03.jpg]]
+
+I really liked this. So that started a conversation about whether I wanted this pose or the first one. I eventually decided on the first one, and that led us to the next sketch.
+
+** Fourth step (bring the tails into the original design)
+
+This was relatively straightforward: making sure the ideas were properly merged together.
+
+[[file:/images/art-delivery-sketch-04.png]]
+
+Spoiler alert: they were. This allowed Plushiesaber to start on the linework, which meant I had a choice of smooth or textured. And, uh, Ι had no idea what that meant, so they provided me with some examples.
+
+** Fifth step (examples of linework)
+
+This is smooth linework.
+
+[[file:/images/art-delivery-sketch-05a.jpg]]
+
+This is rough linework.
+
+[[file:/images/art-delivery-sketch-05b.jpg]]
+
+I chose smooth linework.
+
+** Sixth step (monochrome, with smooth linework)
+
+Plushiesaber let me know that the tails would be added separately.
+
+[[file:/images/art-delivery-sketch-06.png]]
+
+This, again, is a fairly uneventful step, but there's always the chance that I'm going to realize I asked for the wrong thing at some point along the way.
+
+It's a delivery point because the next step is to add color.
+
+** Seventh step (color)
+
+Plushiesaber provided me with two options for the color.
+
+[[file:/images/art-delivery-sketch-07a.jpg]]
+[[file:/images/art-delivery-sketch-07b.jpg]]
+
+At this point I was finally able to visualize something in the design and we had a short conversation about the hands/wings, I expressed a desire for something else. Plushiesaber indicated that this was a standard in anthropological art like this -- not that I couldn't get something different, but that this was the reason behind the design.
+
+This was good enough for me, and this led us to... The completed artwork.
+
+
+** Eigth step (finished)
+
+[[file:/images/art-delivery-sketch-08.jpg]]
+
+* Conclusion
+Here are the steps we followed:
+- monochrome sketch with supporting frame
+- another sketch with some feedback incorporated
+- deeper exploration of feedback
+- incorporation of feedback exploration
+- add linework
+- add color
+- finish work
+
+Most importantly, through all of this, we had a conversation going and feedback could always be incorporated, changes could always be made: we could co-create; the expert in art is able to bring their skills to the table to ensure limited effort is wasted in the discovery of what the customer wants.

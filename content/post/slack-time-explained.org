@@ -80,9 +80,21 @@ What we see here is that the team always delivered on its commitment without wor
 
 ** Let's round this out a bit
 
+#+begin_quote
+A fully utilized highway is a parking lot.
+#+end_quote
+
+A fully utilized highway is a parking lot. It's the space between the cars which allows the cars to safely move forward, change lanes, join and leave the highway, etc.
+
 We don't want to try maximize time spent, because time spent does not directly correlate to value delivered.
 
 We don't want to estimate tech debt and add it to the velocity because the velocity is only for story work -- by creating this restriction, we maintain a correlation between velocity (story work done) and value delivered, to get a sense of how valuable overall the decisions that have led to the work have been.
+
+We want to foster a culture and a practice of continuous improvements and continuous small refactors.
+
+We want to take as little time away from story work (the time used, iteration in and interation out, by the velocity) as possible. Time taken away from story work must be followed by a retrospective in which the team finds a way (or ways) to keep this from happening again.
+
+If time must be taken away from story work, the decision must be the result of a conversation with the product owner/product manager, in which the positive result of the corrective action must be crystal clear (e.g. more trustworthy tests, a specific operation will be easier to code/implement/change, etc.)
 
 * Footnotes
 
