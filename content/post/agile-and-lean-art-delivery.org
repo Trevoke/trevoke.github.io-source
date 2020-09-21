@@ -1,7 +1,7 @@
 #+TITLE: Agile and lean art delivery
 #+DATE: 2020-09-05T10:26:00-04:00
 #+PUBLISHDATE: 2020-09-05T10:26:00-04:00
-#+DRAFT: t
+#+DRAFT: f
 #+TAGS: agile lean
 #+DESCRIPTION: A great, concrete example of iterative, waste-limiting process in the context of art commission
 
@@ -37,7 +37,7 @@ The first step is the one where there is the most potential divergence, so the b
 
 Put another way, if the world of potentiality is a circle and we're all standing in the center, then first we want to make sure we're both looking towards the same arc before we make too much progress in the wrong direction. Given the first conversation, this was first deliverable.
 
-[[file:/images/art-delivery-sketch-01.png]]
+[[file:/images/art-delivery-sketch-01-small.jpg]]
 
 I really liked this already. There was one thing I really liked from some prior phoenix art I'd explored, which was multiple long and thin tails, so I gave that feedback.
 
@@ -47,7 +47,7 @@ This led to the next sketch.
 
 At this step, we have some tails! The sketch is much closer to what I want the final product to be.
 
-[[file:/images/art-delivery-sketch-02.png]]
+[[file:/images/art-delivery-sketch-02-small.jpg]]
 
 This being said, those make me think too much about a nine-tailed fox from Japanese lore, and I said so. This started a conversation about concerns that this would unbalance the final image by putting too much emphasis on one particular part of the image, which frankly was something Ι hadn't considered. They summarized the conversation with two possible paths forward, I chose one, and that led us to the third sketch.
 
@@ -55,7 +55,7 @@ This being said, those make me think too much about a nine-tailed fox from Japan
 
 This was Plushiesaber exploring how to make the tail work based on our conversations. I know that this is hand-drawn because they were having issues with their tablet, but it also looks like they were trying to play with keeping the image balanced (and one must admit the artwork has great balance).
 
-[[file:/images/art-delivery-sketch-03.jpg]]
+[[file:/images/art-delivery-sketch-03-small.jpg]]
 
 I really liked this. So that started a conversation about whether I wanted this pose or the first one. I eventually decided on the first one, and that led us to the next sketch.
 
@@ -63,7 +63,7 @@ I really liked this. So that started a conversation about whether I wanted this 
 
 This was relatively straightforward: making sure the ideas were properly merged together.
 
-[[file:/images/art-delivery-sketch-04.png]]
+[[file:/images/art-delivery-sketch-04-small.jpg]]
 
 Spoiler alert: they were. This allowed Plushiesaber to start on the linework, which meant I had a choice of smooth or textured. And, uh, Ι had no idea what that meant, so they provided me with some examples.
 
@@ -71,11 +71,11 @@ Spoiler alert: they were. This allowed Plushiesaber to start on the linework, wh
 
 This is smooth linework.
 
-[[file:/images/art-delivery-sketch-05a.jpg]]
+[[file:/images/art-delivery-sketch-05a-small.jpg]]
 
 This is rough linework.
 
-[[file:/images/art-delivery-sketch-05b.jpg]]
+[[file:/images/art-delivery-sketch-05b-small.jpg]]
 
 I chose smooth linework.
 
@@ -83,7 +83,7 @@ I chose smooth linework.
 
 Plushiesaber let me know that the tails would be added separately.
 
-[[file:/images/art-delivery-sketch-06.png]]
+[[file:/images/art-delivery-sketch-06-small.jpg]]
 
 This, again, is a fairly uneventful step, but there's always the chance that I'm going to realize I asked for the wrong thing at some point along the way.
 
@@ -93,8 +93,8 @@ It's a delivery point because the next step is to add color.
 
 Plushiesaber provided me with two options for the color.
 
-[[file:/images/art-delivery-sketch-07a.jpg]]
-[[file:/images/art-delivery-sketch-07b.jpg]]
+[[file:/images/art-delivery-sketch-07a-small.jpg]]
+[[file:/images/art-delivery-sketch-07b-small.jpg]]
 
 At this point I was finally able to visualize something in the design and we had a short conversation about the hands/wings, I expressed a desire for something else. Plushiesaber indicated that this was a standard in anthropological art like this -- not that I couldn't get something different, but that this was the reason behind the design.
 
@@ -103,7 +103,7 @@ This was good enough for me, and this led us to... The completed artwork.
 
 ** Eigth step (finished)
 
-[[file:/images/art-delivery-sketch-08.jpg]]
+[[file:/images/art-delivery-sketch-08-small.jpg]]
 
 * Conclusion
 Here are the steps we followed:
