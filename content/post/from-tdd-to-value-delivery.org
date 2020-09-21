@@ -1,7 +1,7 @@
 #+TITLE: From TDD to value delivery
 #+DATE: 2019-01-18
 #+DRAFT: t
-#+TAGS: tdd value-delivery
+#+tags[]: tdd value-delivery
 The path through to a happy developer
 
 I like doing TDD and pairing with someone else who likes those things. It's fairly simple.

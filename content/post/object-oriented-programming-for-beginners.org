@@ -1,7 +1,7 @@
 #+TITLE: Hard-and-fast, black-and-white rules for getting started with Object-Oriented Programming
 #+DATE: 2012-10-18
-#+CATEGORIES: programming
-#+TAGS: object-oriented-programming rules
+#+categories[]: programming
+#+tags[]: object-oriented-programming rules
 
 1. No object should have more than three public methods
 2. Objects should not have getters or setters

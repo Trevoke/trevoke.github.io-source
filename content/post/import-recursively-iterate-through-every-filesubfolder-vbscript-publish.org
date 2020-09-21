@@ -1,7 +1,7 @@
 #+TITLE: Recursively iterate through every file/subfolder  - VBScript
 #+DATE: 2008-12-30
-#+CATEGORIES: programming
-#+TAGS: vbscript
+#+categories[]: programming
+#+tags[]: vbscript
 
 This is actually a lot simpler than I expected (gimme a break, this is my second foray into VBS!)
 

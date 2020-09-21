@@ -1,7 +1,7 @@
 #+TITLE: Sparring
 #+DATE: 2013-05-15
-#+CATEGORIES: martial-arts
-#+TAGS: sparring
+#+categories[]: martial-arts
+#+tags[]: sparring
 
 <h1>What Sparring Is</h1>
 Sparring is a playful and explorative interaction.

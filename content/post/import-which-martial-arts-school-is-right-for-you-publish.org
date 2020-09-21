@@ -1,6 +1,6 @@
 #+TITLE: Which martial arts school is right for you?
 #+DATE: 2008-03-20
-#+CATEGORIES: martial-arts
+#+categories[]: martial-arts
 
 So, you've decided to start taking a martial arts class. Good for you!
 

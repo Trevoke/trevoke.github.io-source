@@ -1,7 +1,7 @@
 #+TITLE: Ruby: What is at_exit and how to write tests for it.
 #+DATE: 2012-01-06
-#+CATEGORIES: programming
-#+TAGS: ruby at_exit testing
+#+categories[]: programming
+#+tags[]: ruby at_exit testing
 
 Ruby has a neat feature called ~at_exit~ which takes a block and then executes the contents of this block when the program ends. There are a couple of VERY important details:
 

@@ -1,7 +1,7 @@
 #+TITLE: What does "increase velocity" mean?
 #+DATE: 2019-06-18
 #+DRAFT: t
-#+TAGS: agile velocity project-management
+#+tags[]: agile velocity project-management
 
 What does "increasing velocity" really mean, and what do people ACTUALLY want?
 

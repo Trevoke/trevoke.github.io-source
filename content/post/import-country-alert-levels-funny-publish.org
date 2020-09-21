@@ -1,6 +1,6 @@
 #+TITLE: Country alert levels
 #+DATE: 2010-01-20
-#+CATEGORIES: funny
+#+categories[]: funny
 
 Let's break the monotony with something funny:
 

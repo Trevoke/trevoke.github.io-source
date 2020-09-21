@@ -1,7 +1,7 @@
 #+TITLE: It's unprofessional to not do TDD
 #+DATE: 2017-10-18
 #+DRAFT: t
-#+TAGS: tdd
+#+tags[]: tdd
 
 trevoke Do you guys have any idea how much *better* it is to do TDD?
 [11:50]

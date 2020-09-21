@@ -1,5 +1,5 @@
 #+TITLE: App idea: tribal knowledge
 #+DATE: 2017-10-18
 #+DRAFT: t
-#+TAGS: idea
+#+tags[]: idea
 Closed groups where you write things valuable to share, anecdotes or gotchas. Time-stamped. Can be marked outdated. Searchable. Taggable?

@@ -1,7 +1,7 @@
 #+TITLE: Add a user to the wheel group in OSX
 #+DATE: 2013-02-07
-#+CATEGORIES: sysadmin programming
-#+TAGS: osx wheel
+#+categories[]: sysadmin programming
+#+tags[]: osx wheel
 
 Why are these things always so weird? Someday I'll understand why OSX is set up that way. And on that day, I'll probably weep.
 

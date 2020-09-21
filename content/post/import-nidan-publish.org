@@ -1,7 +1,7 @@
 #+TITLE: Nidan... ?
 #+DATE: 2009-01-06
-#+CATEGORIES: martial-arts
-#+TAGS: nidan-test belt-test
+#+categories[]: martial-arts
+#+tags[]: nidan-test belt-test
 
 Well, sensei hinted last month that maybe I should start gearing up for a nidan test. I've been getting used to being shodan, which maybe is a bad thing, but I haven't stopped looking for things I could do better. I'm becoming more sensitive to the muscles in my back, and I think my shoulders are finally beginning to open up...
 

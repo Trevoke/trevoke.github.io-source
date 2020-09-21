@@ -1,6 +1,6 @@
 #+TITLE: stances
 #+DATE: 2009-01-27
-#+CATEGORIES: martial-arts
-#+TAGS: stances
+#+categories[]: martial-arts
+#+tags[]: stances
 
 Tonight we had training on stances. It came about more or less accidentally - proper stances are -hard- !! But I am now flexible enough hip-wise to get there.. Now to train my leg muscles, mostly the quads, to follow suit...

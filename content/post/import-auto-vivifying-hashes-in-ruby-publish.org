@@ -1,7 +1,7 @@
 #+TITLE: Auto-vivifying hashes in Ruby
 #+DATE: 2009-11-06
-#+CATEGORIES: programming
-#+TAGS: ruby hashes auto-vivifying-hashes
+#+categories[]: programming
+#+tags[]: ruby hashes auto-vivifying-hashes
 
 An auto-vivifying hash is a hash that lets you create sub-hashes automatically. This means that the following code becomes possible:
 

@@ -1,7 +1,7 @@
 #+TITLE: An old-school 6th dan
 #+DATE: 2008-11-04
-#+CATEGORIES: martial-arts
-#+TAGS: old-school
+#+categories[]: martial-arts
+#+tags[]: old-school
 
 Yesterday evening a man who trained about as long as sensei came to train with us. Black obi, rather frayed to white. He'd trained a long time under his uncle, and then ~15 years under sensei's sensei. He'd taken a break for a while, so he was a bit out of shape, but his mindset, his attitude, his devotion were 100% into everything he did - an important lesson which I forget all too often.
 

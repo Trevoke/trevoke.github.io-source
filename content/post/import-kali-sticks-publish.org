@@ -1,7 +1,7 @@
 #+TITLE: Kali sticks
 #+DATE: 2008-05-15
-#+CATEGORIES: martial-arts
-#+TAGS: escrima kali
+#+categories[]: martial-arts
+#+tags[]: escrima kali
 
 Yesterday we had a small class, so we were able to each work on what we needed. I, hopefully, now have the full chatan yara no sai form, so I just need to work it..
 

@@ -1,7 +1,7 @@
 #+TITLE: Get started with Ruby
 #+DATE: 2011-01-27
-#+CATEGORIES: programming
-#+TAGS: ruby learning
+#+categories[]: programming
+#+tags[]: ruby learning
 
 First, <a title="official Ruby site" href="http://www.ruby-lang.org/en/" target="_blank">get Ruby</a>. Install it as explained on the website. Once you're more comfortable with it, in a few weeks, you can check out <a href="http://rvm.beginrescueend.com/" target="_blank">RVM</a>. Not now though - you'd just confuse yourself.
 

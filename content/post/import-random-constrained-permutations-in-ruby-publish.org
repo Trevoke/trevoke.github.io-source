@@ -1,7 +1,7 @@
 #+TITLE: Random constrained permutations in Ruby
 #+DATE: 2009-12-17
-#+CATEGORIES: programming
-#+TAGS: ruby permutations random
+#+categories[]: programming
+#+tags[]: ruby permutations random
 
 Look, Ma, these are my baby steps in algorithms!
 

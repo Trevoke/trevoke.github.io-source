@@ -1,7 +1,7 @@
 #+TITLE: Rails, HAML, alternatible CSS for tables
 #+DATE: 2009-09-02
-#+CATEGORIES: programming
-#+TAGS: ruby rails haml css cycle
+#+categories[]: programming
+#+tags[]: ruby rails haml css cycle
 
 If you've done any kind of table display in Rails, you've probably discovered the useful 'cycle' method:
 

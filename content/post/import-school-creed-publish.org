@@ -1,7 +1,7 @@
 #+TITLE: School creed
 #+DATE: 2013-04-27
-#+CATEGORIES: martial-arts
-#+TAGS: meditation intention
+#+categories[]: martial-arts
+#+tags[]: meditation intention
 
 In the dojo where I spent my formative years as a martial artist, there is a school creed. A quick search online has revealed that many schools have a similar creed. Every class says it as we begin, after bowing in, before calisthenics. I hear it and/or say it about three times per dojo night.
 

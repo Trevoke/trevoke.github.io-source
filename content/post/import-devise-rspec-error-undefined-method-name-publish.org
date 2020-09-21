@@ -1,7 +1,7 @@
 #+TITLE: Devise + rspec error: undefined method 'name'
 #+DATE: 2012-06-11
-#+CATEGORIES: programming
-#+TAGS: ruby rails devise rspec
+#+categories[]: programming
+#+tags[]: ruby rails devise rspec
 
 If you're using Devise and rspec on Rails 3, and you want to override a controller, and you end up with an error that makes no sense whatsoever:
 

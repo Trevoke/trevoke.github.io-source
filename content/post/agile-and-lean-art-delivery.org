@@ -2,7 +2,7 @@
 #+DATE: 2020-09-05T10:26:00-04:00
 #+PUBLISHDATE: 2020-09-05T10:26:00-04:00
 #+DRAFT: f
-#+TAGS: agile lean
+#+tags[]: agile lean
 #+DESCRIPTION: A great, concrete example of iterative, waste-limiting process in the context of art commission
 
 I've been helping teams and organizations improve their approach to agile and lean delivery for a decade now, and by far one of the most difficult things to wrap one's head around is the idea of iterative delivery of value. I don't know about you, but I'm tired of these various hypothetical images depicting what agile delivery is supposed to look like. Is it a skateboard that becomes a car? Is it a tree swing? Fortunately, I came across a real-world example, and it's actually images! It's wonderful because you can literally *see*:

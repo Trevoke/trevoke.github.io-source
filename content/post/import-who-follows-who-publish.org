@@ -1,7 +1,7 @@
 #+TITLE: Who follows who?
 #+DATE: 2009-03-26
-#+CATEGORIES: martial-arts
-#+TAGS: leadership vicious-cycles
+#+categories[]: martial-arts
+#+tags[]: leadership vicious-cycles
 
 In the past couple of weeks, I'd gotten to spar progressively harder with a blue belt who is twice my age, but has been in dojos where sparring and self-defense were more important than kata. As a result, I consider him somewhat dangerous to spar with.. And, well, I let myself get caught up. I stopped being the watcher..
 

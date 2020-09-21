@@ -1,6 +1,6 @@
 #+TITLE: Spending energy uselessly
 #+DATE: 2009-09-01
-#+CATEGORIES: martial-arts
+#+categories[]: martial-arts
 
 I live on an island. It only took me until last week (10 years and change) to take my dad's advice to go to the beach when I felt like it. So I did that, last week and today, and went swimming. Good for the muscles, good all-around body work. Great stretching. Different way of using the muscles.
 

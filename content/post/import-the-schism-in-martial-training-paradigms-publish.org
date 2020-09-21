@@ -1,7 +1,7 @@
 #+TITLE: The schism in martial training paradigms
 #+DATE: 2012-06-19
-#+CATEGORIES: martial-arts
-#+TAGS: wrist-grab punches boxing drills
+#+categories[]: martial-arts
+#+tags[]: wrist-grab punches boxing drills
 
 <h2>You're training wrong! No, YOU're training wrong!</h2>
 

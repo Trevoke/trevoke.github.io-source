@@ -1,7 +1,7 @@
 #+TITLE: MIMVista and auto-deletion of archived studies
 #+DATE: 2008-11-04
-#+CATEGORIES: sysadmin
-#+TAGS: mim mimvista archive
+#+categories[]: sysadmin
+#+tags[]: mim mimvista archive
 
 The MIM keeps 60 days by default. That may be too much for you..
 

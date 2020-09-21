@@ -1,7 +1,7 @@
 #+TITLE: New position at Cyrus
 #+DATE: 2010-04-22
-#+CATEGORIES: programming life-event
-#+TAGS: cyrus-innovation
+#+categories[]: programming life-event
+#+tags[]: cyrus-innovation
 
 On Monday, April 26th, I am starting a new job at Cyrus Innovation. It may well be fair that I am starting a new career - it's a hop, skip and jump for me. I'm switching from Systems Administration / Tech Support / Hell desk (not a typo, sadly) to Development / Programming.
 

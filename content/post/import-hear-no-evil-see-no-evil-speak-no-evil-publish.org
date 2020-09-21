@@ -1,7 +1,7 @@
 #+TITLE: Hear no evil. See no evil. Speak no evil.
 #+DATE: 2012-07-12
-#+CATEGORIES: philosophy
-#+TAGS: three-monkeys
+#+categories[]: philosophy
+#+tags[]: three-monkeys
 
 I had an epiphany tonight about something that just about everyone knows: the three monkeys. And I wanted to share it with you.
 

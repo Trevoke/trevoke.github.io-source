@@ -1,7 +1,7 @@
 #+TITLE: New gem: ListBrowser
 #+DATE: 2010-01-15
-#+CATEGORIES: programming
-#+TAGS: ruby listbrowser
+#+categories[]: programming
+#+tags[]: ruby listbrowser
 
 
 I was working on a parser for a very specific tree structure, and was frustrated that there wasn’t a simple way to parse it in irb. "What??", I thought. "I have to use my brain?! God forbid!". So I set to using my brain a little more to create this tool. It’s not much, but maybe it’ll make someone’s life a little easier.

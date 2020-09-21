@@ -1,7 +1,7 @@
 #+TITLE: The Litany Against Fear
 #+DATE: 2013-11-18
-#+CATEGORIES: philosophy
-#+TAGS: litany-against-fear meditation
+#+categories[]: philosophy
+#+tags[]: litany-against-fear meditation
 
 So, the litany against fear goes like this:
 

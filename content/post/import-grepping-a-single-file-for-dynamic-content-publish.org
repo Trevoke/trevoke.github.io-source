@@ -1,7 +1,7 @@
 #+TITLE: Grepping a single file for 'dynamic' content
 #+DATE: 2011-08-31
-#+CATEGORIES: programming sysadmin
-#+TAGS: grep shell bash
+#+categories[]: programming sysadmin
+#+tags[]: grep shell bash
 
 You can use xargs to grep the same word through different files. But how do you use xargs to grep different words through the same file?
 Like this:

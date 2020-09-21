@@ -1,7 +1,7 @@
 #+TITLE: More stances and some testing
 #+DATE: 2009-02-05
-#+CATEGORIES: programming
-#+TAGS: stances belt-test
+#+categories[]: programming
+#+tags[]: stances belt-test
 
 So, I've been trying to keep my stances down a lot more now - it's making me much more aware of when I get tense.. Because I rise, because my ankles, hips and knees just don't flex. It's an interesting experience.
 Two people are testing.. During sparring, that evening was the first time that I made a conscious point of "the first thing I do is move - and then answer". I'm feeling good about this change, in addition to keeping slightly lower stances during sparring - mobility much increased and there is a lot more potential there.

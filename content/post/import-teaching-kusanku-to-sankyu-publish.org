@@ -1,7 +1,7 @@
 #+TITLE: Teaching kusanku to sankyu
 #+DATE: 2010-03-11
-#+CATEGORIES: martial-arts
-#+TAGS: kusanku
+#+categories[]: martial-arts
+#+tags[]: kusanku
 
 Last night, after some kicking drills and sparring, sensei entrusted the adult class to me and told us to work on kusanku. The 'adult class' yesterday consisted of three sankyu.
 I looked at the clock, rubbed my hands together and said "Alright everyone, we have twenty-five minutes' worth of kusanku. Let me know if you have questions or doubts."

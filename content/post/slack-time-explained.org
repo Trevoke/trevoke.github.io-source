@@ -2,7 +2,7 @@
 #+DATE: 2019-11-18T18:10:10-05:00
 #+PUBLISHDATE: 2019-11-18T18:10:10-05:00
 #+DRAFT: f
-#+TAGS: agile velocity tech-debt refactor slack slack-time
+#+tags[]: agile velocity tech-debt refactor slack slack-time
 #+DESCRIPTION: An answer to the question "how do you plan ALL the work when you use velocity?"
 
 

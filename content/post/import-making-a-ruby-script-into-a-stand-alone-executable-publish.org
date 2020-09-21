@@ -1,7 +1,7 @@
 #+TITLE: Making a ruby script into a stand-alone executable
 #+DATE: 2009-01-23
-#+CATEGORIES: programming
-#+TAGS: ruby script executable
+#+categories[]: programming
+#+tags[]: ruby script executable
 
 Erik Veenstra created two scripts, tar2rubyscript and rubyscript2exe, which essentially grab what you wrote, wrap it up with some other code, bundle it with the ruby executable, and spit out a finished, executable package - which will run on that same OS -- so compile it on Windows, get a Windows executable, compile on Linux, get Linux executable, etc.
 

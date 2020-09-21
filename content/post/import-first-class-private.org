@@ -1,7 +1,7 @@
 #+TITLE: First Class
 #+DATE: 2013-06-11
-#+CATEGORIES: martial-arts
-#+TAGS: teaching
+#+categories[]: martial-arts
+#+tags[]: teaching
 
 The first class went really well.
 

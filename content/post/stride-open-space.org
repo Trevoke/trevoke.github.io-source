@@ -4,7 +4,7 @@
 #+DATE: 2016-02-04
 #+URI:         /blog/%y/%m/%d/opening-the-stride-open-space
 #+KEYWORDS:    stride, open space
-#+TAGS: stride open-space
+#+tags[]: stride open-space
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: How we open the Stride open space

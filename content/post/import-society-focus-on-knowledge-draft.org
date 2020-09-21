@@ -1,7 +1,7 @@
 #+TITLE: Society's focus on knowledge
 #+DATE: 2011-10-20
-#+CATEGORIES: philosophy
-#+TAGS: worldview society knowledge
+#+categories[]: philosophy
+#+tags[]: worldview society knowledge
 
 Here is a thought with which I've been wrestling for quite a while - the focus of society on knowledge and what it could be doing to us as people, human beings, and members of society, as well as to society itself.
 

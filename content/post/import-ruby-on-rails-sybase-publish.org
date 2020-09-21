@@ -1,7 +1,7 @@
 #+TITLE: Ruby on Rails + Sybase
 #+DATE: 2009-07-31
-#+CATEGORIES: programming
-#+TAGS: ruby sybase activerecord
+#+categories[]: programming
+#+tags[]: ruby sybase activerecord
 
 Caveat: This adapter may only work with the enterprise edition of Sybase (i.e. Sybase ASE) not with SQLAnywhere (Sybase ASA)
 

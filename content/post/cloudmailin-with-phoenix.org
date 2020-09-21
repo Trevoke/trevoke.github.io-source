@@ -4,7 +4,7 @@
 #+DATE: 2016-04-03
 #+URI:         /blog/%y/%m/%d/cloudmailin-with-phoenix
 #+KEYWORDS:    phoenix, elixir, email, cloudmailin
-#+TAGS: cloudmailin phoenix elixir
+#+tags[]: cloudmailin phoenix elixir
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: What CloudMailIn looks like when the request gets to Phoenix

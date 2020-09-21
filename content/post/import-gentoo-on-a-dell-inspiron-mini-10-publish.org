@@ -1,7 +1,7 @@
 #+TITLE: Gentoo on a Dell Inspiron Mini 10
 #+DATE: 2010-03-01
-#+CATEGORIES: sysadmin
-#+TAGS: gentoo dell-inspiron-mini-10
+#+categories[]: sysadmin
+#+tags[]: gentoo dell-inspiron-mini-10
 
 There are a few gotchas:
 

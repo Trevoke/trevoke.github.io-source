@@ -1,7 +1,7 @@
 #+TITLE: Ruby callbacks (hooks)
 #+DATE: 2010-03-31
-#+CATEGORIES: programming
-#+TAGS: ruby hooks callbacks
+#+categories[]: programming
+#+tags[]: ruby hooks callbacks
 
 Hooks are a fascinating bit of Ruby magic. They are methods you can define with actions to run when something happens. You can put triggers in your code.
 

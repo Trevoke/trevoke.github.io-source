@@ -3,8 +3,8 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2015-04-02
 #+URI:         /blog/%y/%m/%d/the-value-of-estimates-for-a-team
-#+CATEGORIES: process
-#+TAGS: agile estimation
+#+categories[]: process
+#+tags[]: agile estimation
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: How estimating is a valuable practice for teams

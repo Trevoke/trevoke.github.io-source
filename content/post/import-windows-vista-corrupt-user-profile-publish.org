@@ -1,6 +1,6 @@
 #+TITLE: Windows Vista : Corrupt user profile
 #+DATE: 2008-12-07
-#+TAGS: windows vista user-profile corrupt
+#+tags[]: windows vista user-profile corrupt
 
 I'm taking this from <a href="http://blog.tiensivu.com/aaron/archives/932-Dealing-with-corrupt-user-profiles-in-Vista-and-saving-the-contents.html" target="_blank">this page</a> but thought I should try to propagate it a little since it took me forever to find it.
 

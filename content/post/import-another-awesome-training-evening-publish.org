@@ -1,7 +1,7 @@
 #+TITLE: Another awesome training evening
 #+DATE: 2009-09-17
-#+CATEGORIES: martial-arts
-#+TAGS: pain
+#+categories[]: martial-arts
+#+tags[]: pain
 
 So tonight, I went to train 35 minutes away from home, at the dojo where my sensei's sensei teaches. Warmups / stretches, kicking drills, calisthenics, sparring, then fighting drills.
 Sensei's sensei has a son who is now 48. Now -- I am fast by normal people's standards. This guy is really fast by my standards. He also has a really positive energy - very friendly eyes, a great disposition.. And he can dislocate your jaw before you can blink or think "oh sh..!", so don't piss him off.

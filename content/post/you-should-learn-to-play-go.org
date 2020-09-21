@@ -1,7 +1,7 @@
 #+TITLE: Learn to play go
 #+DATE: 2019-06-11
 #+DRAFT: t
-#+TAGS: go
+#+tags[]: go
 
 Want to deliver value? Want to write changeable code?
 

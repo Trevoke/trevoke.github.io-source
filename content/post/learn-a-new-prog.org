@@ -1,7 +1,7 @@
 #+TITLE: The first step in learning any new programming language
 #+DATE: 2019-06-06
-#+CATEGORIES: programming
-#+TAGS: learning programming-language
+#+categories[]: programming
+#+tags[]: learning programming-language
 
 Part of being a professional programmer is learning new languages (seriously — past a certain point, you should be fluent in a couple of languages, but that's another blog post), and part of being a good programmer is being effective at doing so. The very first step in learning a new language is being able to write some code with it. Further steps usually involve mastering the syntax as well as whatever new paradigms the language may throw at you, BUT! If you are able to write some fundamental code with the language, then all other doors open to you, largely because it's so much easier to understand all other resources.
 

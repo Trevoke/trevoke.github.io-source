@@ -1,7 +1,7 @@
 #+TITLE: Grouping directories by name
 #+DATE: 2009-01-27
-#+CATEGORIES: programming
-#+TAGS: ruby script
+#+categories[]: programming
+#+tags[]: ruby script
 
 As is, this code will create an array of arrays - Directories with the same 6 first characters will be grouped in the same sub-array. I am using this for log directories, name format 20081125 for instance - you can just replace the logic to be whatever you need, of course.
 

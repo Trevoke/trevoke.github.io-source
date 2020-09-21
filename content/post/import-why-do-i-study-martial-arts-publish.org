@@ -1,6 +1,6 @@
 #+TITLE: Why do I study martial arts?
 #+DATE: 2009-10-03
-#+CATEGORIES: martial-arts
+#+categories[]: martial-arts
 
 I am watching Rocky III and IV (the only ones I really like), and the driving theme is the power of the human spirit. Rewatching it now, I see a lot of other ideas. They're not particularly hidden, but I never really noticed them before. This started to make me think about my choices.
 

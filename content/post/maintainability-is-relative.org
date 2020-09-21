@@ -3,8 +3,8 @@
 #+EMAIL:       trevoke@gmail.com
 #+DATE: 2016-10-23
 #+URI:         /blog/%y/%m/%d/maintainability-is-relative
-#+TAGS: maintainability code testing
-#+CATEGORIES: programming
+#+tags[]: maintainability code testing
+#+categories[]: programming
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 

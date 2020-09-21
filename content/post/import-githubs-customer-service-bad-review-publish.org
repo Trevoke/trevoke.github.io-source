@@ -1,6 +1,6 @@
 #+TITLE: Github's customer service: bad review
 #+DATE: 2010-03-12
-#+TAGS: github customer-service
+#+tags[]: github customer-service
 
 I will readily admit that I don't know all that much about Github or Git for that matter. I use them, they're handy, and that's where it stops. I read about a git feature called "smart HTTP", which would allow to communicate both ways with git (push and pull) with HTTP or HTTPS. So, I asked Github about it - it would be nice for them to have this feature, because I currently can't push to Github from work. Here's how the exchange went.
 (this first message is from memory, as I used the web interface, so I don't have a copy of it)

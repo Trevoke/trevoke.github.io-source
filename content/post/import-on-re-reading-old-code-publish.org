@@ -1,7 +1,7 @@
 #+TITLE: On re-reading old code
 #+DATE: 2009-12-09
-#+CATEGORIES: programming
-#+TAGS: learning ruby
+#+categories[]: programming
+#+tags[]: learning ruby
 
 I came across this beauty in some old code of mine:
 

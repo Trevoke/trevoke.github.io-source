@@ -1,7 +1,7 @@
 #+TITLE: Running alchemist tests in a separate frame
 #+DATE: 2017-02-18
 #+DRAFT: t
-#+TAGS: elixir emacs alchemist testing
+#+tags[]: elixir emacs alchemist testing
 
 #+BEGIN_SRC elisp
 (defadvice alchemist-mix--execute-test (around mosic-test-in-new-frame activate)
