@@ -1,0 +1,131 @@
+#+TITLE: GenAI Is a Power Tool — Don’t Use It Like a Crutch
+#+DATE: 2025-04-13T21:12:27-04:00
+#+DRAFT: nil
+#+CATEGORIES[]: genai critical-thinking
+#+TAGS[]: programming llm genai
+#+DESCRIPTION: Studies show that repeated use of GenAI makes you worse at using your brain. Here's how to counter it.
+#+type: book
+#+layout: chapters
+
+* You're knee-deep in a sprint.
+A teammate is out sick. Product wants the filtering module updated by EOD. You’re juggling two different refactors and a Slack thread that just won’t die. You think:
+
+#+begin_quote
+“I’ll just ask ChatGPT for the price filtering logic — it’ll save me an hour.”
+#+end_quote
+
+Fast forward: the code runs, the tests pass. Ship it.
+
+A week later, someone opens a defect. Turns out the AI-generated logic doesn't account for tiered discounts already applied upstream in the pricing engine. Nobody caught it in review — you assumed it “looked right.” The system is now fragile in a new place, and no one owns the debt.
+
+That’s not science fiction. That’s today, happening quietly, across dev teams, editorial rooms, and strategy meetings.
+
+The problem isn't the power of GenAI. The problem is our passive use of it.
+
+* The slow drift
+It doesn’t happen all at once. It creeps in.
+
+- You start with a bash one-liner.
+- Then it’s a helper function.
+- Then a whole module.
+- Eventually, you’re skipping the part where you think through the shape of the solution at all.
+
+And the worst part? It *feels* productive.
+
+You're “moving fast,” but you're dulling the part of you that *knows how to evaluate solutions*.
+
+* Let's be specific. Here's what to watch for:
+- You use GenAI to write code that technically works, but no one validated how it fits with the domain boundaries you’ve been using. The system silently becomes harder to reason about.
+- You generate copy that reads well, but subtly shifts the tone away from the voice your users trust.
+- You get a good-enough summary of an article — but you skip the intro and conclusion yourself, so you don’t notice the critical nuance that was lost.
+
+* GenAI doesn’t understand you. It can’t.
+It doesn’t know your codebase, your product strategy, your market, your learning objective, your context. It is not aware. It is not aligned.
+
+It generates high-probability guesses, not informed judgments.
+
+* So how do you stay sharp while using GenAI?
+
+Stay in the loop. Stay in the lead.
+
+** Use it as a mirror, not a source of truth.
+Before you ask GenAI to generate anything, write down your own draft first. Then compare.
+
+#+begin_example
+You're writing a project proposal. Draft your version first. Then ask GenAI to critique it or offer alternatives. Don’t just take its version as better because it’s cleaner.
+#+end_example
+
+** Force context into the interaction.
+The more context you provide, the more relevant the output.
+
+#+begin_example
+You're building a quiz generator. Instead of “generate 5 questions on photosynthesis,” try “generate 5 questions for high schoolers focusing on energy transfer and light absorption in chloroplasts.”
+#+end_example
+
+** Use it to stress-test your framing.
+Ask questions like:
+
+- “What assumptions am I making?”
+- “What edge cases would break this?”
+
+#+begin_example
+You’re designing a permissions system. Ask GenAI: “What roles or flows might I be overlooking?” It might surface things like audit-only users or dormant accounts.
+#+end_example
+
+** Make it explain itself.
+After getting a result, ask why. Make it argue for the shape of its solution.
+
+* A case study you can feel in your bones
+I wrote this blog entry with a LLM's help. How did I do it? Here were the key prompts:
+
+** Setting it up as an interviewer
+Very simple. I told it what I want to do, and I told it how to help me do it.
+#+begin_quote
+I need to write a blog entry about how to use GenAI (large language models) without degradation of critical thinking skills.
+
+Think about this topic for a while then come up with a list of 5-10 initial questions for me to answer, after which I want you to interview me until I'm content that I have what I need for the blog entry
+#+end_quote
+
+After that, it then asked me the questions one at a time, going a bit deeper on each topic.
+
+**CRITICAL THINKING**: A few times, it asked me questions because it was its job to do so, not realizing I had answered it as part of the previous question. Read its output, think about it, correct it, tell it to move on.
+
+** Asking it to come up with examples
+I'm pretty bad at coming up with examples. My mind functions really well on patterns and systems but I struggle to make it tangible for folks who need it. The LLM, however, has no such difficulty.
+
+#+begin_quote
+Would you mind stepping out of your job as interviewer for a second, and try to come up with an example, based on what I said? I can refine it or correct it if required
+#+end_quote
+
+**CRITICAL THINKING**: I then took the examples and then refined them until they fit what I needed for the blog entry, which didn't take too long.
+
+** Putting it back on track
+It asked me a question that was too detailed for this blog entry, and I told it so.
+
+#+begin_quote
+I think this is off-topic, isn't it? Why do you think this is required for the blog entry I want to write? I mean, I appreciate that this is a second-order effect of skills that may degrade, so maybe this is worth putting in a footnote or something like that
+#+end_quote
+
+**CRITICAL THINKING**: I wouldn't have asked that if I hadn't kept track of my end goal, and I may have ended up with a very different blog entry!
+
+* Keep those critical thinking skills sharp.
+Because you won't know they're gone until you can't use them anymore.
+
+* The work is still yours.
+At its best, GenAI can help you think better — but only if you stay active. It’s not a replacement for thought. It’s not a substitute for judgment. It’s a tool.
+
+Treat it like:
+
+- a whiteboard
+- a junior dev
+- a powerful, contextless autocomplete
+
+Don’t confuse:
+
+- Speed with understanding
+- Fluency with truth
+- Outputs with outcomes
+
+Use GenAI. But don’t let it use you.
+
+* You’re still the one building the system.
