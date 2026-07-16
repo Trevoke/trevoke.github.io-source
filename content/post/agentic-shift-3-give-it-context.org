@@ -1,0 +1,167 @@
+#+TITLE: Give It the Right Context
+#+DATE: 2026-06-15T09:00:00-04:00
+#+DRAFT: t
+#+tags[]: agentic ai stone mcp rag context
+#+DESCRIPTION: Information architecture for agents — MCP, RAG as a general pattern, and why a reviewer without context is guessing.
+
+* You've written a good skill, and it's still wrong sometimes.
+You've got a code-review skill. You wrote it carefully — inputs, steps, output shape, a done-criterion. It's repeatable. On Tuesday it caught a real bug. On Wednesday it waved through a change that violated your team's naming convention and shrugged at a feature that didn't actually do what the ticket asked.
+
+The skill didn't get dumber overnight. It never *knew* your naming convention. It never *saw* the ticket. You handed it the diff and a process, and you expected it to review against standards it had no way to read.
+
+This is the next shift, and it's still inside "I describe *how* to do the work" — but a different dimension of it. Part 2 was the process. This is the information the process runs on. Same instinct a senior reviewer already has: a good reviewer doesn't review a diff in a vacuum. They pull up the ticket. They remember the team agreed last month that we stopped abbreviating identifiers. The context isn't decoration. It's the thing that turns "looks fine to me" into "this is wrong, here's the line."
+
+So let's ask the question I keep coming back to: what problem are we trying to solve?
+
+* The problem is reach, not phrasing.
+When you're chatting, context is whatever you paste into the box. That works until it doesn't — until the thing the agent needs is too big to paste, changes too often to paste, or you don't know in advance *which* thing it'll need.
+
+So the design question moves. It stops being "what do I put in the prompt?" and becomes:
+
+#+begin_quote
+What should the agent be able to reach, and when?
+#+end_quote
+
+That's an information-architecture question, not a prompt-fiddling one. Underneath it are two ideas people constantly conflate: MCP and RAG.
+
+** MCP: what the agent can reach
+MCP — the Model Context Protocol — is a standardized way for an agent to reach external systems. Your ticket tracker. A filesystem path. A docs server. Instead of you pasting the ticket, the agent can go *get* the ticket, because you gave it a connection that can.
+
+The point isn't the protocol plumbing. The point is the shift in your job: you're now deciding what's on the agent's reachable surface and what isn't. A connection to read tickets is useful. A connection that can also *close* tickets is a different decision, and you should make it on purpose. Reach is a permission, and permissions are designed, not defaulted.
+
+** RAG: go get the relevant thing before you answer
+RAG gets reduced, in most write-ups, to "vector database." That's one implementation. The general pattern is broader and more useful to hold in your head:
+
+#+begin_quote
+Before answering, go get the relevant information.
+#+end_quote
+
+That's it. A vector search over embedded docs is RAG. So is reading a specific file. So is querying the ticket by its ID. So is grepping the style guide for the rule that applies here. Any "before answering, retrieve what's relevant" is RAG. The hard part is rarely the storage — it's deciding what's *relevant* to this question, right now, and fetching that and not the rest.
+
+Which brings us to the constraint that makes relevance matter.
+
+* The window is finite. Relevance beats volume.
+The agent has a context window — working memory, measured in tokens. It is finite. When people first internalize that retrieval is possible, the instinct is to retrieve *everything*: the whole style guide, every related ticket, the entire module. Stuff the window. More context, better answer.
+
+It doesn't work that way. A window packed with marginally-relevant material buries the three sentences that actually decide the review. The model has to find the signal in your noise, and it's not great at that — it'll anchor on whatever's vivid, not whatever actually decides the question. Relevance beats volume.
+
+Window size differs across models too, and the numbers move month to month — but a bigger window is just more *room to be irrelevant in*. It raises the ceiling on how much you *can* cram; it does nothing for the discipline of cramming the right thing. Treat window size as a design variable, not a score where the high number wins.
+
+And it cuts both ways. A reviewer without context is guessing; with it, they're auditing — as true of an agent reviewer as a human one. Context quality is output quality, for the reviewer as much as the doer. The skill was never the bottleneck. The information you fed it was.
+
+Let me show you, because I don't trust this kind of claim until I can see it.
+
+* A code-review ashlar that needs its context retrieved
+Here's the worked example. We're reviewing a diff, and to review it *well* the agent needs two things it can't infer from the diff alone: the team's style guide, and the ticket's acceptance criteria. So we don't paste them. We retrieve them, and we make the dependency a contract.
+
+This is where Stone's =#:queries= earns its keep. An ashlar that queries a node type won't run until something upstream has produced it. The retrieval steps are first-class members of the harness, not a paragraph in a prompt.
+
+#+begin_src racket
+;; deterministic retrieval — no model, just go get the thing
+(define fetch-style-guide
+  (make-ashlar
+    #:produces 'style-guide
+    (lambda (dag) ...)))            ; read the team's style guide
+
+(define fetch-acceptance-criteria
+  (make-ashlar
+    #:queries  '(ticket-id)
+    #:produces 'acceptance-criteria
+    (lambda (dag) ...)))           ; pull the ticket by id (this is RAG)
+
+;; the reviewer can't run until BOTH contexts exist
+(define review
+  (make-agent-ashlar caller
+    #:queries  '(diff style-guide acceptance-criteria)
+    #:produces 'review-notes
+    #:system   "review the diff against the style guide and the acceptance criteria; cite the line and the rule"
+    #:name     'review))
+
+;; the payoff — retrieval feeds the reviewer
+(define ashlar
+  (~> seed fetch-style-guide fetch-acceptance-criteria review))
+#+end_src
+
+Read the =#:queries= line on =review=. It names three node types, and =validate-ashlar= will refuse the harness before any LLM call if nothing upstream produces one of them. That's the cheap mechanical check from Part 2, doing a new job here: it tells you you forgot to wire in the style guide *before* you spend a model call discovering the review is toothless. A retrieval step you forgot to connect is exactly the kind of "malformed" the validator is built to catch.
+
+Note also =fetch-acceptance-criteria= itself =#:queries '(ticket-id)= — it's RAG in the general sense, a "before answering, go get the ticket" step, and it's deterministic. No model needed to look something up by its id. Save the model calls for the work that needs judgment.
+
+* When the adversary rejects, heal with fresh context
+Part 4 is about the doer-and-reviewer loop in earnest, but context has a specific job inside it that belongs here, so let me introduce it now.
+
+Say the reviewer's work gets checked by an =#:adversary= — a separate ashlar trying to falsify "this review was good." Sometimes the adversary is right to reject: the review missed something because it didn't have the *right* context. Maybe it never saw the one file the diff actually depends on.
+
+Re-running with the identical context just produces the identical miss. What you want is to supply *new* context before the next turn. That's =#:heal-with=:
+
+#+begin_src racket
+(define supply-missing-file
+  (make-ashlar
+    #:produces 'related-file
+    (lambda (dag) ...)))           ; fetch the file the rejection pointed at
+
+(define review
+  (make-agent-ashlar caller
+    #:queries     '(diff style-guide acceptance-criteria)
+    #:produces    'review-notes
+    #:system      "review the diff; cite the line and the rule"
+    #:adversary   thorough-critic
+    #:heal-with   supply-missing-file
+    #:max-healing 2
+    #:name        'review))
+#+end_src
+
+The healer isn't "try again." It's "try again *with something you didn't have* — the right file, a missing example, the current state of the world." The rejection becomes a retrieval trigger. And =#:max-healing= is the ceiling: you don't get to fetch-and-retry forever, because a loop without a bound is a way to spend money slowly. (More on why both a predicate and a ceiling are non-negotiable in Part 4.)
+
+* Same skill, good context versus degraded context
+I said I distrust claims I can't see. So let's make it visible. Same =review= ashlar, same model, same prompt. The only variable is the context we feed it.
+
+Run it with the real style guide and the real acceptance criteria:
+
+#+begin_src racket
+;; good context
+(run-ashlar (~> seed fetch-style-guide fetch-acceptance-criteria review))
+;; ~> review-notes:
+;;   "line 42: `usrCnt` violates the no-abbreviation rule (style guide §3.2)"
+;;   "acceptance criterion 2 unmet: discounts not applied before tax"
+#+end_src
+
+Now break it the first way: forget to wire in a context entirely. Skip the ticket, so nothing produces the acceptance criteria the reviewer queries.
+
+#+begin_src racket
+;; degraded context: the acceptance criteria never got wired in
+(run-ashlar (~> seed fetch-style-guide review))
+;; ~> validate-ashlar fails:
+;;   'review queries 'acceptance-criteria — no upstream producer
+#+end_src
+
+That failure is free — the missing producer gets caught statically, before a single token burns. It's the bottom rung from Part 2, doing its job. But notice what it *can't* check: whether the context you did wire in is any good.
+
+So break it the second way. Wire everything correctly, but feed it hollow content — a present-but-blank style guide, present-but-empty acceptance criteria. The graph is complete, =validate= passes, the model runs.
+
+#+begin_src racket
+;; degraded context: the wiring is all there, but the content is hollow
+(run-ashlar (~> seed blank-style-guide blank-acceptance-criteria review))
+;; ~> review-notes:
+;;   "looks good to me — clean and readable, nothing to flag"
+#+end_src
+
+Same =review= ashlar, same model, same prompt as the good run. The only thing that changed is the quality of what it retrieved — and the review went from "line 42 violates §3.2" to "looks good to me." It can't cite a rule it was never given. It's guessing, and a guess in the shape of a review is worse than no review, because it wears the confidence of an audit.
+
+Two failure modes, two different defenses. The forgotten wiring, =validate= catches for free. The hollow content it can't see at all — that run finishes and hands you a confident, useless review. Context isn't something you only supply or omit; it's something you supply *well* or *badly*, and only one of those failures is the validator's to catch. The skill was identical across these runs. Output quality tracked context quality and nothing else.
+
+* Information architecture for agents is real engineering.
+None of this is prompt fiddling. Deciding what an agent can reach, deciding what's relevant enough to spend window on, wiring retrieval as a contract the validator can check, arranging for a rejection to fetch the missing piece instead of re-running the same mistake — that's architecture. It's the same discipline you'd bring to deciding what a service is allowed to call and what data it gets to see, pointed at a new kind of component.
+
+The senior instinct didn't change. A good reviewer always pulled up the ticket first. You're just designing, now, the system that pulls it up — and deciding, on purpose, what it's allowed to reach for.
+
+#+begin_quote
+Give the agent more context and you get a more confident guess. Give it the *right* context and you get an audit.
+#+end_quote
+
+* The series
+- Part 0 — [[file:agentic-shift-0-designable-not-magic.org][AI Is Designable, Not Magic]]
+- Part 1 — [[file:agentic-shift-1-describe-the-work.org][I Describe the Work]]
+- Part 2 — [[file:agentic-shift-2-make-it-a-skill.org][Make It a Skill]]
+- Part 3 — [[file:agentic-shift-3-give-it-context.org][Give It the Right Context]]
+- Part 4 — [[file:agentic-shift-4-doer-and-reviewer.org][The Doer and the Reviewer]]
+- Part 5 — [[file:agentic-shift-5-manage-the-harness.org][Manage the Harness]]

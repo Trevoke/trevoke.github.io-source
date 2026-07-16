@@ -1,0 +1,7 @@
+# Local working artifacts, not for publication
+voice-profile.md
+agentic-series-brief.md
+
+# Hugo build cache (regenerated on every build, not source)
+resources/_gen/
+.hugo_build.lock

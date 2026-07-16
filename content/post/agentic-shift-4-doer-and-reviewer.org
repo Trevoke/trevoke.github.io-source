@@ -1,0 +1,150 @@
+#+TITLE: The Doer and the Reviewer
+#+DATE: 2026-06-15T09:00:00-04:00
+#+DRAFT: t
+#+tags[]: agentic ai stone testing review exit-criteria
+#+DESCRIPTION: An agent that grades its own homework will pass itself every time; here's how to build a doer-reviewer loop that actually converges.
+
+* You ask the agent if it's done. It says yes.
+You've described the work. You've turned the description into a skill. You've given it the right context. The agent goes off, does a thing, comes back, and tells you it's done.
+
+So you ask the obvious follow-up: "Are you sure? Did you check?"
+
+And it says yes. Of course it says yes. It's the same agent, holding the same context that produced the answer, asked to evaluate the answer it just produced. You've set up a student to grade their own exam, in the same room, with the answer key being the exam they wrote. The grade comes back an A. It always comes back an A.
+
+This is the rung where most people stall. Not because the agent is bad — it's often quite good — but because they're trusting a self-assessment that is structurally incapable of being skeptical. Let's fix the structure.
+
+* What problem are we trying to solve?
+We want to *trust the output without reading every line of it*. If I'm going to read every line as carefully as if I'd written it, the agent saved me typing and nothing else.
+
+So the question is: what would let me trust it? Not "feel good about it" — trust it, the way I trust a green test suite I didn't write.
+
+The answer, in decreasing order of trustworthiness — the firmest thing to lean on, first:
+
+- An *external, checkable signal* that doesn't care what any model thinks.
+- A *contract* and *exit criteria* both agreed on before the loop starts.
+- A reviewer that is *separate* from the doer.
+- A reviewer running a *different* model than the doer.
+
+Notice that three of those four are things you'd recognize from any decent code review process. That's not an accident. The disciplines that make agent output trustworthy are the ones you already have — that's your moat, and it's why a good engineer gets more out of an agent, not less. You already know how to do this for humans; we're just giving it a new shape.
+
+We'll build it the other way up — from the move people skip straight past to the gate that actually settles it.
+
+* Separation is the lesson. A different model amplifies it.
+The instinct is to reach for a different, smarter model to check the work. That's an amplifier. It is not the win.
+
+The win is *separation*. A reviewer with a fresh context — even the *same model* — catches more than the doer reviewing itself. Why? Because the context that produced the error is gone. The doer is sitting on a chain of reasoning that led, step by step, to its answer; every one of those steps is now an assumption it's defending. Ask it to check its own work and it re-walks the same path and arrives, unsurprisingly, at the same place. A fresh reviewer never took the path. It just sees the output, cold, with no stake in it.
+
+The mechanism matters, because this is where the slop creeps in. Separation doesn't make the reviewer *correct* — it removes the reviewer's *investment* in the doer's mistakes. Those are different things. The first is impossible; the second is cheap.
+
+So: separate same-model critic *first*. Then, on top of that, a *different brain* — Claude doing the work, Gemini reviewing it, say — strengthens it, because now you're not just removing the stake, you're bringing different blind spots to the table. Different training, different alignment, different failure modes. The doer's blind spot is, with luck, the reviewer's clear sight.
+
+In Stone, the membrane between doer and reviewer is a first-class thing: the =#:adversary=. The reviewer is its own ashlar, whose job is not to admire the work but to try to *falsify* "this worked."
+
+#+begin_src racket
+;; the reviewer — a different brain, whose job is to falsify, not admire
+(define reviewer
+  (make-agent-ashlar caller
+    #:queries  '(feature-impl requirement)
+    #:produces 'review-verdict
+    #:model    "gemini-..."
+    #:system   "try to falsify 'this satisfies the requirement'; report every violation you find"
+    #:name     'reviewer))
+
+;; the doer — one brain — with the reviewer attached as its adversary
+(define build-feature
+  (make-agent-ashlar caller
+    #:queries   '(requirement)
+    #:produces  'feature-impl
+    #:adversary reviewer
+    #:model     "claude-..."
+    #:system    "implement the requirement behind the feature flag; change nothing else"
+    #:name      'build-feature))
+#+end_src
+
+The doer is one brain. The adversary is another. The =#:adversary= wiring is the separation made structural: a different ashlar, with its own context, whose entire reason to exist is to find the crack.
+
+* "The output is good" is not a thing you can check.
+Before that loop runs, the doer and the reviewer need a *contract*. The doer commits to producing something of a known shape. The reviewer commits to checking specific, named conditions. And both agree on the *exit criteria* — the conditions under which the reviewer is satisfied — /before the loop starts/.
+
+Here's the test for whether your exit criteria are real: can a stranger, who wasn't in the room, look at the output and the criteria and tell you whether it passed? If yes, the criteria are checkable. If no, you've written a wish.
+
+"The output is good" is a wish. Good by whose lights? Measured how? It's the agentic equivalent of a standup where everyone says things are "on track" — emotional comfort dressed up as verification.
+
+"No function longer than 20 lines. The feature is reachable only when the flag is on. No existing test changed. The new path has a test." That's checkable. A stranger can run down that list with a straight face. The reviewer can too — and so, critically, can a machine.
+
+This is the same discipline as writing the failing test before the code. You are stating what "done" means in terms someone other than its author can confirm. Vague acceptance criteria don't get less vague when you hand them to an agent; they get *cheaper to violate at scale*, because now you've got something that can produce ten thousand lines of plausible, on-track, wrong.
+
+* Two brains agreeing is not proof.
+So now you have a doer and a reviewer, ideally on different models, with a real contract. The reviewer reads the work and says it passes. The doer agrees. Done?
+
+No. And this is the trap that catches the people who *did* everything else right.
+
+Consensus is not verification. Two models can confidently agree on the same wrong answer. They share enormous amounts of training data; they share alignment pressures; they share, often, the *exact same blind spot* about a library's behavior or an edge case in a date format. When both of them tell you the code is correct, what you have learned is that the error — if there is one — is in the region where both models are weak. That's a *weak signal*. It is not nothing. It is also nowhere near proof.
+
+I'll say it the way I'd say it to a team: two reviewers who went to the same school and read the same books tend to miss the same things. You've seen it with humans. It's worse with models — the overlap in their "education" is far higher than any two people's.
+
+What closes the gap is a signal that doesn't *have* an opinion. Something external and checkable. A test that runs and goes red or green. A schema that validates or doesn't. A value looked up from ground truth — the actual price in the actual database, not the price the model is fairly sure of.
+
+In our worked example, that's a deterministic ashlar that runs the real test suite. No model. No prose. It runs =make test= and reports the exit code.
+
+#+begin_src racket
+(define run-suite
+  (make-ashlar
+    #:queries  '(feature-impl)
+    #:produces 'suite-result
+    #:name     'run-suite
+    (lambda (dag) ...)))   ; run `make test`; pass/fail is the exit code, not an opinion
+#+end_src
+
+That ashlar cannot be persuaded. It doesn't care how clean the diff reads or how confident either model is. The tests pass or they don't. *That* is the thing I'm actually willing to trust without reading every line — not because a model vouched for it, but because a machine I wrote the rules for ran the rules.
+
+And before any of this even gets to run, =raco stone validate= walks the harness statically and tells me the cheap, mechanical things: that =run-suite= has something upstream producing =feature-impl=, that the reviewer's =#:queries= are actually satisfiable, that I didn't wire a branch nobody can reach. It's the compiler's old bottom rung, handed back to me — "this is malformed" before a single token is spent. =validate= plus the external test together are worth more than any amount of model agreement, because neither of them has a stake.
+
+* Now wire the loop — with both bounds.
+We have the pieces. The doer produces, the adversary tries to falsify, the suite gives an external verdict. The loop revises until the verdict is good.
+
+Both bounds matter, and they fail in opposite directions:
+
+#+begin_src racket
+(define converge
+  (ashlar-loop build-feature
+    #:until (lambda (dag) (suite-green? dag))   ; a predicate with no ceiling runs forever
+    #:max   5))                                 ; a ceiling with no predicate is just busywork
+#+end_src
+
+A success predicate with no ceiling is a promise to run until the heat death of the universe, because nothing says some prompt and some model will ever satisfy it. A ceiling with no predicate is five rounds of revision whether or not anything was wrong — motion mistaken for progress. You need both: keep going *until* it's actually right, but *stop* if it isn't getting there, and hand it back to me.
+
+Then the whole thing composes into one ashlar, and the payoff is that it reads like a sentence:
+
+#+begin_src racket
+;; the payoff — build, converge against the external check, then ship behind the flag
+(define ashlar (~> seed converge run-suite ship-behind-flag))
+#+end_src
+
+That =~>= line is the converging adversarial loop as a *designed artifact*. Not "I hope the agent did a good job." A doer, a separate adversary on a different brain, a contract, a bounded revise loop, and a model-independent gate — assembled on purpose.
+
+* What you manage, and what the harness does for you
+It's fair to wonder whether a harness that runs itself has automated *you* out of the loop. It hasn't — it's taken over the part that was never judgment to begin with. The plumbing — routing the reviewer's notes back to the doer, counting iterations against =#:max=, threading the test result into the loop's =#:until=, recording every node in the DAG so I can trace what happened — runs the same every time, and none of it needs a person. What needs a person is the judgment that can't be delegated:
+
+- *Whether the exit criteria are the right criteria.* The machine checks them; it doesn't decide they were the things worth checking.
+- *Overriding the reviewer.* Sometimes the adversary is wrong — too strict, missing context, falsifying something that's actually fine. Deciding that is mine. The harness will never decide to ignore its own reviewer; I do that, knowingly, and it's on me.
+- *What counts as the external check at all.* Choosing that the test suite — and not "two models agreed" — is the gate is a design decision I own.
+
+That's the division. The agent does the work and the harness runs the loop; I design the loop and hold the criteria. Authorship didn't disappear. It moved.
+
+* Pro-AI is not pro-slop
+You'll hear that caring about quality and using AI heavily are in tension — that if you really cared, you'd write it yourself. I think that gets it exactly backwards, and this rung is where I can show you why rather than assert it.
+
+The loop we just built is *more* rigorous than what most teams do to their human-written code. Separate reviewer with no stake. A different mind with different blind spots. Exit criteria written down and agreed before the work starts. An external, machine-checked gate that no opinion can talk past. Quality here isn't hoped for. It's *designed* — it's in the topology of the harness, not in anyone's optimism.
+
+The engineer who's good at this gets *more* leverage from the agent, precisely because the disciplines that make output reviewable — tests first, explicit done-criteria, an adversary you can't sweet-talk — were already instinct. The craft is the moat. The agent just made the moat matter more.
+
+So write down what failure looks like before you build the thing — and then check it with something other than the same kind of mind that built it.
+
+* The series
+- Part 0 — [[file:agentic-shift-0-designable-not-magic.org][AI Is Designable, Not Magic]]
+- Part 1 — [[file:agentic-shift-1-describe-the-work.org][I Describe the Work]]
+- Part 2 — [[file:agentic-shift-2-make-it-a-skill.org][Make It a Skill]]
+- Part 3 — [[file:agentic-shift-3-give-it-context.org][Give It the Right Context]]
+- Part 4 — [[file:agentic-shift-4-doer-and-reviewer.org][The Doer and the Reviewer]]
+- Part 5 — [[file:agentic-shift-5-manage-the-harness.org][Manage the Harness]]

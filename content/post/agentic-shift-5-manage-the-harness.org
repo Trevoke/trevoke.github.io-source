@@ -1,0 +1,195 @@
+#+TITLE: Manage the Harness
+#+DATE: 2026-06-15T09:00:00-04:00
+#+DRAFT: t
+#+tags[]: agentic ai stone architecture harness
+#+DESCRIPTION: The last shift: you stop managing an agent and start building the thing that manages agents — and that thing is software architecture.
+
+* You've got three loops that work. Now what?
+You're a few weeks past the chat box. You have a doer-reviewer loop that converges (Part 4). You have a context-retrieval step that feeds it well (Part 3). You have a couple of skills you trust enough to run unattended on the easy cases (Part 2).
+
+And every time you ship something, you wire them together by hand.
+
+You run the changelog agent, eyeball its output, paste it into the implementation loop, watch the adversary do its thing, then copy the result somewhere a human can approve it. You are the glue. You are the thing deciding what runs when, what gets passed where, what happens when a step fails, and at which point a person needs to look. You're doing this in your head and in your terminal, freshly, every time.
+
+That's the last shift. You stop managing an agent. You start building the thing that manages agents.
+
+This is the move that unsettles people. If your hands are off the work — if you're not the one writing the lines — are you still the author of what ships? I'll leave the question hanging until the end; the answer depends on everything in between.
+
+That thing is a *harness*. And writing a harness is not prompt work. It's software architecture. Separation of concerns, contracts at the boundaries, observability when it breaks. You already know how to do this. It just has a new payload moving through it.
+
+* What problem are we trying to solve?
+Let's be specific, because "orchestration" is the kind of word that means everything and therefore nothing.
+
+A harness answers four questions, and they're the same four questions any system that coordinates work has to answer:
+
+- *What runs when?* The topology. The order, the branches, the loops.
+- *What gets passed?* The contracts. What each step produces, what the next step needs.
+- *What happens when a step fails?* The error path. Retry, heal, escalate, abort.
+- *When does a human need to be in this?* The gates. Deliberately placed, not bolted on after.
+
+If you've built any non-trivial system, you've answered these before. The difference now is that some of the boxes in your diagram are LLM calls — probabilistic, occasionally confident and wrong — and some are plain functions. The architecture has to hold both, and it has to let you *see* what happened, because you will not be reading every line as it goes by.
+
+The whole rest of this post is one worked example. I distrust the hypothetical diagrams — the skateboard-that-becomes-a-car school of explanation — so let's build a real thing and watch it take shape.
+
+* The thing we're shipping: a library release
+Here's a job I do by hand more often than I'd like. I'm cutting a release of a library. I need to:
+
+1. Turn the commits since the last tag into a changelog.
+2. Make a small, mechanical edit the release needs — say, bump the version references in the docs — through the doer-reviewer loop, because I want it checked.
+3. Get a human to approve the release notes before anything goes out.
+
+Three steps. One of them is a loop I already built. One of them ends at a person. Let's wire it as a harness, in Stone.
+
+** The pieces, each as one ashlar
+The unit you build in Stone is an /ashlar/ — a dressed block. Some ashlars are LLM calls, some are plain deterministic functions, some are a human step. They all carry the same two contracts: =#:produces= (what type of node I emit) and =#:queries= (what types I need upstream). Those contracts are what let the harness be checked before it runs.
+
+First, the changelog. Commits in, a draft changelog out.
+
+#+begin_src racket
+(define draft-changelog
+  (make-agent-ashlar caller
+    #:queries  '(commit-log)
+    #:produces 'changelog-draft
+    #:model    "the-strongest-summarizer"
+    #:system   "group these commits into a human-readable changelog by category"
+    #:name     'draft-changelog))
+#+end_src
+
+Notice =#:model=. The changelog is a summarization-and-grouping job, so I route it to whichever brain is currently best at long, dull, structured summarization. That's a knob, and I'll come back to why it's a knob and not a constant.
+
+Now the edit. This is the doer-reviewer loop from Part 4 — except here I'm not going to /run/ it and watch. I'm going to /place/ it. It's a component now.
+
+#+begin_src racket
+(define edit-doer
+  (make-agent-ashlar caller
+    #:queries  '(changelog-draft)
+    #:produces 'doc-edit
+    #:model    "the-strongest-coder"
+    #:system   "bump every version reference in the docs to the new release version"
+    #:name     'edit-doer))
+
+(define edit-reviewer
+  (make-agent-ashlar caller
+    #:queries  '(doc-edit)
+    #:produces 'review-verdict
+    #:model    "a-different-brain"      ; separate context, separate model
+    #:system   "find any version reference the edit missed or got wrong; say PASS or list misses"
+    #:name     'edit-reviewer))
+
+;; the external check — no model: grep the docs, fail if any old version string survives
+(define check-versions
+  (make-ashlar
+    #:queries  '(doc-edit)
+    #:produces 'version-scan
+    #:name     'check-versions
+    (lambda (dag) ...)))   ; clean only when zero references to the old version remain
+
+(define edit-loop
+  (ashlar-loop (~> edit-doer edit-reviewer check-versions)
+    #:until clean-scan?      ; the external signal closes the loop, not the reviewer
+    #:max   3))
+#+end_src
+
+A few things to flag, all from earlier in the series. The reviewer is a /separate/ ashlar with a /different/ =#:model= — separation first, different brain as the amplifier on top. The loop closes on =check-versions=, a deterministic scan of the docs — not on the reviewer's verdict. And it carries both bounds: a success predicate (=#:until=) and a ceiling (=#:max=). A predicate with no ceiling runs forever; a ceiling with no predicate is busywork. You need both, and the harness makes you write both down.
+
+But now =edit-loop= is a single value. I don't oversee it anymore. I drop it into a bigger picture as one box.
+
+** The human gate, on purpose
+Before this release goes anywhere, a person approves the notes. Not because the agent is untrustworthy in some vague way — because shipping a release is a decision a human should own. That's a design call, and Stone makes it first-class:
+
+#+begin_src racket
+(define approve-release
+  (make-ask-human approval-channel
+    #:queries   '(changelog-draft doc-edit)
+    #:produces  'release-approval
+    #:format-fn (lambda (_) "here are the notes and the doc edit — approve, or send back with notes")
+    #:name      'approve-release))
+#+end_src
+
+The human-in-the-loop step is not a fallback for when the AI fails. It's a place in the topology you /chose/ to put a person, for the same reason you'd require a second signature on a wire transfer. You're designing where judgment lives.
+
+** The payoff: compose them
+Now the whole release pipeline is one line.
+
+#+begin_src racket
+(define ashlar
+  (~> seed draft-changelog edit-loop approve-release))
+#+end_src
+
+That's the harness. =seed= carries in the commit log; the changelog gets drafted; the doc edit goes through its own converging loop; a human approves. Four steps, three different models doing what each is good at, one human gate, and a typed DAG recording every node along the way.
+
+I didn't write a single line of glue. I described the topology. The coordinating-in-my-head-and-terminal job — the thing I /was/ — is now an artifact I can read, check, and change.
+
+* Model routing is a knob because strengths drift
+Look back at those three =#:model= values: the strongest summarizer, the strongest coder, a different brain for review. Today those map to specific models. Next month they might not. The big brains leapfrog each other on a schedule nobody controls, and a model that's the best coder in June is a coin flip by autumn.
+
+This is the same lesson as context rot from Part 3, in a different form: *design for change, because the thing you're depending on will move.* I don't hard-code "the best coder" as a fact. I keep it as a routing decision in one place, easy to swap, because I /know/ I'll be swapping it. The harness's job is to make that a one-line edit, not a refactor.
+
+Agreement between two of those brains, by the way, is still a weak signal — they share training data and blind spots, and can be confidently wrong together. The thing that actually closes the loop isn't a second opinion. It's an external, checkable signal that doesn't care what any model thinks — which is why the loop above ends on =check-versions=, the deterministic scan, and not on =edit-reviewer='s verdict.
+
+* Freeze what's stable. Leave the rest fluid.
+Run the changelog step fifty times and you notice something. The /grouping/ — deciding which commit is a feature and which is a fix — genuinely benefits from a model's judgment. But the /formatting/ — turning a grouped list into the exact markdown your release process expects, with the headers and the links in the right shape — is not judgment. It's a rule. The agent does it correctly almost every time, which is another way of saying you're paying an LLM to do something a function would do deterministically and for free.
+
+So extract it. The well-worn, stable, deterministic part comes out of the agent and becomes a plain function.
+
+#+begin_src racket
+(define format-changelog
+  (make-ashlar
+    #:queries  '(changelog-groups)
+    #:produces 'changelog-draft
+    #:name     'format-changelog
+    (lambda (dag)
+      ;; deterministic: groups -> the exact markdown the release wants
+      (render-markdown (node-content (dag-nearest-ancestor dag 'changelog-groups))))))
+#+end_src
+
+And the agent's job shrinks to exactly the part that needs a brain:
+
+#+begin_src racket
+(define group-commits
+  (make-agent-ashlar caller
+    #:queries  '(commit-log)
+    #:produces 'changelog-groups
+    #:model    "the-strongest-summarizer"
+    #:system   "decide whether each commit is a feature, a fix, or a chore — the call is rarely clean, and the commit message often lies"
+    #:name     'group-commits))
+
+;; the agent decides less, on purpose:
+(define draft-changelog (~> group-commits format-changelog))
+#+end_src
+
+This is the factory move: *over time, the agent decides less, on purpose.* Every step you can freeze into a small auditable function is a step that's now deterministic, free, fast, and reviewable by reading — not by hoping. You're not de-skilling the system. You're promoting the parts that earned it out of probabilistic territory and into code you can put a test around.
+
+But the judgment cuts both ways, and getting this wrong is its own failure.
+
+Freeze the /grouping/ — the part that needs a brain, or the part that changes shape every other week — and you've committed premature rigidity. You'll have a brittle =if/else= forest pretending to be a classifier, breaking on every commit message that doesn't fit the mold you froze it into, and you'll be back to maintaining the very thing you were trying to get leverage on. Freezing a fluid step doesn't make it stable. It makes it wrong, faster.
+
+So the line you're drawing is: stable, mechanical, well-understood, hot-path — freeze it. Genuinely judgment-heavy, or still moving under you — leave it fluid. Drawing that line /is/ the architecture, and it's yours.
+
+* How you trust the whole thing without reading every line
+You're not going to read every token that flows through this pipeline. That's the point — if you could, you wouldn't need the harness. So how do you trust it?
+
+The same way you trust any system you didn't watch run: a cheap mechanical check before, and an observable record after.
+
+Before anything runs, =raco stone validate= statically walks the topology and checks that every =#:queries= type has a producer upstream and that no branch is unreachable. If =approve-release= queries =doc-edit= and nothing upstream produces a =doc-edit=, you hear about it before a single model is called. This is the compiler's bottom rung, rebuilt by hand — the cheap "this is malformed" signal that natural language never gave you. It doesn't tell you the changelog is /good/. It tells you the harness is /wired/. Those are different claims, and conflating them is how people get burned.
+
+After it runs, =raco stone trace= gives you the append-only DAG: =tally= for what ran and what each step cost, =lifecycle= for the order and the retries, =payload= for what actually moved between nodes. When the release notes come out wrong, you don't re-run it three times and squint. You open the trace and read the node where it went sideways. The parts that matter are ones you /can/ open — by design.
+
+* The shift, all the way up
+Step back and look at where the work went.
+
+You're not typing the lines anymore. You wrote the spec. You built the harness. You routed each step to the right brain and kept that routing easy to change. You drew the line between what got frozen into deterministic functions and what stayed fluid. You placed the human gate where a person should own the call. That's authorship — it just moved /up/, from the keystroke to the structure.
+
+There's a harder version of that question, the one people actually voice: does using AI mean you don't care? Did you make this, or did you just accept it? You don't read every line — that's deliberate. But the parts that bear weight, the ones you just designed, are parts you /can/ open and defend. Not caring would look like shipping what you can't check. This is the opposite: the caring moved to the decisions that shape everything downstream, and those are the ones you made. The rigor /is/ the care.
+
+There's one rung that can't move up, though: *the refusal to ship past a rung you can't yet review.* The scope-ashlar discipline says it plainly — a rung you can't review is a rung you haven't reached. You can freeze steps, route models, compose loops, and gate on humans all day. What you cannot do is ship something whose correctness you have no way to check, and call the harness responsible for a judgment you never made. The harness extends your reach. It does not replace your reach with a guess.
+
+Pro-AI was never pro-slop. Your craft was never the casualty of any of this. It was the moat — the edge no prompt-paster can copy — and you're still the one building the system.
+
+* The series
+- Part 0 — [[file:agentic-shift-0-designable-not-magic.org][AI Is Designable, Not Magic]]
+- Part 1 — [[file:agentic-shift-1-describe-the-work.org][I Describe the Work]]
+- Part 2 — [[file:agentic-shift-2-make-it-a-skill.org][Make It a Skill]]
+- Part 3 — [[file:agentic-shift-3-give-it-context.org][Give It the Right Context]]
+- Part 4 — [[file:agentic-shift-4-doer-and-reviewer.org][The Doer and the Reviewer]]
+- Part 5 — [[file:agentic-shift-5-manage-the-harness.org][Manage the Harness]]

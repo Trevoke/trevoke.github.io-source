@@ -1,0 +1,130 @@
+#+TITLE: Make It a Skill
+#+DATE: 2026-06-15T09:00:00-04:00
+#+DRAFT: t
+#+tags[]: agentic ai stone skills process tdd
+#+DESCRIPTION: When you find yourself describing the same work for the third time, stop describing the task and start describing the process — and treat writing that process as the software-engineering task it actually is.
+
+* You've written this prompt before.
+You're reviewing a pull request, and before you can review it you want a description of what it actually does, because the author left the box empty again. So you paste the diff into the chat box and type: "write me a PR description for this." It comes back fine. You tweak the headings, you ship it.
+
+Two days later, another empty PR. You paste another diff. "Write me a PR description for this." You tweak the headings again — the *same* headings, because you have opinions about what a PR description should contain. You're not having a new conversation. You're re-typing an old one, slightly worse each time because you're doing it from memory and you're annoyed.
+
+That's the smell. When you describe the same work a third time, you're not describing a task anymore. You're describing a *process*, badly, one instance at a time.
+
+In [[file:agentic-shift-1-describe-the-work.org][Part 1]] the shift was from doing the work to describing it — prompt as specification, with a contract and a review. This post is the next shift: from describing *the work* to describing *how* to do the work. From a task to a skill.
+
+* What problem are we trying to solve?
+Let's be specific about what's wrong with re-typing the prompt.
+
+It's not that it's slow, though it is. It's that the knowledge lives in your head and nowhere else. The "right" PR description — what sections, what level of detail, whether the risk note is mandatory — is a real opinion you hold, refined over years of reviewing other people's PRs. Every time you re-type the prompt, you're re-deriving that opinion from memory, and you're getting a slightly different answer. There's no artifact. There's nothing to improve. There's nothing to hand to a teammate.
+
+A skill is the artifact. A skill is a *named, repeatable process*: a prompt template, defined inputs, the steps to follow, the shape of the output, the criteria for "done," and a rule for what to do when it can't finish. Not a clever sentence you got lucky with once. A thing with a name, that takes the same kind of input every time and produces the same kind of output every time.
+
+The test for whether something should be a skill is almost embarrassingly simple:
+
+#+begin_quote
+If you're going to do this every time, it should be a skill.
+#+end_quote
+
+* A skill is heavily focused, or it isn't a skill.
+Here's the first place this goes wrong, and it goes wrong because it feels like progress.
+
+You build the PR-description skill. It works. So you think: while I'm here, why not have it also run the linter, and check whether the tests are named well, and suggest a better branch name, and flag any TODOs, and — you see where this is going. You've built a do-everything skill. And a do-everything skill is a god-object: the same anti-pattern you'd flag instantly in a code review, wearing a prompt as a disguise.
+
+A god-object skill is hard to reason about, impossible to reuse, and you can't tell why it failed when it fails — was it the linting part, the naming part, the description part? You've coupled five concerns into one prompt and now you can't change one without risking the others. It felt like progress; it's a smell.
+
+A focused skill does one thing. "Write a PR description from a diff." That's it. It doesn't know about your linter. It doesn't have opinions about branch names. It takes a diff, it produces a description. If you want the linter too, that's a *different* skill, and you compose them — which is the entire subject of [[file:agentic-shift-5-manage-the-harness.org][Part 5]].
+
+This should feel familiar, because it's the same discipline you already have. Single responsibility. Small surface. Reuse over duplication. Writing a good skill is a software-engineering task, and your instincts about good software are exactly the instincts that produce good skills. The moat is the craft, and here the craft just took a new shape.
+
+* The worked example: a PR description from a diff
+Let's build the real thing, in Stone. The point is *genericity*: the skill knows how to write a PR description for any diff. The actual diff — the domain, the thing that's specific to today's PR — comes in at runtime. The skill is the stable part. The diff is the variable part. Keeping those two separate is what makes the skill reusable.
+
+In Stone, the unit you build is an /ashlar/ — a dressed block. A skill is an ashlar (or a few of them) with its inputs and outputs declared as a contract. Here's the doer:
+
+#+begin_src racket
+(define write-pr-description
+  (make-agent-ashlar caller
+    #:queries  '(diff)
+    #:produces 'pr-description
+    #:system   "given the diff, write a PR description: summary, what changed, why, and a risk note"
+    #:name     'write-pr-description))
+#+end_src
+
+Read the contract, not the prompt. =#:queries '(diff)= says: I need a node of type ~diff~ to exist upstream before I can run. =#:produces 'pr-description= says: I emit a node of that type. The single-line =#:system= string stands in for what is, in real life, a much longer prompt encoding all your opinions about PR descriptions. We keep it to one line on purpose — you should orient on the *shape* of the ashlar (what it consumes, what it produces), not on prose I'd only get to argue with later.
+
+Notice there's no diff *in* the ashlar. The diff is supplied at runtime, as the seed. That's what makes this reusable: the same =write-pr-description= runs against today's PR and next week's PR without a single edit.
+
+* Editing the text isn't closing the loop.
+Now, the first version of that skill will not be right. That's fine — that's expected. You write a rough version, you run it, you see where the output falls short, you sharpen the prompt, you run it again. Red, green, refactor, all the way up — except now the thing you're refactoring is the skill itself.
+
+But there's a trap here. You read the output, you don't love the risk note, so you edit the =#:system= string to say "make the risk note specific." You feel like you closed the loop.
+
+You didn't. You edited the *text*. Editing the text of a skill is exactly as meaningful as editing the text of a function: it's a change you *believe* will help. You only know the edit landed by running it back through the skill's own done-criteria — by running the skill again, on a real diff, and checking whether the output now meets the bar you wrote down. Natural language has no compiler. There's no red squiggle under a prompt that says "this won't do what you think." The skill compiles in the only sense that matters — producing the output you intended — exactly when you run it and check, and not one second before.
+
+This goes back to [[file:agentic-shift-0-designable-not-magic.org][Part 0]]: the compiler was only ever the *bottom rung*. It never told you your program was correct. It told you, cheaply and mechanically, that your program was *malformed* — before you ran anything. Natural-language prose has no such rung — a =#:system= string has nothing to be *malformed* against, so the only way to know an edit landed is to run it. But a *harness* of prompts has structure, and structure *can* be malformed — exactly the kind of cheap, mechanical thing a check can catch before you run anything.
+
+* The cheapest rung, returning: =raco stone validate=
+Stone hands that rung back, and it does it off the contract you already wrote. The doer's =#:queries '(diff)= is enough for the validator to work with on its own; I'll add a reviewer too — Part 4's whole subject — so two ashlars end up leaning on the same diff:
+
+#+begin_src racket
+(define review-pr-description
+  (make-agent-ashlar caller
+    #:queries  '(pr-description diff)
+    #:produces 'review-notes
+    #:system   "check the PR description against the diff: is anything claimed that the diff doesn't do?"
+    #:name     'review-pr-description))
+
+;; the payoff — compose them:
+(define ashlar (~> write-pr-description review-pr-description))
+#+end_src
+
+The reviewer =#:queries '(pr-description diff)=. It needs *both* the description and the original diff — you can't tell whether a description is honest without the thing it's describing. The doer needs the diff too. Those dependencies aren't comments or hopes. They're contracts: declared, machine-readable.
+
+And because they're declared, they can be *checked statically*. Before any model runs, before you spend a single token:
+
+#+begin_src racket
+raco stone validate
+;; => error: ashlar 'write-pr-description queries 'diff,
+;;    but no upstream ashlar produces 'diff
+#+end_src
+
+There it is. I wired up two ashlars that both need a diff and never put a diff *into* the graph. I had it in my head — it's "the input," obviously — but "obvious to me" isn't a producer. The validator walks the graph, sees a queried type with no producer upstream, and tells me, in milliseconds, that my harness is malformed.
+
+That is the compiler's bottom rung, returning. It doesn't tell me the PR description is *good* — that's what the reviewer ashlar, and your own eyes, are for. It tells me, before I've called any model, that the wiring is broken. A cheap, mechanical "this won't run as written." The fix is to make the diff a produced, queryable node so both ashlars can reach it:
+
+#+begin_src racket
+(define provide-diff
+  (make-ashlar
+    #:produces 'diff
+    (lambda (dag) ...)))   ;; surface the seed diff as a queryable node
+
+(define ashlar
+  (~> provide-diff write-pr-description review-pr-description))
+#+end_src
+
+Run =raco stone validate= again and it's quiet. Now every model call you make is at least running against a graph that *can* run. You haven't proven the output is right. You've reclaimed the floor — the cheapest, fastest signal, the one the compiler used to give you for free.
+
+* Structure travels; clever phrasing doesn't.
+One more reason to build the skill as structure rather than as a clever sentence.
+
+A prompt you tuned until it sang on Claude is a prompt you tuned *for Claude*. Move it to Gemini and the magic phrasing — the incantation that finally made it behave — often stops working, because you were fitting the quirks of one model. The three big brains have different blind spots ([[file:agentic-shift-0-designable-not-magic.org][Part 0]] again), and clever phrasing is exactly the part that's overfit to one of them.
+
+But the *structure* travels. "Take a diff, produce a description with these four sections, check the claims against the diff, done when no claim is unsupported" — that's a process, and it's legible to any model that can follow instructions. The contract (=#:queries=, =#:produces=), the done-criteria, the separation of doer from reviewer: that's the part that survives a model swap. The structure is the durable asset. The clever sentence is a liability you'll pay rent on every time the models drift.
+
+So when you write the skill, spend your effort on the structure. The skill should read like a process you could hand to a competent new hire, not like a spell you're afraid to disturb.
+
+* Where this leaves you.
+There's a thing that happens when you sit down to externalize a process you've been running on instinct for years: you find out you don't understand it as well as you thought. What *are* the four sections of a good PR description? Is the risk note actually mandatory, or do you just add it when you remember? What does "done" mean — and could a reviewer who isn't you check it? The instinct was real, but it was fuzzy, and fuzzy survives in your head because you never had to write it down.
+
+A skill forces you to write it down. And the act of making the process explicit — inputs, steps, output shape, done-criteria, the escalation rule for when it can't finish — is what turns a habit into something you can improve, hand off, and trust a machine to run. The validator catches the malformed wiring; *you* still have to know what "good" means precisely enough to check it. Stone won't write that down for you. It'll just refuse to let you pretend you did.
+
+That's not a tax. That's the senior engineer's job, finally written down where the next person — or the next agent — can read it.
+
+* The series
+- Part 0 — [[file:agentic-shift-0-designable-not-magic.org][AI Is Designable, Not Magic]]
+- Part 1 — [[file:agentic-shift-1-describe-the-work.org][I Describe the Work]]
+- Part 2 — [[file:agentic-shift-2-make-it-a-skill.org][Make It a Skill]]
+- Part 3 — [[file:agentic-shift-3-give-it-context.org][Give It the Right Context]]
+- Part 4 — [[file:agentic-shift-4-doer-and-reviewer.org][The Doer and the Reviewer]]
+- Part 5 — [[file:agentic-shift-5-manage-the-harness.org][Manage the Harness]]

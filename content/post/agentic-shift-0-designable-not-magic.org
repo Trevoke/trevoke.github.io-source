@@ -1,0 +1,100 @@
+#+TITLE: AI Is Designable, Not Magic
+#+DATE: 2026-06-15T09:00:00-04:00
+#+DRAFT: t
+#+tags[]: agentic ai stone craft probabilistic
+#+DESCRIPTION: AI is a probabilistic text system you can reason about and design with — and the engineering disciplines you already have are how you do it.
+
+* You ask three of them the same question.
+You're reviewing a small change and you're not sure about it. So you do the thing everyone does now: you paste it into the chat box and ask.
+
+Here's the function under review. It dedupes a list of records by =id=, keeping the most recent one:
+
+#+begin_src python
+def latest_by_id(records):
+    seen = {}
+    for r in records:
+        seen[r.id] = r
+    return list(seen.values())
+#+end_src
+
+You ask: "Does this keep the most recent record per id? The records aren't sorted." You ask Claude. You ask Gemini. You ask ChatGPT. Same prompt, three tabs.
+
+Two of them tell you yes — confidently, fluently, with a tidy explanation about how the dict overwrites earlier entries so you end up with the last one seen. One of them says: no, this keeps the *last record in iteration order*, which is only the most recent if the input happens to be sorted oldest-to-newest, and you just told me it isn't.
+
+The two that agreed are wrong. The lone dissenter is right. There is no =sort=, no timestamp comparison, nothing in that code that knows what "recent" means — it keeps whatever came last in the list.
+
+That's the moment the rest of this series is built around.
+
+* AI is not a magic box. It's a system you can reason about.
+The reflex, when this happens, is to treat it as a glitch. The AI "got it wrong," the way a magic 8-ball gives you a bad shake. But that framing is the actual problem.
+
+A large language model is a probabilistic text system. It produces the most likely continuation of the text it's been given, conditioned on an enormous amount of training data. That description is useful precisely because it tells you what to expect and what to design around.
+
+Fluency is what it optimizes for. Fluency is not the same as correctness. The model is very good at producing text that *reads* like the answer a knowledgeable person would give. Whether that text is *true* is a separate property, and nothing in the mechanism guarantees it. The two wrong answers above weren't malfunctioning. They were doing exactly what they do: producing a plausible, well-formed continuation. "The dict overwrites, so you get the latest" is an extremely common shape of explanation in the training data. It's just not what *this* code does.
+
+So don't confuse:
+
+- Confidence with correctness
+- Fluency with truth
+- Agreement with verification
+
+All three are facets of one mistake: taking the *shape* of a good answer for a good answer.
+
+* Agreement is a weak signal.
+The instinct to ask three models and go with the majority is a reasonable instinct. It's also a trap, and the vignette above is exactly why.
+
+The three big brains — Claude, Gemini, ChatGPT — are different models with different training and different blind spots. That difference is real, and it's useful: model choice is a design variable, not a coin flip. When they disagree, you've learned something — at minimum, that the question is contested enough to be worth your own attention.
+
+But when they *agree*, you've learned much less than it feels like. They were trained on overlapping slices of the same internet. They share failure modes. Two of them landing on the same wrong answer isn't three independent experts converging on the truth — it's the same common misconception surfacing twice. Agreement between models is a *weak* signal. It can be the sound of a shared blind spot, said louder.
+
+What would have actually settled it? Not a third opinion. A test:
+
+#+begin_src python
+records = [Rec(id=1, ts=200), Rec(id=1, ts=100)]
+assert latest_by_id(records)[0].ts == 200   # fails: returns ts=100
+#+end_src
+
+That assertion doesn't have an opinion. It runs, it fails, and the failure doesn't care how fluent the explanation was. An external, checkable signal beats any amount of model consensus. This comes back later in the series.
+
+* The compiler was only the bottom rung.
+I'm borrowing this framing from a colleague, Zach. That reframe reorganized how I think about all of this.
+
+A compiler never promised your program was *correct*. That's not what it was for. It gave you something much cheaper and much more mechanical: a fast, reliable "this is malformed" signal *before* you ran anything. Type mismatch, undefined name, unbalanced parens — caught at the door, for free. Everything above that — "does it actually do what I meant?" — you were always on the hook for. That's why TDD, code review, and refactoring exist. The compiler gave you the bottom rung; the disciplines built every rung above it.
+
+Now look at what a language model gives you. Natural language has no compiler. There's no syntax for a prompt to be *invalid* against. "Dedupe these records, keeping the latest" can't fail to compile, because there's nothing to compile it against. The bottom rung — the cheap mechanical check that used to catch the dumb stuff before you spent real attention on the smart stuff — is *gone*.
+
+That's the analogy this series runs on. The cheap mechanical floor — the compiler's "this is malformed," caught before you run anything — is the rung that's newly gone, and you rebuild it by hand: a static check over your agent's wiring before any model call runs. Everything above that floor was always your job, compiler or no compiler — a test that pins down what the dedup code actually does, a reviewer that doesn't trust the doer. The difference now is that you're building the whole ladder on ground that no longer comes with a floor.
+
+(There's a framework I wrote for this called Stone — a way to assemble agents into harnesses you can statically check and trace. I'm not going to show you any of its machinery in this post; this one is the frame. But it'll be the workbench for most of what comes after, so you'll see the name again.)
+
+* Pro-AI is pro-craft.
+This argument gets miscategorized constantly.
+
+Treating the model as a probabilistic system you design around is not the skeptic's position. It's the *most* pro-AI position there is. The person who pastes a prompt, gets fluent output, and ships it is not getting more out of the tool — they're getting less, because they've capped its usefulness at "whatever I was willing to not check." The engineer who knows the bottom rung is missing, and rebuilds it, gets far more leverage, on harder problems, with output they can actually stand behind.
+
+Pro-AI is not pro-slop. Quality is something you design, not something you hope for. And the disciplines that let you design it — specifying clearly, testing, reviewing with fresh eyes, refactoring the thing that produces the work and not just the work — are exactly the disciplines that made you a good engineer before any of this. They don't become obsolete. They become your moat — the advantage a prompt-paster can't copy, because it's earned. They just take a new shape.
+
+That's the premise of this series: your craft isn't the casualty of working with agents — it's exactly what's still needed in this agentic world.
+
+* What comes next.
+The series traces five shifts — the moves a senior engineer makes going from "chatting with the AI" to architecting a system of them. Each one is a place where an engineering discipline you already have gets pointed at a new target.
+
+1. *I describe the work.* From doing it yourself to specifying it — the prompt as a spec, not a conversation, with the agent taking actions and you reviewing the result.
+2. *I describe how to do the work.* From one-off instructions to named, repeatable skills — and discovering that writing a good one is a software-engineering task.
+3. *I give it the right context.* Information architecture for agents: what should it be able to reach, and when? A reviewer without context is guessing; with context, it's auditing.
+4. *I manage the agent.* The doer and a separate reviewer — a loop with exit criteria you wrote down in advance, closed by an external check that doesn't depend on any model's opinion.
+5. *I manage the harness.* Composing those pieces into a pipeline, routing the right brain to each job, freezing the stable parts into plain code — authoring the work from higher up.
+
+The compiler was only the bottom rung. We're going to build the rest of the ladder.
+
+#+begin_quote
+There is no "the AI." There are three confident strangers and a test that doesn't care what any of them think. Your job isn't to pick which stranger to trust — it's to build the thing that decides.
+#+end_quote
+
+* The series
+- Part 0 — [[file:agentic-shift-0-designable-not-magic.org][AI Is Designable, Not Magic]]
+- Part 1 — [[file:agentic-shift-1-describe-the-work.org][I Describe the Work]]
+- Part 2 — [[file:agentic-shift-2-make-it-a-skill.org][Make It a Skill]]
+- Part 3 — [[file:agentic-shift-3-give-it-context.org][Give It the Right Context]]
+- Part 4 — [[file:agentic-shift-4-doer-and-reviewer.org][The Doer and the Reviewer]]
+- Part 5 — [[file:agentic-shift-5-manage-the-harness.org][Manage the Harness]]

@@ -1,0 +1,117 @@
+#+TITLE: I Describe the Work
+#+DATE: 2026-06-15T09:00:00-04:00
+#+DRAFT: t
+#+tags[]: agentic ai stone tdd tool-calls specification
+#+DESCRIPTION: The first shift after the chat box is from doing the work yourself to describing it well enough that an agent can do it and you can review what came back.
+
+* You stop typing and start describing.
+You've got a flaky test. You know the one — it goes red maybe one run in twenty, always in CI, never on your machine, and the log it leaves behind is a wall of output you've scrolled past forty times this month. You could open it again. Read it again. Find the suspect again.
+
+Or you could describe what "find the suspect" means, hand the log to something that reads fast, and look at what it hands back.
+
+That second move is the shift. In Part 0 we said the compiler's bottom rung is gone, and the through-line of this series is rebuilding the feedback it used to give you — by hand, with craft. This post is the first rung you rebuild: you stop being the one who *does* the work and become the one who *describes* it. Not chats about it. Describes it, precisely, the way you'd write a ticket you actually want done right.
+
+* What problem are we trying to solve?
+The chat box has a ceiling, and you hit it the moment the work needs to touch something.
+
+A chat can tell you what a flaky-test log *probably* means. It can't read the log. It can't run the suite. It can't open the three files the failing assertion points at. You become its hands — copying output in, pasting suggestions out, ferrying context back and forth across a membrane that exists only because the model can't reach across it.
+
+So the first thing we give the model is reach. Not unlimited reach. Defined reach.
+
+** Tool calls: the model can take actions
+A tool call is exactly what it sounds like. You describe a capability — read this file, query that API, run this command — and the model can choose to invoke it and use the result. The model proposes; the tool executes; the output comes back into the conversation as a fact, not a guess.
+
+The word that matters is *you*. You decide what tools exist. You decide what they can touch. A read-file tool scoped to a logs directory is a very different animal from a shell that can do anything to anything. The capability you grant is a design decision, and it's yours.
+
+So let's grant exactly one, and see how little it takes.
+
+** The AI sandwich
+This is the shape of every good delegation I've made to a human, too.
+
+- *Top slice (yours):* context and constraints. What the work is, what "done" means, what the agent may touch.
+- *The filling (the agent's):* the substantive work. Reading, reasoning, producing the thing.
+- *Bottom slice (yours):* review. You read the output, decide if it's right, and act on it.
+
+The agent owns the middle. You own both ends. If you skip the top slice you get a confident answer to a question you didn't ask; if you skip the bottom slice you're shipping something nobody read. The sandwich is a division of labor: the boring, mechanical middle goes to the machine, and the judgment stays with you.
+
+* The worked example: name the suspect
+Let's build the flaky-test triage as an *ashlar* — the unit of work in Stone, the Racket framework this series builds in. One ashlar, one tool, one clear contract. (If you're new to the vocabulary: an ashlar is a dressed stone block — a single verifiable step in a harness.)
+
+Start with the top slice — the context and constraints, written as a specification:
+
+#+begin_src racket
+(define find-suspect
+  (make-agent-ashlar caller
+    #:queries    '(flaky-test-log)
+    #:produces   'suspect-test
+    #:middleware (list (read-file #:allowed-paths (list "logs/")))
+    #:system     "read the failing run's log; name the single test most likely flaky and cite the line that implicates it"
+    #:name       'find-suspect))
+#+end_src
+
+Read that top to bottom and notice how much of it isn't prose. The =#:system= line is one sentence. A real one is several sentences of explicit instruction — I've shortened it here so the ashlar's shape stays readable. The sentence is enough to show what this ashlar is *for*. Everything that matters is in the keywords around it:
+
+- =#:queries '(flaky-test-log)= — this ashlar consumes a log. It won't run until something upstream has produced one.
+- =#:produces 'suspect-test= — it emits one thing: a named suspect. Not a fix. Not a refactor. A name.
+- =#:middleware= — the one tool it gets is the built-in =read-file=, scoped with =#:allowed-paths (list "logs/")=. That's the "what can it touch" decision, made explicit and made small.
+
+The contract is the specification. =#:queries= and =#:produces= are you saying, in a form a machine can check, "here is what goes in and here is what must come out."
+
+Now we need the top slice to have something to stand on — the log itself — and the bottom slice, where you take over again:
+
+#+begin_src racket
+(define seed
+  (make-ashlar #:produces 'flaky-test-log
+    (lambda (dag) (node-text (load-latest-ci-log)))))
+
+(define review
+  (make-ask-human review-channel
+    #:queries   '(suspect-test)
+    #:produces  'verdict
+    #:format-fn (lambda (_) "here's the suspect and its evidence — confirm, or tell me what it missed")
+    #:name      'review))
+
+;; the payoff — context in, work in the middle, you on the bottom:
+(define ashlar (~> seed find-suspect review))
+#+end_src
+
+There's the sandwich. =seed= sets the context. =find-suspect= does the work. =review= is you — a first-class step in the pipeline, not an afterthought. The =~>= composes them into a single ashlar you can run.
+
+Look closely at =make-ask-human=; it's easy to skip past. The human review isn't outside the system, bolted on after the fact. It's *in* the harness, with its own contract: it =#:queries '(suspect-test)= and =#:produces 'verdict= (the channel itself — where you actually sit to answer — gets wired up in =main=). The framework treats your judgment as a step that has inputs and outputs, the same as any other. That's the bottom slice given a name and a place to stand.
+
+* Prompt-as-specification, not conversation
+A conversation drifts. You ask, it answers, you clarify, it adjusts, and three turns later neither of you can say precisely what was agreed. That's fine when you're thinking out loud. It's a terrible way to get repeatable work done.
+
+A specification holds still. The =#:system= sentence, the =#:queries=, the =#:produces= — taken together, that's a statement of the work that doesn't move when you're not looking at it. You can read it back next week and know exactly what this ashlar promises. You can hand it to a teammate. You can run it again on a different log and get the same *kind* of answer.
+
+The discipline here is the one you already have. Writing a tight ticket, writing a clear acceptance criterion, writing a function signature that says what it takes and what it returns — you've been doing specification your whole career. The shift is noticing that the prompt is now that artifact, and treating it with the same seriousness. A vague spec gets vague work — as true for an agent as for a new hire. So the engineer who already writes sharp specs gets sharp work back where the prompt-paster gets mush; the discipline you've spent a career on is the leverage.
+
+* Red, green, refactor — at this rung
+If you've done test-driven development, you already know the loop, and it runs here almost unchanged. Kent Beck's rhythm doesn't care that the thing in the middle is a language model.
+
+- *Red.* Write down what "done" means before you run anything. For our example, "done" is: it names exactly one test, and it cites a line from the log that actually implicates it. That's your failing condition — the thing that isn't true yet.
+- *Green.* Run the ashlar. Does the output satisfy the condition? If it named three tests, or named one with no evidence, you're still red. When the output clears the bar, you're green.
+- *Refactor.* You don't just refactor the code the agent produced — you refactor *the thing that produced it.* If the agent keeps citing irrelevant lines, you tighten the =#:system= sentence so it stops. If it keeps reaching for files it shouldn't, you narrow the tool's scope. The goal is that next round needs *less* correction than this one.
+
+That last move is the one that compounds. In ordinary TDD you refactor the implementation. Here you also refactor the specification — the prompt, the contract, the tool's reach. You're red-green-refactoring the instruction itself, and a sharper instruction is an asset you keep.
+
+* You're meeting the review instinct, not replacing it
+There's a fear underneath all of this: that describing the work instead of doing it means you stop understanding it. That you hand off the thinking and get back to being a manager who can't read the thing they approved.
+
+I don't think that's what happens — but only if you keep the bottom slice. The senior engineer's instinct to review, to ask "wait, why this line and not that one," to smell a confident wrong answer — that instinct doesn't get retired here. It gets *pointed somewhere new.* You're no longer reviewing your own keystrokes. You're reviewing a suspect and its evidence, a claim small enough to actually check. The skill is the same skill. The object it acts on changed shape.
+
+Pro-AI is not pro-slop. The agent reading the log faster than you isn't the point. The point is that you described the work precisely enough that what came back is *reviewable* — and then you reviewed it. Quality didn't show up because the model is good. It showed up because you designed a step whose output you could check, and checked it.
+
+That's not a smaller job than doing the work yourself. It's a different one, and it scales.
+
+#+begin_quote
+Read the log yourself and you're scrolling a wall of output for the fortieth time. Describe what "find the suspect" means and you're checking one name against one cited line. Same judgment — pointed at something small enough to actually check.
+#+end_quote
+
+* The series
+- Part 0 — [[file:agentic-shift-0-designable-not-magic.org][AI Is Designable, Not Magic]]
+- Part 1 — [[file:agentic-shift-1-describe-the-work.org][I Describe the Work]]
+- Part 2 — [[file:agentic-shift-2-make-it-a-skill.org][Make It a Skill]]
+- Part 3 — [[file:agentic-shift-3-give-it-context.org][Give It the Right Context]]
+- Part 4 — [[file:agentic-shift-4-doer-and-reviewer.org][The Doer and the Reviewer]]
+- Part 5 — [[file:agentic-shift-5-manage-the-harness.org][Manage the Harness]]

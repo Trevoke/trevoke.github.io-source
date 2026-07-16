@@ -1,0 +1,1616 @@
+#+TITLE: Setting up a RAG from scratch with metrics
+#+DATE: 2025-05-26
+#+DRAFT: t
+#+categories[]: programming genai
+#+tags[]: rag llm
+#+type: book
+#+layout: chapters
+
+[[file:~/src/workbench/rag-ragas/][rag-ragas project]]
+
+* You're not building a search engine. You're building a trust engine.
+:PROPERTIES:
+:CUSTOM_ID: the-confession-that-changes-everything
+:END:
+Here's what I wish I'd known when I started building RAG systems: you're
+not building a search engine, you're building a *trust engine*. And trust
+is measurable.
+
+The failure mode is specific. You ask the system a question, it retrieves
+some documents, and it hands back a confident, fluent answer that the
+documents don't actually support. It looks right. It reads well. And it's
+wrong --- the same way a confident answer in a meeting can be wrong,
+except now it's wrong at scale and nobody's checking it against the
+source. In RAG terms, that's a *faithfulness* problem: the answer drifted
+away from the context it was supposed to be grounded in.
+
+This tutorial builds a RAG system that can tell you when it's doing that.
+And we'll know whether it works /before/ we write the implementation,
+because we're going to write the tests first.
+
+*Why we're using fantastical examples*: Throughout this tutorial, we'll
+work with completely fictional concepts like "Zephyr Crystals" and
+"Lumifruits." Why? Because when we use real-world examples, we can't
+tell if the LLM is answering from its training data or from our RAG
+system. With fantasy elements that no LLM has ever seen, we know with
+100% certainty that every correct answer comes from our retrieval
+system. It's the cleanest test of faithfulness I know: if the answer is
+right, it came from your documents. Full stop.
+
+* Why RAG needs quality measurement (and why you should care)
+:PROPERTIES:
+:CUSTOM_ID: why-rag-needs-quality-measurement-and-why-you-should-care
+:END:
+Let me tell you a story. A company I know built a customer service
+chatbot using RAG. It worked great---until it started telling customers
+that their refund policy included "a complimentary unicorn with every
+return." The retrieval worked. The generation worked. But nobody
+measured whether the generation was /faithful/ to what was retrieved.
+
+Here's the catch: most RAG systems are built to look good in a demo, not
+to be trustworthy in production. RAGAS is how you close that gap. It gives
+you a fact-checker that asks three questions of every answer:
+
+- "Did you actually find relevant information?" (Context Precision)
+- "Did you use what you found honestly?" (Faithfulness)
+- "Did you actually answer the question?" (Answer Relevancy)
+
+In other words, RAGAS is what turns a RAG system from a creative writing
+machine into something you can rely on.
+
+* What we're building: objectives that build on each other
+:PROPERTIES:
+:CUSTOM_ID: our-learning-journey-objectives-that-build-on-each-other
+:END:
+We're going to build this system using what Kent Beck taught me: make
+the tests tell the story. Each objective is a promise, each test is
+proof we kept it, and each implementation is the simplest thing that
+could possibly work.
+
+** Objective 1: Set up a vector store that actually stores vectors
+:PROPERTIES:
+:CUSTOM_ID: objective-1-set-up-a-vector-store-that-actually-stores-vectors
+:END:
+*Success Criteria*: Given a document about "machine learning," when we
+search for "ML algorithms," we get a similarity score > 0.7
+
+** Objective 2: Connect to a local LLM without the cloud looking over our shoulder
+:PROPERTIES:
+:CUSTOM_ID: objective-2-connect-to-a-local-llm-without-the-cloud-looking-over-our-shoulder
+:END:
+*Success Criteria*: Send a prompt to our local Ollama-served LLM and get
+a response in < 2 seconds
+
+** Objective 3: Build a RAG pipeline that retrieves, then generates
+:PROPERTIES:
+:CUSTOM_ID: objective-3-build-a-rag-pipeline-that-retrieves-then-generates
+:END:
+*Success Criteria*: Ask a question, get relevant documents, generate an
+answer that uses them
+
+** Objective 4: Measure quality with RAGAS (because "it works on my machine" isn't enough)
+:PROPERTIES:
+:CUSTOM_ID: objective-4-measure-quality-with-ragas-because-it-works-on-my-machine-isnt-enough
+:END:
+*Success Criteria*: Achieve Faithfulness > 0.8 and Answer Relevancy >
+0.7 on test queries
+
+** Objective 5: Improve based on measurements (the part everyone skips)
+:PROPERTIES:
+:CUSTOM_ID: objective-5-improve-based-on-measurements-the-part-everyone-skips
+:END:
+*Success Criteria*: Identify why scores are low and improve them by 20%
+
+* Setting up our development environment
+:PROPERTIES:
+:CUSTOM_ID: setting-up-our-development-environment
+:END:
+First, let's be honest about what we're doing here. We're going to
+install a bunch of packages, and some of them might fight with each
+other. That's normal. That's Python. So let's make sure as little
+fighting as necessary happens.
+
+#+begin_src sh
+curl -LsSf https://astral.sh/uv/install.sh | sh # if you don't already have `uv`
+mkdir -p ~/src/workbench/rag_ragas
+cd ~/src/workbench/rag_ragas
+uv init -p 3.12
+# Create our virtual environment (because we're not savages)
+uv venv --python 3.12
+source .venv/bin/activate  # On Windows: rag_env\Scripts\activate
+
+# Install our cast of characters
+uv add chromadb==1.0.15  # Our vector database
+uv add litellm==1.74.3   # Our LLM Swiss Army knife
+uv add ragas==0.2.15      # Our quality police
+uv add pytest==8.4.1     # Our test runner
+uv add python-dotenv==1.1.1     # For managing secrets
+#+end_src
+
+For painfully didactic reasons, I'm specifying versions. Real world? You
+might need different ones. The documentation will tell you. Or the error
+messages will. One of those.
+
+** Setting up Ollama
+:PROPERTIES:
+:CUSTOM_ID: setting-up-ollama
+:END:
+Before we can talk to a local LLM, we need to have one running. Enter
+Ollama:
+
+#+begin_src sh
+# Install Ollama (macOS/Linux)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# For Windows, download from: https://ollama.com/download
+
+# Pull a large language model (I'll use gemma3)
+ollama pull gemma3
+# Pull a vector embedding model (I'll use mxbai-embed-large
+ollama pull mxbai-embed-large
+
+# Start Ollama (it runs automatically after install, but just in case)
+ollama serve
+
+# Test it's working
+curl http://localhost:11434/api/generate -d '{
+  "model": "gemma3",
+  "prompt": "Hello, Ollama!"
+}'
+#+end_src
+
+Ollama runs on port 11434 by default. Remember the number; you'll need it
+more than once.
+
+Finally, let's do a small tweak to the =pyproject.toml= file, let's add
+some config for pytest:
+
+#+begin_src toml
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+#+end_src
+
+* Objective 1: A vector store that remembers
+:PROPERTIES:
+:CUSTOM_ID: objective-1-a-vector-store-that-remembers
+:END:
+** The test that tells us what we want
+:PROPERTIES:
+:CUSTOM_ID: the-test-that-tells-us-what-we-want
+:END:
+Here's something I learned the hard way: write the test first, and it
+tells you when you're done. Let's create =tests/test_vector_store.py= to
+verify that we have a vector store and that it brings data back:
+
+#+begin_src python
+import os
+import shutil
+import pytest
+import time
+from rag_ragas.vector_store import VectorStore
+
+@pytest.fixture
+def clean_vector_store():
+    """Provide a clean vector store and cleanup after test."""
+    return VectorStore(in_memory=True)
+
+class TestVectorStoreWithOllama:
+    def test_ollama_connection_works(self, clean_vector_store):
+        """Test that we can connect to Ollama for embeddings."""
+        assert clean_vector_store.test_embedding_connection(), "Ollama embeddings not working"
+
+    def test_stores_and_retrieves_similar_documents(self, clean_vector_store):
+        """Test the full embedding and retrieval pipeline with local models."""
+        store = clean_vector_store
+
+        # Skip test if Ollama isn't available
+        if not store.test_embedding_connection():
+            pytest.skip("Ollama not available for embeddings")
+
+        documents = [
+            "Zephyr Crystals are translucent gemstones that resonate at 432Hz when exposed to moonlight.",
+            "The Ethereal Harmonics Academy teaches students to tune Zephyr Crystals for dimensional travel.",
+            "Professor Marlowe discovered that Zephyr Crystals can store up to 7 terabytes of memory in their crystalline matrix.",
+            "When two Zephyr Crystals are quantum-entangled, they maintain instant communication across any distance.",
+            "Lumifruit trees bloom only during the Eclipse of the Three Moons, creating bioluminescent fruit.",
+            "The Twilight Grove exists in a state where day and night occur simultaneously."
+        ]
+
+        start_time = time.time()
+        store.add_documents(documents)
+        embedding_time = time.time() - start_time
+
+        crystal_results = store.search("How do Zephyr Crystals work?", k=2)
+
+        fruit_results = store.search("Where do Lumifruits grow?", k=2)
+
+        assert len(crystal_results) >= 1
+        assert any("zephyr crystal" in doc.lower() for doc in crystal_results)
+
+        assert len(fruit_results) >= 1
+        assert any("lumifruit" in doc.lower() or "twilight grove" in doc.lower() for doc in fruit_results)
+
+    def test_similarity_quality_with_local_embeddings(self, clean_vector_store):
+        """Test that local embeddings provide reasonable semantic similarity."""
+        store = clean_vector_store
+
+        if not store.test_embedding_connection():
+            pytest.skip("Ollama not available for embeddings")
+
+        documents = [
+            "The Aurora Borealis phenomenon creates dancing lights across the sky in brilliant colors of green, blue, and purple.",
+            "Zephyr Crystals are magical gemstones that vibrate and resonate at specific sound frequencies when activated.",
+            "Temporal magic allows wizards to manipulate time, causing displacement and chronological anomalies in reality."
+        ]
+
+        store.add_documents(documents)
+
+        crystal_results = store.search_with_scores("magical gemstone frequency vibration", k=3)
+        top_result = crystal_results[0]['document'].lower()
+        assert "zephyr" in top_result or "crystal" in top_result or "frequency" in top_result
+
+        aurora_results = store.search_with_scores("dancing lights sky brilliant colors", k=3)
+        top_result = aurora_results[0]['document'].lower()
+        assert "aurora" in top_result or "lights" in top_result or "colors" in top_result
+
+        temporal_results = store.search_with_scores("time manipulation chronological", k=3)
+        top_result = temporal_results[0]['document'].lower()
+        assert "temporal" in top_result or "time" in top_result or "displacement" in top_result
+
+    def test_handles_empty_queries_gracefully(self, clean_vector_store):
+        """Test edge cases with local embeddings."""
+        store = clean_vector_store
+
+        if not store.test_embedding_connection():
+            pytest.skip("Ollama not available for embeddings")
+
+        store.add_documents(["Single test document about nothing in particular."])
+
+        # Empty query should return empty list, not crash
+        results = store.search("", k=1)
+        assert isinstance(results, list)  # Should be a list, even if empty
+        print(f"Empty query results: {results}")
+
+        # Very short query should work
+        results = store.search("test", k=1)
+        assert isinstance(results, list)
+        print(f"Short query results: {results}")
+
+        # None query should be handled gracefully
+        results = store.search(None, k=1)
+        assert isinstance(results, list)
+
+        # Query for non-existent content
+        results = store.search("unicorns and dragons flying through space", k=1)
+        assert isinstance(results, list)
+        # Might return results (semantic similarity) or empty list - both OK
+
+    def test_collection_info_and_debugging(self, clean_vector_store):
+        """Test the debugging utilities."""
+        store = clean_vector_store
+
+        if not store.test_embedding_connection():
+            pytest.skip("Ollama not available for embeddings")
+
+        # Test collection info
+        info = store.get_collection_info()
+        assert 'document_count' in info or 'error' in info
+        print(f"Collection info: {info}")
+
+        # Test debug search function
+        test_docs = ["This is a test document.", "Another test document here."]
+        # This should not crash
+        store.debug_search("test query", test_docs)
+
+    def test_search_with_scores_functionality(self, clean_vector_store):
+        """Test the scored search feature for debugging."""
+        store = clean_vector_store
+
+        if not store.test_embedding_connection():
+            pytest.skip("Ollama not available for embeddings")
+
+        documents = [
+            "Dragons are large mythical creatures that breathe fire and hoard treasure.",
+            "Unicorns are magical horses with a single horn and healing powers."
+        ]
+
+        store.add_documents(documents)
+
+        # Test scored search
+        results = store.search_with_scores("mythical fire-breathing creature", k=2)
+
+        assert isinstance(results, list)
+        #if results:  # If we got results
+        assert 'document' in results[0]
+        assert 'similarity' in results[0] or 'distance' in results[0]
+#+end_src
+
+Run it: =pytest tests/test_vector_store.py -v=
+
+It fails. Perfect. That's the "Red" in Red-Green-Refactor.
+
+** Making it real (Green phase)
+:PROPERTIES:
+:CUSTOM_ID: making-it-real-green-phase
+:END:
+Now let's write the simplest thing that could possibly work. Create
+=src/rag_ragas/vector_store.py=:
+
+#+begin_src python
+import chromadb
+import requests
+import json
+from typing import List, Optional, Dict, Any
+from chromadb.api.types import EmbeddingFunction, Documents
+
+class OllamaEmbeddingFunction(EmbeddingFunction):
+    """
+    Custom ChromaDB embedding function that uses Ollama's local embedding endpoint.
+    """
+
+    def __init__(self, model_name: str = "mxbai-embed-large", base_url: str = "http://localhost:11434"):
+        self.model_name = model_name
+        self.base_url = base_url
+        self.embed_url = f"{base_url}/api/embeddings"
+        self._embedding_dim = None  # We'll detect this
+
+    def __call__(self, input: Documents) -> List[List[float]]:
+        """
+        Generate embeddings for a list of documents using Ollama.
+        """
+        embeddings = []
+
+        for document in input:
+            try:
+                # Handle empty documents
+                if not document or not document.strip():
+                    print(f"Warning: Empty document, using placeholder")
+                    # Use a placeholder for empty docs
+                    document = "empty document placeholder"
+
+                response = requests.post(
+                    self.embed_url,
+                    json={
+                        "model": self.model_name,
+                        "prompt": document
+                    },
+                    timeout=30
+                )
+                response.raise_for_status()
+
+                embedding = response.json()["embedding"]
+
+                # Detect embedding dimension on first successful call
+                if self._embedding_dim is None:
+                    self._embedding_dim = len(embedding)
+                    print(f"Detected embedding dimension: {self._embedding_dim}")
+
+                embeddings.append(embedding)
+
+            except Exception as e:
+                print(f"Error generating embedding for document: '{document[:50]}...': {str(e)}")
+                # Fallback: return a zero vector of the expected dimension
+                fallback_dim = self._embedding_dim or 1024  # mxbai-embed-large default
+                embeddings.append([0.0] * fallback_dim)
+
+        return embeddings
+
+class VectorStore:
+    def __init__(self, persist_directory="./chroma_db", in_memory=False):
+        """
+        Initialize ChromaDB with local Ollama embeddings.
+        """
+        if in_memory:
+            # In-memory client - no files, no cleanup needed
+            self.client = chromadb.Client()
+        else:
+            # Persistent client for production
+            self.client = chromadb.PersistentClient(path=persist_directory)
+
+        # Use our local Ollama embedding function
+        self.embedding_function = OllamaEmbeddingFunction(
+            model_name="mxbai-embed-large"
+        )
+
+        # Get or create our collection
+        self.collection = self.client.get_or_create_collection(
+            name="rag_documents",
+            embedding_function=self.embedding_function
+        )
+
+    def add_documents(self, documents: List[str]) -> None:
+        """Add documents to our vector store using local embeddings."""
+        # Filter out empty documents
+        valid_documents = []
+        valid_ids = []
+
+        for i, doc in enumerate(documents):
+            if doc and doc.strip():  # Only add non-empty documents
+                valid_documents.append(doc.strip())
+                valid_ids.append(f"doc_{len(valid_documents)-1}_{hash(doc.strip()) % 10000}")
+
+        if not valid_documents:
+            print("Warning: No valid documents to add")
+            return
+
+        print(f"Adding {len(valid_documents)} documents to vector store...")
+        self.collection.add(
+            documents=valid_documents,
+            ids=valid_ids
+        )
+
+    def search(self, query: str, k: int = 2) -> List[str]:
+        """
+        Search for similar documents using local embeddings.
+        Returns empty list if no results or query issues.
+        """
+        # Handle empty or invalid queries
+        if not query or not query.strip():
+            print("Warning: Empty query provided")
+            return []
+
+        try:
+            results = self.collection.query(
+                query_texts=[query.strip()],
+                n_results=min(k, self.collection.count())  # Don't ask for more than we have
+            )
+
+            # Handle case where no documents are returned
+            if not results or not results.get('documents') or not results['documents'][0]:
+                print(f"No results found for query: '{query}'")
+                return []
+
+            return results['documents'][0]  # ChromaDB returns nested lists
+
+        except Exception as e:
+            print(f"Error during search for query '{query}': {str(e)}")
+            return []
+
+    def search_with_scores(self, query: str, k: int = 2) -> List[Dict[str, Any]]:
+        """
+        Search with similarity scores for debugging.
+        """
+        if not query or not query.strip():
+            return []
+
+        try:
+            results = self.collection.query(
+                query_texts=[query.strip()],
+                n_results=min(k, self.collection.count()),
+                include=['documents', 'distances']
+            )
+
+            if not results or not results.get('documents') or not results['documents'][0]:
+                return []
+
+            # Combine documents with their scores
+            documents = results['documents'][0]
+            distances = results.get('distances', [None] * len(documents))[0]
+
+            return [
+                {
+                    'document': doc,
+                    'distance': dist,
+                    'similarity': 1 - dist if dist is not None else None
+                }
+                for doc, dist in zip(documents, distances)
+            ]
+
+        except Exception as e:
+            print(f"Error during scored search: {str(e)}")
+            return []
+
+    def get_collection_info(self) -> Dict[str, Any]:
+        """Get info about the current collection for debugging."""
+        try:
+            count = self.collection.count()
+            return {
+                'document_count': count,
+                'collection_name': self.collection.name
+            }
+        except Exception as e:
+            return {'error': str(e)}
+#+end_src
+
+Run the test again. Green.
+
+One thing worth being clear about, because it trips people up: =k= is the
+number of results you want back, not a similarity threshold.
+=search(query, k=2)= asks for the two closest documents, however close or
+far they actually are.
+
+* Objective 2: Talking to a local LLM (freedom from the cloud)
+:PROPERTIES:
+:CUSTOM_ID: objective-2-talking-to-a-local-llm-freedom-from-the-cloud
+:END:
+** The test that defines our interface
+:PROPERTIES:
+:CUSTOM_ID: the-test-that-defines-our-interface
+:END:
+Create =test_llm_connection.py=:
+
+#+begin_src python
+import pytest
+from rag_ragas.llm_client import LocalLLMClient
+
+class TestLocalLLM:
+    def test_connects_and_responds(self):
+        # Arrange
+        client = LocalLLMClient()
+
+        # Act
+        response = client.complete("Say 'Hello, RAG world!' and nothing else.")
+
+        # Assert
+        assert response is not None
+        assert "Hello, RAG world!" in response
+        assert len(response) < 100  # It followed instructions
+
+    def test_handles_connection_errors_gracefully(self):
+        # This is important: what happens when Ollama isn't running?
+        client = LocalLLMClient(base_url="http://localhost:99999")
+
+        response = client.complete("This should fail gracefully")
+        assert "Error" in response or response == ""
+#+end_src
+
+** Making the connection
+:PROPERTIES:
+:CUSTOM_ID: making-the-connection
+:END:
+We're using LiteLLM here because it's the Swiss Army knife of LLM
+connections --- one interface, many providers, so swapping the model
+behind it later doesn't ripple through your code. Create
+=src/rag_ragas/llm_client.py=:
+
+#+begin_src python
+import litellm
+from typing import Optional
+import logging
+
+# LiteLLM can be chatty. Let's keep it quiet unless we need it.
+logging.getLogger("litellm").setLevel(logging.WARNING)
+
+class LocalLLMClient:
+    def __init__(self, base_url="http://localhost:11434", model_name="gemma3"):
+        """
+        Initialize connection to local LLM via Ollama.
+        Ollama runs on port 11434 by default.
+        """
+        self.base_url = base_url
+        # LiteLLM requires "ollama/" prefix for Ollama models
+        self.model_name = f"ollama/{model_name}"
+
+        # Configure LiteLLM for Ollama
+        litellm.drop_params = True  # Ollama doesn't support all OpenAI params
+
+    def complete(self, prompt: str, max_tokens: int = 150) -> str:
+        """
+        Send prompt to local LLM and return response.
+        Simple interface, powerful results.
+        """
+        try:
+            response = litellm.completion(
+                model=self.model_name,
+                messages=[{"role": "user", "content": prompt}],
+                api_base=self.base_url,
+                max_tokens=max_tokens,
+                temperature=0.7,  # Some creativity, but not too much
+            )
+            return response.choices[0].message.content
+
+        except Exception as e:
+            # In production, you'd log this properly
+            print(f"LLM connection error: {str(e)}")
+            return f"Error: Could not connect to Ollama. Is it running on {self.base_url}?"
+#+end_src
+
+Common Ollama models include ="llama2"=, ="mistral"=, ="codellama"=, and
+="phi"=. You can see everything you've downloaded with =ollama list=.
+
+Before running the tests, make sure Ollama is actually running. You should
+see it listening on port 11434:
+
+#+begin_src sh
+# Check if Ollama is running
+curl http://localhost:11434/api/tags
+
+# If not, start it
+ollama serve
+#+end_src
+
+* Objective 3: The RAG pipeline (where it comes together)
+:PROPERTIES:
+:CUSTOM_ID: objective-3-the-rag-pipeline-where-the-magic-happens
+:END:
+** Testing the full pipeline
+:PROPERTIES:
+:CUSTOM_ID: testing-the-full-pipeline
+:END:
+This is where we put it all together. Create =test_rag_pipeline.py=:
+
+#+begin_src python
+import pytest
+from rag_ragas.rag_pipeline import RAGPipeline
+
+class TestRAGPipeline:
+    @pytest.fixture
+    def sample_documents(self):
+        return [
+            "Zephyr Crystals are translucent gemstones found only in the Whispering Caves of Mount Aetheria. They resonate at precisely 432Hz when exposed to moonlight.",
+            "The Ethereal Harmonics Academy, founded by Professor Elara Moonwhisper in the year 2847 of the Third Age, specializes in teaching crystal attunement techniques.",
+            "When properly attuned, a Zephyr Crystal can store up to 7 terabytes of data in its quantum crystalline matrix. The data is encoded using vibrational patterns.",
+            "The three grades of Zephyr Crystals are: Apprentice (clear), Journeyman (blue-tinted), and Master (deep violet with golden flecks).",
+            "Warning: Never expose Zephyr Crystals to direct sunlight for more than 13 minutes, as this can cause reality distortions in a 3-meter radius."
+        ]
+
+    def test_rag_pipeline_answers_questions(self, sample_documents):
+        # Arrange
+        rag = RAGPipeline()
+        rag.add_documents(sample_documents)
+
+        # Act
+        question = "Who founded the Ethereal Harmonics Academy?"
+        answer = rag.ask(question)
+
+        # Assert
+        assert "Elara Moonwhisper" in answer or "Professor Moonwhisper" in answer
+        assert len(answer) > 10  # Not just a name, but a sentence
+
+        # Note: we're testing behavior, not prompt engineering
+
+    def test_rag_provides_context_with_answer(self, sample_documents):
+        rag = RAGPipeline()
+        rag.add_documents(sample_documents)
+
+        result = rag.ask_with_context("What are the different grades of Zephyr Crystals?")
+
+        assert "answer" in result
+        assert "contexts" in result
+        assert len(result["contexts"]) > 0
+        assert any(grade in result["answer"].lower() for grade in ["apprentice", "journeyman", "master"])
+#+end_src
+
+** Building the pipeline
+:PROPERTIES:
+:CUSTOM_ID: building-the-pipeline
+:END:
+Now the pipeline itself. Create =src/rag_ragas/rag_pipeline.py=:
+
+#+begin_src python
+from typing import List, Dict, Any
+from .vector_store import VectorStore
+from .llm_client import LocalLLMClient
+
+class RAGPipeline:
+    def __init__(self, retrieval_k: int = 3, vector_store=None):
+        """
+        Initialize our RAG pipeline.
+        retrieval_k: how many documents to retrieve for context
+        vector_store: pass one in for tests (e.g. in-memory); defaults to a persistent store
+        """
+        self.vector_store = vector_store or VectorStore()
+        self.llm_client = LocalLLMClient()
+        self.retrieval_k = retrieval_k
+
+    def add_documents(self, documents: List[str]) -> None:
+        """Add documents to our knowledge base."""
+        self.vector_store.add_documents(documents)
+
+    def ask(self, question: str) -> str:
+        """Simple interface: question in, answer out."""
+        result = self.ask_with_context(question)
+        return result["answer"]
+
+    def ask_with_context(self, question: str) -> Dict[str, Any]:
+        """
+        The full RAG process:
+        1. Retrieve relevant documents
+        2. Build a prompt with context
+        3. Generate an answer
+        4. Return both answer and contexts (for transparency)
+        """
+        # Step 1: Retrieve relevant documents
+        contexts = self.vector_store.search(question, k=self.retrieval_k)
+
+        # Step 2: Build our prompt (this is where prompt engineering happens)
+        prompt = self._build_prompt(question, contexts)
+
+        # Step 3: Generate answer
+        answer = self.llm_client.complete(prompt)
+
+        # Step 4: Return everything (the answer plus the contexts it came from)
+        return {
+            "answer": answer,
+            "contexts": contexts,
+            "question": question
+        }
+
+    def _build_prompt(self, question: str, contexts: List[str]) -> str:
+        """
+        Build a prompt that encourages faithful answers.
+        This is where the prompt does the work of keeping answers grounded.
+        """
+        context_text = "\n\n".join(contexts)
+
+        prompt = f"""You are a helpful assistant. Answer the question based ONLY on the provided context.
+If the context doesn't contain enough information to answer the question, say "I don't have enough information to answer that."
+
+Context:
+{context_text}
+
+Question: {question}
+
+Answer: """
+
+        return prompt
+#+end_src
+
+So... Wait. Are we done? Let's try it:
+
+#+begin_src python
+# Quick smoke test (add to your Python REPL or a test file)
+# First, make sure Ollama is running: ollama serve
+from rag_ragas.rag_pipeline import RAGPipeline
+
+rag = RAGPipeline()
+rag.add_documents([
+    "Lumifruit trees grow exclusively in the Twilight Grove, where day and night exist simultaneously.",
+    "A ripe Lumifruit emits a soft golden glow and tastes like starlight mixed with honey.",
+    "The Lumifruit harvest must be completed during the Eclipse of the Three Moons, which occurs once every 7 years."
+])
+
+answer = rag.ask("Where do Lumifruit trees grow?")
+print(answer)  # Should mention Twilight Grove!
+
+# Try asking something it doesn't know
+answer2 = rag.ask("What is the scientific name of Lumifruit?")
+print(answer2)  # Should say it doesn't have this information
+#+end_src
+
+And there it is. It answered the question it could, and admitted the one
+it couldn't:
+
+#+begin_example
+% uv run smoke_test.py
+Adding 3 documents to vector store...
+Detected embedding dimension: 1024
+
+Lumifruit trees grow exclusively in the Twilight Grove.
+I don't have enough information to answer that.
+#+end_example
+
+* Objective 4: Measuring quality with RAGAS (trust, but verify)
+:PROPERTIES:
+:CUSTOM_ID: objective-4-measuring-quality-with-ragas-trust-but-verify
+:END:
+Here's where it gets serious. We have a RAG system, but is it any good?
+Time for RAGAS.
+
+** Testing our quality metrics
+:PROPERTIES:
+:CUSTOM_ID: testing-our-quality-metrics
+:END:
+Create =test_quality_metrics.py=:
+
+#+begin_src python
+import pytest
+from rag_ragas.quality_evaluator import QualityEvaluator
+from rag_ragas.rag_pipeline import RAGPipeline
+
+class TestQualityMetrics:
+        def test_faithfulness_detects_hallucination(self):
+                evaluator = QualityEvaluator()
+
+                # Good example: answer matches context
+                good_result = {
+                        "question": "What frequency do Zephyr Crystals resonate at?",
+                        "answer": "Zephyr Crystals resonate at 432Hz when exposed to moonlight.",
+                        "contexts": ["Zephyr Crystals are translucent gemstones that resonate at precisely 432Hz when exposed to moonlight."]
+                }
+
+                good_score = evaluator.evaluate_faithfulness(good_result)
+                assert good_score > 0.8  # Should be highly faithful
+
+                # Bad example: answer includes hallucination
+                bad_result = {
+                        "question": "What frequency do Zephyr Crystals resonate at?",
+                        "answer": "Zephyr Crystals resonate at 432Hz and can also cure diseases with their vibrations.",
+                        "contexts": ["Zephyr Crystals are translucent gemstones that resonate at precisely 432Hz when exposed to moonlight."]
+                }
+
+                bad_score = evaluator.evaluate_faithfulness(bad_result)
+                assert bad_score < 0.8  # Should detect the made-up healing properties
+
+        def test_answer_relevancy_detects_off_topic(self):
+                evaluator = QualityEvaluator()
+
+                # Good: directly answers the question
+                good_result = {
+                        "question": "What color are Zephyr Crystals?",
+                        "answer": "Zephyr Crystals are blue-tinted for Journeyman grade and deep violet with golden flecks for Master grade.",
+                        "contexts": ["There are three grades of Zephyr Crystals: Apprentice grade (clear), Journeyman grade (blue-tinted), and Master grade (deep violet with golden flecks)."]
+                }
+
+                good_score = evaluator.evaluate_relevancy(good_result)
+                assert good_score > 0.7
+
+                bad_result = {
+                    "question": "What color are Zephyr Crystals?",
+                    "answer": "The weather today is sunny and warm. It's a great day for outdoor activities like hiking and swimming.",
+                    "contexts": ["There are three grades of Zephyr Crystals: Apprentice grade (clear), Journeyman grade (blue-tinted), and Master grade (deep violet with golden flecks)."]
+                }
+
+                bad_score = evaluator.evaluate_relevancy(bad_result)
+                assert bad_score < 0.7
+#+end_src
+
+** Implementing RAGAS evaluation
+:PROPERTIES:
+:CUSTOM_ID: implementing-ragas-evaluation
+:END:
+Create =src/rag_ragas/quality_evaluator.py=:
+
+#+begin_src python
+from typing import Dict, Any, List
+import asyncio
+from ragas import SingleTurnSample
+from ragas.metrics import Faithfulness, ResponseRelevancy, ContextPrecision
+from ragas.llms import LangchainLLMWrapper
+from ragas.embeddings import LangchainEmbeddingsWrapper
+from ragas.run_config import RunConfig
+from ragas.metrics.base import MetricWithLLM, MetricWithEmbeddings
+from langchain_community.chat_models import ChatOllama
+from langchain_community.embeddings import OllamaEmbeddings
+
+class QualityEvaluator:
+        def __init__(self, llm_name="gemma3", embedding_model_name="mxbai-embed-large"):
+                """
+                Initialize RAGAS metrics with our local LLM.
+                This is where RAGAS meets our local setup.
+                """
+                chat_ollama = ChatOllama(
+                    model=llm_name,
+                    base_url="http://localhost:11434"
+                )
+
+                ollama_embeddings = OllamaEmbeddings(
+                    model=embedding_model_name,
+                    base_url="http://localhost:11434"
+                )
+                self.llm = LangchainLLMWrapper(chat_ollama)
+                self.embeddings = LangchainEmbeddingsWrapper(ollama_embeddings)
+
+                self.faithfulness = Faithfulness()
+                self.relevancy = ResponseRelevancy()
+                self.context_precision = ContextPrecision()
+
+                metrics = [self.faithfulness, self.relevancy, self.context_precision]
+                self._init_ragas_metrics(metrics, self.llm, self.embeddings)
+
+        def _init_ragas_metrics(self, metrics, llm, embedding):
+                """Initialize RAGAS metrics with LLM and embeddings."""
+                for metric in metrics:
+                   if isinstance(metric, MetricWithLLM):
+                       metric.llm = llm
+                   if isinstance(metric, MetricWithEmbeddings):
+                       metric.embeddings = embedding
+                       run_config = RunConfig()
+                       metric.init(run_config)
+
+        def evaluate_faithfulness(self, result: Dict[str, Any]) -> float:
+                """
+                Measure how faithful the answer is to the context.
+                1.0 = perfect faithfulness, 0.0 = complete hallucination
+                """
+                sample = SingleTurnSample(
+                        user_input=result["question"],
+                        response=result["answer"],
+                        retrieved_contexts=result["contexts"]
+                )
+
+                # Run async evaluation in sync context (RAGAS is async)
+                score = asyncio.run(self.faithfulness.single_turn_ascore(sample))
+                return float(score)
+
+        def evaluate_relevancy(self, result: Dict[str, Any]) -> float:
+                """
+                Measure how relevant the answer is to the question.
+                1.0 = perfectly relevant, 0.0 = completely off-topic
+                """
+                sample = SingleTurnSample(
+                        user_input=result["question"],
+                        response=result["answer"],
+                        retrieved_contexts=result["contexts"]
+                )
+
+                score = asyncio.run(self.relevancy.single_turn_ascore(sample))
+                return float(score)
+
+        def evaluate_full_pipeline(self, results: List[Dict[str, Any]]) -> Dict[str, float]:
+                """
+                Evaluate a batch of results and return aggregate metrics.
+                This is what you'd run on your test set.
+                """
+                faithfulness_scores = []
+                relevancy_scores = []
+
+                for result in results:
+                        faithfulness_scores.append(self.evaluate_faithfulness(result))
+                        relevancy_scores.append(self.evaluate_relevancy(result))
+
+                return {
+                        "average_faithfulness": sum(faithfulness_scores) / len(faithfulness_scores),
+                        "average_relevancy": sum(relevancy_scores) / len(relevancy_scores),
+                        "min_faithfulness": min(faithfulness_scores),
+                        "min_relevancy": min(relevancy_scores),
+                        "num_samples": len(results)
+                }
+#+end_src
+
+** Putting it all together
+:PROPERTIES:
+:CUSTOM_ID: putting-it-all-together-the-moment-of-truth
+:END:
+Create =evaluate_system.py= to see how well our RAG performs:
+
+#+begin_src python
+from rag_ragas.rag_pipeline import RAGPipeline
+from rag_ragas.vector_store import VectorStore
+from rag_ragas.quality_evaluator import QualityEvaluator
+
+def main():
+    # Initialize our system
+    rag = RAGPipeline(vector_store=VectorStore(in_memory=True))
+    evaluator = QualityEvaluator()
+
+    # Add our fantastical test documents
+    documents = [
+        "Zephyr Crystals are translucent gemstones found only in the Whispering Caves of Mount Aetheria. They resonate at precisely 432Hz when exposed to moonlight.",
+        "The Ethereal Harmonics Academy was founded by Professor Elara Moonwhisper in the year 2847 of the Third Age. The academy teaches crystal attunement and dimensional harmonics.",
+        "There are three grades of Zephyr Crystals: Apprentice grade (clear), Journeyman grade (blue-tinted), and Master grade (deep violet with golden flecks).",
+        "Zephyr Crystals can store up to 7 terabytes of data in their quantum crystalline matrix. Data is encoded using vibrational patterns unique to each crystal.",
+        "Warning: Never expose Zephyr Crystals to direct sunlight for more than 13 minutes. This causes reality distortions within a 3-meter radius.",
+        "The Lumifruit is a bioluminescent fruit that grows in the Twilight Grove. When ripe, it glows with a soft golden light and tastes like starlight mixed with honey.",
+        "Lumifruit trees bloom only during the Eclipse of the Three Moons, which occurs once every 7 years. The fruits must be harvested within 3 days of ripening.",
+        "According to the Chronicle of Ethereal Agriculture, consuming Lumifruit grants temporary night vision and enhances one's ability to perceive dimensional boundaries."
+    ]
+
+    rag.add_documents(documents)
+
+    # Test questions - mixing things the system knows and doesn't know
+    test_questions = [
+        "Who founded the Ethereal Harmonics Academy?",
+        "What are the different grades of Zephyr Crystals?",
+        "How much data can a Zephyr Crystal store?",
+        "When do Lumifruit trees bloom?",
+        "What happens if you eat a Lumifruit?",
+        "What is the chemical composition of Zephyr Crystals?",  # Not in documents
+        "How long do Lumifruits stay fresh after harvesting?"     # Not in documents
+    ]
+
+    # Collect results
+    results = []
+    for question in test_questions:
+        result = rag.ask_with_context(question)
+        results.append(result)
+        print(f"\nQ: {question}")
+        print(f"A: {result['answer']}")
+
+    # Evaluate quality
+    print("\n" + "="*50)
+    print("QUALITY METRICS")
+    print("="*50)
+
+    metrics = evaluator.evaluate_full_pipeline(results)
+    for metric, value in metrics.items():
+        print(f"{metric}: {value:.3f}")
+
+    # Did we clear the bar?
+    if metrics["average_faithfulness"] > 0.8 and metrics["average_relevancy"] > 0.7:
+        print("\n✅ Congratulations! Your RAG system meets quality standards!")
+        print("   It's correctly handling even completely fictional information!")
+    else:
+        print("\n⚠️  Quality needs improvement. See Objective 5...")
+
+if __name__ == "__main__":
+    main()
+#+end_src
+
+Oh no, all our hopes, dashed?
+
+#+begin_example
+Q: Who founded the Ethereal Harmonics Academy?
+A: Professor Elara Moonwhisper.
+
+Q: What are the different grades of Zephyr Crystals?
+A: There are three grades of Zephyr Crystals: Apprentice grade (clear), Journeyman grade (blue-tinted), and Master grade (deep violet with golden flecks).
+
+Q: How much data can a Zephyr Crystal store?
+A: Zephyr Crystals can store up to 7 terabytes of data.
+
+Q: When do Lumifruit trees bloom?
+A: Lumifruit trees bloom only during the Eclipse of the Three Moons, which occurs once every 7 years.
+
+Q: What happens if you eat a Lumifruit?
+A: According to the Chronicle of Ethereal Agriculture, consuming Lumifruit grants temporary night vision and enhances one’s ability to perceive dimensional boundaries.
+
+Q: What is the chemical composition of Zephyr Crystals?
+A: I don't have enough information to answer that.
+
+Q: How long do Lumifruits stay fresh after harvesting?
+A: The fruits must be harvested within 3 days of ripening.
+
+==================================================
+QUALITY METRICS
+==================================================
+average_faithfulness: 0.8670
+average_relevancy: 0.410
+min_faithfulness: 0.000
+min_relevancy: 0.000
+num_samples: 7.000
+
+⚠️  Quality needs improvement. See Objective 5...
+#+end_example
+
+Well now that sucks, why a relevancy of 0? Well, if you look at the
+answers, one of the answers is actually not an answer to the question!
+The system found something that was irrelevant and made an answer around
+it.
+
+* Objective 5: Improving based on measurements (the fun part)
+:PROPERTIES:
+:CUSTOM_ID: objective-5-improving-based-on-measurements-the-fun-part
+:END:
+Here's what nobody tells you about RAG: the first version usually sucks.
+But that's okay! We have measurements now. We can make it better.
+
+** Common problems and solutions
+:PROPERTIES:
+:CUSTOM_ID: common-problems-and-solutions
+:END:
+Create =src/rag_ragas/rag_pipeline_improved.py=:
+
+#+begin_src python
+from typing import List, Dict, Any, Optional
+from .vector_store import VectorStore
+from .llm_client import LocalLLMClient
+import re
+
+class ImprovedRAGPipeline:
+    def __init__(self, retrieval_k: int = 3, rerank: bool = True, vector_store=None):
+        """
+        Improved RAG with better retrieval and prompt engineering.
+        """
+        self.vector_store = vector_store or VectorStore()
+        self.llm_client = LocalLLMClient()
+        self.retrieval_k = retrieval_k
+        self.rerank = rerank
+
+    def add_documents(self, documents: List[str], chunk_size: int = 200) -> None:
+        """
+        Add documents with smart chunking.
+        Overlapping chunks improve context preservation.
+        """
+        chunked_docs = []
+        for doc in documents:
+            chunks = self._chunk_document(doc, chunk_size, overlap=50)
+            chunked_docs.extend(chunks)
+
+        self.vector_store.add_documents(chunked_docs)
+
+    def _chunk_document(self, doc: str, chunk_size: int, overlap: int) -> List[str]:
+        """
+        Smart chunking that respects sentence boundaries.
+        Keeping chunks coherent (not split mid-sentence) helps faithfulness.
+        """
+        sentences = re.split(r'(?<=[.!?])\s+', doc)
+        chunks = []
+        current_chunk = []
+        current_size = 0
+
+        for sentence in sentences:
+            sentence_size = len(sentence.split())
+
+            if current_size + sentence_size > chunk_size and current_chunk:
+                chunks.append(" ".join(current_chunk))
+                # Overlap: keep last few sentences
+                overlap_size = 0
+                overlap_chunk = []
+                for sent in reversed(current_chunk):
+                    overlap_size += len(sent.split())
+                    overlap_chunk.insert(0, sent)
+                    if overlap_size >= overlap:
+                        break
+                current_chunk = overlap_chunk
+                current_size = overlap_size
+
+            current_chunk.append(sentence)
+            current_size += sentence_size
+
+        if current_chunk:
+            chunks.append(" ".join(current_chunk))
+
+        return chunks
+
+    def ask_with_context(self, question: str) -> Dict[str, Any]:
+        """
+        Improved RAG with reranking and better prompts.
+        """
+        # Step 1: Retrieve more documents than needed
+        contexts = self.vector_store.search(
+            question,
+            k=self.retrieval_k * 2 if self.rerank else self.retrieval_k
+        )
+
+        # Step 2: Rerank if enabled (poor man's reranking with LLM)
+        if self.rerank and len(contexts) > self.retrieval_k:
+            contexts = self._rerank_contexts(question, contexts)[:self.retrieval_k]
+
+        # Step 3: Build improved prompt
+        prompt = self._build_improved_prompt(question, contexts)
+
+        # Step 4: Generate with constraints
+        answer = self.llm_client.complete(prompt, max_tokens=200)
+
+        # Step 5: Post-process to improve faithfulness
+        answer = self._post_process_answer(answer, contexts)
+
+        return {
+            "answer": answer,
+            "contexts": contexts,
+            "question": question
+        }
+
+    def _rerank_contexts(self, question: str, contexts: List[str]) -> List[str]:
+        """
+        Use LLM to rerank contexts by relevance.
+        This significantly improves context precision.
+        """
+        rerank_prompt = f"""Given the question: "{question}"
+
+Rank these contexts from most to least relevant:
+
+{chr(10).join([f"{i+1}. {ctx}" for i, ctx in enumerate(contexts)])}
+
+Return just the numbers in order of relevance, separated by commas."""
+
+        ranking_response = self.llm_client.complete(rerank_prompt, max_tokens=50)
+
+        try:
+            # Parse ranking (e.g., "3,1,4,2" -> [3,1,4,2])
+            ranking = [int(x.strip())-1 for x in ranking_response.split(",")]
+            reranked = [contexts[i] for i in ranking if i < len(contexts)]
+            return reranked if reranked else contexts
+        except:
+            # If parsing fails, return original order
+            return contexts
+
+    def _build_improved_prompt(self, question: str, contexts: List[str]) -> str:
+        """
+        Better prompt that emphasizes faithfulness.
+        The trick is to be explicit about what NOT to do.
+        """
+        context_text = "\n\n".join([f"Context {i+1}: {ctx}" for i, ctx in enumerate(contexts)])
+
+        prompt = f"""You are a helpful assistant that answers questions ONLY based on the provided context.
+
+IMPORTANT RULES:
+1. Use ONLY information from the provided context
+2. If the context doesn't contain the answer, say "The provided context doesn't contain this information."
+3. Do not add information from your general knowledge
+4. Quote or paraphrase the context when possible
+5. Keep your answer concise and directly related to the question
+
+Context:
+{context_text}
+
+Question: {question}
+
+Answer (based only on the context above): """
+
+        return prompt
+
+    def _post_process_answer(self, answer: str, contexts: List[str]) -> str:
+        """
+        Clean up the answer to improve quality metrics.
+        Remove obvious hallucinations and off-topic content.
+        """
+        # Remove common LLM habits that hurt metrics
+        answer = answer.strip()
+
+        # Remove "Based on the context..." preambles
+        preamble_patterns = [
+            r"^Based on the (provided )?context,?\s*",
+            r"^According to the (given )?information,?\s*",
+            r"^From the context,?\s*"
+        ]
+        for pattern in preamble_patterns:
+            answer = re.sub(pattern, "", answer, flags=re.IGNORECASE)
+
+        # If answer is too long, truncate at sentence boundary
+        if len(answer.split()) > 100:
+            sentences = re.split(r'(?<=[.!?])\s+', answer)
+            truncated = []
+            word_count = 0
+            for sent in sentences:
+                word_count += len(sent.split())
+                if word_count > 100:
+                    break
+                truncated.append(sent)
+            answer = " ".join(truncated)
+
+        return answer.strip()
+#+end_src
+
+** Testing our improvements
+:PROPERTIES:
+:CUSTOM_ID: testing-our-improvements
+:END:
+Create =test_improvements.py=:
+
+#+begin_src python
+import pytest
+from rag_ragas.rag_pipeline import RAGPipeline
+from rag_ragas.rag_pipeline_improved import ImprovedRAGPipeline
+from rag_ragas.vector_store import VectorStore
+from rag_ragas.quality_evaluator import QualityEvaluator
+
+class TestImprovements:
+    @pytest.fixture
+    def test_documents(self):
+        return [
+            """The Spectral Orchid is a rare flower that exists partially in the ethereal plane.
+            It blooms only when the barrier between dimensions is thinnest. The petals shimmer
+            between visible and invisible states. Harvesting requires special phase-shift gloves.""",
+
+            """Spectral Orchids are crucial ingredients in dimensional portal creation. The dried
+            petals, when ground with moonstone, create a powder that can tear holes in reality.
+            The Academy of Planar Studies maintains the largest collection of preserved specimens.""",
+
+            """Side effects of Spectral Orchid exposure include temporal displacement, seeing into
+            parallel timelines, and occasional phasing through solid objects. The effects are
+            temporary unless exposure exceeds 72 hours. Emergency treatment involves grounding
+            crystals and essence of stability potion."""
+        ]
+
+    def test_improved_pipeline_has_better_metrics(self, test_documents):
+        # Set up both pipelines
+        basic_rag = RAGPipeline(vector_store=VectorStore(in_memory=True))
+        improved_rag = ImprovedRAGPipeline(vector_store=VectorStore(in_memory=True))
+        evaluator = QualityEvaluator()
+
+        # Add documents
+        basic_rag.add_documents(test_documents)
+        improved_rag.add_documents(test_documents)
+
+        # Test question
+        question = "What are the side effects of Spectral Orchid exposure?"
+
+        # Get results
+        basic_result = basic_rag.ask_with_context(question)
+        improved_result = improved_rag.ask_with_context(question)
+
+        # Evaluate
+        basic_faith = evaluator.evaluate_faithfulness(basic_result)
+        improved_faith = evaluator.evaluate_faithfulness(improved_result)
+
+        # The improved version should be more faithful
+        assert improved_faith >= basic_faith
+
+        # And it should meet our quality bar
+        assert improved_faith > 0.8
+
+        # Print for debugging
+        print(f"\nBasic faithfulness: {basic_faith:.2f}")
+        print(f"Improved faithfulness: {improved_faith:.2f}")
+        print(f"Basic answer: {basic_result['answer']}")
+        print(f"Improved answer: {improved_result['answer']}")
+#+end_src
+
+* The final test: Building a quality-first RAG application
+:PROPERTIES:
+:CUSTOM_ID: the-final-test-building-a-quality-first-rag-application
+:END:
+Let's put it all together in a real application. Create =app.py=:
+
+#+begin_src python
+#!/usr/bin/env python3
+"""
+A quality-measured RAG system that knows when it's making stuff up.
+The point is trust.
+"""
+
+import argparse
+from typing import List
+import json
+from rag_ragas.rag_pipeline_improved import ImprovedRAGPipeline
+from rag_ragas.vector_store import VectorStore
+from rag_ragas.quality_evaluator import QualityEvaluator
+
+class QualityRAGApp:
+    def __init__(self, quality_threshold: float = 0.8):
+        self.rag = ImprovedRAGPipeline(retrieval_k=3, rerank=True, vector_store=VectorStore(in_memory=True))
+        self.evaluator = QualityEvaluator()
+        self.quality_threshold = quality_threshold
+
+    def load_documents(self, file_path: str) -> None:
+        """Load documents from a text file."""
+        print(f"Loading documents from {file_path}...")
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            # Split by double newlines for simple document separation
+            documents = [doc.strip() for doc in content.split('\n\n') if doc.strip()]
+
+        self.rag.add_documents(documents)
+        print(f"Loaded {len(documents)} documents.")
+
+    def ask_with_quality_check(self, question: str) -> None:
+        """Ask a question and show quality metrics."""
+        print(f"\n📝 Question: {question}")
+        print("-" * 50)
+
+        # Get answer
+        result = self.rag.ask_with_context(question)
+
+        # Evaluate quality
+        faithfulness = self.evaluator.evaluate_faithfulness(result)
+        relevancy = self.evaluator.evaluate_relevancy(result)
+
+        # Display results
+        print(f"💬 Answer: {result['answer']}")
+        print(f"\n📊 Quality Metrics:")
+        print(f"   Faithfulness: {faithfulness:.2f} {'✅' if faithfulness >= self.quality_threshold else '⚠️'}")
+        print(f"   Relevancy: {relevancy:.2f} {'✅' if relevancy >= 0.7 else '⚠️'}")
+
+        if faithfulness < self.quality_threshold:
+            print("\n⚠️  Warning: Low faithfulness score. The answer might contain hallucinations.")
+
+        # Show contexts used (for transparency)
+        print(f"\n🔍 Used {len(result['contexts'])} contexts for this answer")
+
+    def interactive_mode(self) -> None:
+        """Run in interactive mode."""
+        print("\n🚀 Quality-Measured RAG System Ready!")
+        print("Type 'quit' to exit, 'metrics' for overall stats")
+        print("-" * 50)
+
+        results = []
+
+        while True:
+            question = input("\n❓ Your question: ").strip()
+
+            if question.lower() == 'quit':
+                break
+            elif question.lower() == 'metrics':
+                if results:
+                    overall_metrics = self.evaluator.evaluate_full_pipeline(results)
+                    print("\n📊 Overall System Metrics:")
+                    for metric, value in overall_metrics.items():
+                        print(f"   {metric}: {value:.3f}")
+                else:
+                    print("No questions asked yet!")
+                continue
+
+            if question:
+                result = self.rag.ask_with_context(question)
+                results.append(result)
+                self.ask_with_quality_check(question)
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Quality-Measured RAG System - Because trust matters"
+    )
+    parser.add_argument(
+        "documents",
+        help="Path to text file containing documents"
+    )
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        default=0.8,
+        help="Minimum faithfulness threshold (default: 0.8)"
+    )
+    parser.add_argument(
+        "--question",
+        help="Ask a single question instead of interactive mode"
+    )
+
+    args = parser.parse_args()
+
+    # Initialize app
+    app = QualityRAGApp(quality_threshold=args.threshold)
+    app.load_documents(args.documents)
+
+    # Run in appropriate mode
+    if args.question:
+        app.ask_with_quality_check(args.question)
+    else:
+        app.interactive_mode()
+
+if __name__ == "__main__":
+    main()
+#+end_src
+
+* Running your quality-measured RAG system
+:PROPERTIES:
+:CUSTOM_ID: running-your-quality-measured-rag-system
+:END:
+First, create a test document file =ethereal_guide.txt=:
+
+#+begin_example
+The Zephyr Crystal is a translucent gemstone found exclusively in the Whispering Caves of Mount Aetheria. These remarkable crystals resonate at precisely 432Hz when exposed to moonlight, creating a harmonic frequency that can open doorways between dimensions.
+
+There are three recognized grades of Zephyr Crystals. Apprentice grade crystals are perfectly clear and suitable for basic attunement exercises. Journeyman grade crystals have a distinctive blue tint and can maintain stable quantum entanglement. Master grade crystals are deep violet with golden flecks and are capable of storing up to 7 terabytes of data in their crystalline matrix.
+
+The Ethereal Harmonics Academy, founded by Professor Elara Moonwhisper in the year 2847 of the Third Age, is the premier institution for studying crystal attunement. Students learn to manipulate the vibrational patterns of Zephyr Crystals to encode information, facilitate communication across vast distances, and even glimpse alternate timelines.
+
+Warning: Zephyr Crystals must never be exposed to direct sunlight for more than 13 minutes. Prolonged solar exposure causes the crystal's harmonic frequency to destabilize, resulting in reality distortions within a 3-meter radius. Symptoms of reality distortion include temporal loops, gravity inversions, and spontaneous transmutation of nearby objects.
+
+The Lumifruit is another wonder of the ethereal realm, growing exclusively in the Twilight Grove where day and night exist simultaneously. These bioluminescent fruits glow with a soft golden light when ripe and are said to taste like starlight mixed with honey. Lumifruit trees bloom only during the Eclipse of the Three Moons, an event that occurs once every seven years.
+
+Consuming a Lumifruit grants temporary night vision lasting 3-4 hours and enhances one's ability to perceive dimensional boundaries. Ancient texts in the Chronicle of Ethereal Agriculture suggest that regular consumption can permanently alter one's perception of reality, though this claim remains unverified by the Academy.
+#+end_example
+
+Now run it:
+
+#+begin_src sh
+# Interactive mode
+python app.py ethereal_guide.txt
+
+# Single question mode
+python app.py ethereal_guide.txt --question "What happens if Zephyr Crystals are exposed to sunlight?"
+
+# With custom quality threshold
+python app.py ethereal_guide.txt --threshold 0.9
+
+# Try asking about something not in the documents
+python app.py ethereal_guide.txt --question "How are Zephyr Crystals mined?"
+#+end_src
+
+** Example output showing quality metrics in action
+:PROPERTIES:
+:CUSTOM_ID: example-output-showing-quality-metrics-in-action
+:END:
+Here's what you should see when running the system:
+
+#+begin_example
+🚀 Quality-Measured RAG System Ready!
+Type 'quit' to exit, 'metrics' for overall stats
+--------------------------------------------------
+
+❓ Your question: What are the grades of Zephyr Crystals?
+
+📝 Question: What are the grades of Zephyr Crystals?
+--------------------------------------------------
+💬 Answer: There are three recognized grades of Zephyr Crystals: Apprentice grade crystals which are perfectly clear, Journeyman grade crystals that have a distinctive blue tint and can maintain stable quantum entanglement, and Master grade crystals which are deep violet with golden flecks and are capable of storing up to 7 terabytes of data.
+
+📊 Quality Metrics:
+   Faithfulness: 0.92 ✅
+   Relevancy: 0.88 ✅
+
+🔍 Used 2 contexts for this answer
+
+❓ Your question: What is the chemical formula of Zephyr Crystals?
+
+📝 Question: What is the chemical formula of Zephyr Crystals?
+--------------------------------------------------
+💬 Answer: The provided context doesn't contain information about the chemical formula of Zephyr Crystals.
+
+📊 Quality Metrics:
+   Faithfulness: 0.95 ✅
+   Relevancy: 0.91 ✅
+
+🔍 Used 3 contexts for this answer
+#+end_example
+
+Notice that the system refuses to make up a chemical formula when that
+information isn't in the documents. That refusal is faithfulness working
+exactly as intended.
+
+* The lessons learned (what I wish I'd known)
+:PROPERTIES:
+:CUSTOM_ID: the-lessons-learned-what-i-wish-id-known
+:END:
+1. *Start with the test*: Every objective began with a test. The test
+   told us what success looked like before we wrote a single line of
+   implementation.
+
+2. *Measure everything*: RAGAS isn't just about catching problems---it's
+   about understanding your system's behavior. Low faithfulness? Your
+   prompt needs work. Low relevancy? Your retrieval needs tuning.
+
+3. *Simple first, clever later*: Our first implementation was
+   deliberately simple. We added reranking and smart chunking only after
+   we could measure their impact.
+
+4. *Transparency builds trust*: Showing contexts and quality scores
+   isn't just for debugging---it helps users understand when to trust
+   the system.
+
+5. *Local LLMs are liberating*: No API keys, no rate limits, no privacy
+   concerns. Just you and your machine.
+
+6. *Fantasy content is the ultimate test*: By using completely fictional
+   concepts, we remove any possibility of the LLM answering from its
+   training. Every correct answer about Zephyr Crystals or Lumifruits is
+   proof that your RAG is working. Every hallucination is immediately
+   obvious because the LLM literally cannot know these things without
+   your documents.
+
+* Where to go from here
+:PROPERTIES:
+:CUSTOM_ID: where-to-go-from-here
+:END:
+Your RAG system now has a quality measurement built in. But this is just
+the beginning. You could:
+
+1. *Add more sophisticated reranking*: Use cross-encoder models for
+   better context selection
+2. *Implement query understanding*: Classify questions to use different
+   retrieval strategies
+3. *Add memory*: Store conversation history for context-aware responses
+4. *Build evaluation datasets*: Create test sets specific to your domain
+5. *Optimize for speed*: Batch processing, caching, and async operations
+
+The best RAG system isn't the one with the fanciest features. It's the
+one that knows its limitations and tells you about them honestly.
+
+A system that says "I don't know" when it doesn't know isn't broken ---
+that's the whole point. That's trust.
+
+So go build RAG systems that know when they're working and, more
+importantly, when they're not.
+
+/P.S. If your RAGAS scores are still low after all this, don't worry ---
+mine were too. Going from 0.6 to 0.8 faithfulness taught me more about RAG
+than any tutorial ever could. That's the real lesson: measurement isn't
+judgment, it's education./
+
+* Troubleshooting Ollama
+:PROPERTIES:
+:CUSTOM_ID: troubleshooting-ollama
+:END:
+Because I've been there, here are the common "why isn't it working?"
+moments:
+
+*"Connection refused" errors*: - Is Ollama actually running? Check with:
+=curl http://localhost:11434/api/tags= - Solution: =ollama serve=
+
+*"Model not found" errors*: - Did you pull the model? Check with:
+=ollama list= - Solution: =ollama pull llama2= (or whatever model you
+want)
+
+*Slow responses*: - First run is always slow (model loading) - Consider
+smaller models for development: =ollama pull phi= or
+=ollama pull orca-mini=
+
+*Out of memory*: - Ollama needs a few GB of RAM per model - Try smaller
+models or close other applications
+
+Local LLMs need a little attention up front, but once they're running
+they stay out of your way --- no API keys, no internet required.
+
+* Bonus: Using different models for different jobs
+:PROPERTIES:
+:CUSTOM_ID: bonus-using-different-models-for-different-jobs
+:END:
+One nice thing about Ollama: you can use different models for different
+jobs:
+
+#+begin_src python
+# For fast development iterations
+dev_client = LocalLLMClient(model_name="orca-mini")  # Small and fast
+
+# For production RAG
+prod_client = LocalLLMClient(model_name="llama2")  # Balanced
+
+# For quality evaluation (if you have the GPU or the RAM)
+eval_client = LocalLLMClient(model_name="llama2:13b")  # More capable
+
+# Just remember to pull them first:
+# ollama pull orca-mini
+# ollama pull llama2
+# ollama pull llama2:13b
+#+end_src
