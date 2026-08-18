@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Refuse to run alongside a live `hugo server` -- it writes drafts/future
+# content and a livereload script straight into public/ on disk, and this
+# script has no diff review step, so that contamination would go live as-is.
+if pgrep -f "hugo server" > /dev/null; then
+  echo -e "\033[0;31mA 'hugo server' process is running -- kill it before deploying.\033[0m"
+  pgrep -fa "hugo server"
+  exit 1
+fi
+
 echo -e "\033[0;32mDeploying updates to GitHub...\033[0m"
 
 # Build the project.
