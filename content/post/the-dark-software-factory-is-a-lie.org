@@ -1,0 +1,65 @@
+#+TITLE: The Dark Factory Is A Lie
+#+DATE: 2026-08-18T09:00:00-04:00
+#+tags[]: genai dark-factory lean xp agile
+#+DESCRIPTION: Where and when are dark factories appropriate? What do the new software delivery teams look like?
+
+
+* The Siren Song of the "Dark Factory"
+If someone offers to give me software for free, I’ll take it.
+
+Honestly, who wouldn't? The promise of the "Dark Software Factory" is oh-so seductive. It’s a Level 5[fn:1] autonomy fantasy where you turn off the lights, lock the doors, and let the machines churn. You feed raw text into a LLM at night, and by morning, a flawless, production-ready feature exits the pipeline. No meetings, no handoffs, and most importantly, no expensive, messy human beings.
+
+It sounds like magic. Like an oasis in the desert. Beware the crocodiles.
+
+To understand why the Dark Factory is a lie, we have to understand what software actually is. We got lulled into thinking of software development as a simple translation: ~Text Input ➔ Code Output~. As if the only thing standing between an idea and a working system is the tedious act of typing syntax.
+
+Software developers, it turns out, have a uniquely challenging cognitive task. Their minds are constantly engaged in the struggle of forcing the chaotic, beautiful, non-deterministic real world to fit into the rigid, uncompromising rules of a Turing machine
+
+The real world is fluid. It has rules that defy clean logic. If a Turing machine had emotions, it'd go mad. The actual work of a software practitioner is not the typing of the code; it is the hundreds of invisible, micro-decisions, trade-offs, and design choices required to translate that living reality into digital form.
+
+When you automate away the human, you don't just automate the typing. You ignore the decisions. You erase the context.
+
+We can't build factories that eliminate the thinker. We need a new approach: one that uses automation to eliminate the tedious, repetitive toil of assembly, leaving the human mind free to do what it does best. We need...  /Lean Software Manufacturing/. (or Lean Software Production?)
+
+* Reality meets the Dark Factory
+
+To say the "Dark Factory" is a lie is not to say we cannot build highly automated, incredibly powerful software factories. We can. We have.
+
+Take a look at companies like strongDM (I know, that is so "February 2026", right?). They have built a highly sophisticated and effective generative engine. It isn't just a toy that spits out scripts; it is a genuine factory. It spins up digital twins of environments, runs thousands of automated scenarios, and forces probabilistic AI models to satisfy highly deterministic validation criteria. It behaves like a true, closed-loop control system. And it works. It ships real, production-ready code.
+
+And yet, even the most perfect factory eventually hits a snag.
+
+It is not a limitation of the tools, the prompts, or the speed of the models. It is a limitation of the domain itself. Because no matter how fast or precise your assembly line is, a factory can only produce what it has been designed to build. And some things are too complex, too vague for a dark factory.
+
+* The Way Forward
+
+In further blog posts, we'll use the Cynefin model to explain how appropriate various problems can be to the shape of a factory, dark or not. We'll also showcase how the various XP (Extreme Programming) practices, with adjustments, are still appropriate to an agentically-enabled software delivery team.
+
+For now, suffice it to say the following:
+
+1. Software delivery work spreads across the Cynefin framework and therefore cannot be unilaterally determined as being "dark factory appropriate" or "not dark factory appropriate"
+2. Only two of the five categories identified by Cynefin are obviously appropriate to a "dark factory"
+3. Communication, collaboration, and discipline are still an omnipresent need in software delivery
+4. Spoiler alert: the XP practices give you a leg up in agentic work
+
+* Lean is dead, long live Lean
+
+The temptation in the "age of AI" is to look at engineering departments as cost centers to be optimized out of existence. Surely we can hire a few prompt engineers for a few months, fire everyone else, and the "Dark Factory" will do the rest.
+
+The mathematics of software delivery -- and the rest of the world between 2023 and 2026 -- disagree.
+
+If you build an organization on the promise and dream of the Dark Factory, you will find yourself buried under an unmaintainable, brittle mountain of context-deaf code. Because typing code was never the bottleneck. The bottleneck has always been, and will always be, the clarity of human thought and the precision of human alignment.
+
+This is why we must organize around a different paradigm: *Lean Software Manufacturing*.
+
+Lean Software Manufacturing is not about using automation to replace the developer. It is about automating the physical assembly line of context and actions and syntax so that developers can step into their true role: the designers and directors of the factory itself. Under this model, the developer’s work shifts from manual crafting to system steering: designing the validation harnesses, maintaining the seed files, and tuning the pipelines.
+
+When we run our automated factory floors in the dark on the appropriate tasks, we are not eliminating developers. We are liberating them. We are freeing highly educated, critical thinkers to pair with product managers, to design robust validation environments, and to guide the architecture of complex systems with foresight and empathy.
+
+The mathematical laws of lean production—small batches, eliminating waste, continuous feedback—remain completely undefeated. The typing may be faster, but the steering is more critical than ever.
+
+To deliver real value effectively in this new present, you cannot turn off the lights and lock the doors. You must keep the human mind at the wheel.
+
+* Footnotes
+
+[fn:1] No one knows what level 5 is, but it sounds better than level 4.
