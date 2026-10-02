@@ -63,7 +63,7 @@ googleAnalytics = ""      # UA-XXXXXXXX-X
 
   hidedate = false
   math = true
-  codeBlocksDark = true
+  codeBlocksDark = false
   centerArticle = true
   # use public git repo url to link lastmod git commit, enableGitInfo should be true.
   gitRepo = ""
