@@ -1,0 +1,286 @@
+#+TITLE:       The Recs Files
+#+SUBTITLE: The Truth Is In Here
+#+AUTHOR:      Aldric Giacomoni
+#+EMAIL:       trevoke@gmail.com
+#+DATE: 2026-10-02
+#+DRAFT: t
+#+categories[]: llm
+#+tags[]: context-management
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: The way to manage the truth of your codebase
+
+* Problem: Agent Drift and the Illusion of Velocity
+
+#+begin_quote
+*SCULLY:* "Mulder, I’ve reviewed the latest commits. It’s chaotic. It introduced a second retry wrapper, bypassed the authentication middleware we wrote ten days ago, and renamed =Account= to =Subscriber= across four separate modules."
+
+*MULDER:* "It’s agent drift, Scully. A classic case. The codebase isn't just failing to maintain state—it's actively fabricating a new reality."
+
+*SCULLY:* "There’s a perfectly rational explanation, Mulder. LLMs are non-deterministic, probabilistic prediction engines. As codebases grow, asking an agent to maintain long-term architectural consistency is a fool's errand. Hallucination is baked into the math."
+
+*MULDER /(staring at the terminal screen)/*: "That’s where you’re wrong, Scully. You’re blaming the engine for failing to navigate chaos. We keep searching for the solution /out there/, hoping a bigger context window, a smarter model, or a bigger prompt dump will magically fix our engineering."
+
+*SCULLY:* "And what's your alternative hypothesis?"
+
+*MULDER:* "Stop treating context like an unstructured chat log and start treating it like an engineered runtime state. /The Recs Files, Scully. The truth is in here./"
+#+end_quote
+
+If you’ve spent more than a few weeks building a system alongside AI coding agents, that conversation isn't science fiction—it’s your Tuesday afternoon.
+
+You haven’t just hit a context window limit. You are witnessing Agent Drift.
+
+When an agent operates over long-running projects without explicit structural boundaries, all the decisions you haven't made explicit were never made at all. Left unconstrained, the model default-fills architectural ambiguity with plausible, localized guesses. The codebase slowly degrades into a patchwork of competing idioms, duplicate abstractions, and shifted vocabulary.
+
+Two diametrally opposed behaviors eventually trigger this drift:
+
+1. /Context Flooding ("The Truth is Out There"/): Dumping raw pull requests, issue threads, chat histories, and full API docs into a massive context window. This creates prompt pollution, high token burn, and subtle reasoning errors.
+2. /Blind Discovery/: Giving the agent a minimal prompt and letting it inspect files haphazardly to "figure it out." This leads to runtime discovery sprawl and unguided guesses.
+
+Both approaches stem from the same flawed premise: treating agent context as an unstructured, growing chat log.
+
+If we want to build complex systems alongside autonomous agents without watching our architecture disintegrate, we must treat context differently. Context is not a conversation history. It is an engineered runtime state. And if we want our software to remain congruent over time, we need a deterministic architecture that keeps humans in firm control of decisions, while directing the agent to execute bounded plans.
+
+Welcome to The Recs Files.
+
+* Solution: The Context Architecture
+To replace the growing chat log with an engineered runtime state, /The Recs Files/ architecture separates history from active state. Borrowing from Event Sourcing and CQRS (Command Query Responsibility Segregation), we split our context infrastructure into three distinct artifacts: a root unifying anchor, append-only decision records, and active state projections.
+
+#+begin_example
+                         [ VISION.md ]
+                     (Root Unifying Anchor)
+                               │
+                               ▼
+                   [ APPEND-ONLY RECORDS ]
+                 (The "Files" in Recs Files)
+               (docs/adr/, docs/user-workflows/...)
+                Log of immutable choices & changes
+                               │
+                               │ Trigger: Record added/superseded
+                               ▼
+                  [ ACTIVE STATE PROJECTIONS ]
+                   (Read-Only Ground Truth)
+            Single materialized file per record type
+#+end_example
+
+** The Root Unifying Anchor (VISION.md)
+At the root of the repository sits =VISION.md=. It is the single, non-negotiable North Star that defines the system's core purpose, target audience, primary capabilities, and non-goals. When individual architectural choices or feature requirements conflict, =VISION.md= serves as the ultimate tie-breaker across all records, ensuring every automated decision aligns with the software's overarching design intent.
+
+** Append-Only Decision Records
+The "Files" in /The Recs Files/ are each a decision, captured as an immutable, append-only [fn:1] record under version control (e.g., =docs/architectural-decision-records/=, =docs/user-workflows/=, =docs/features/=).
+
+When a decision changes, we never edit an existing record to alter its historical meaning. We write a new record that explicitly supersedes or amends the old one.
+
+Record files follow a strict naming convention: =[TYPE_PREFIX]-[ID]-[descriptive-headline].md= [fn:2]
+- =ADR-012-use-redis-for-session-caching.md=
+- =UW-004-user-initiates-passwordless-login.md=
+- =FR-008-stripe-webhook-idempotency-handling.md=
+- =ADR-019-use-memcached-for-session-caching.md= (superseding the above ADR-012)
+
+*The Newspaper Headline Rule* - Record titles must state the outcome or action explicitly, functioning like a newspaper headline rather than a generic category label. A title like =ADR-012-caching.md= tells an agent nothing without parsing the document body. A title like =ADR-012-use-redis-for-session-caching.md= immediately declares the active decision.
+** What should be a record
+Left to its own devices, your agent will want to make everything into a record. It's on you to stop it.
+** Active State Projections
+While append-only records preserve an accurate audit trail, feeding an agent forty historical ADRs, ten of which are superseded, three abandoned, and two contradictory, wastes context window budget and introduces reasoning errors.
+
+This is where *Projections* enter the picture.
+
+A Projection is a single, read-only materialized view compiled from all active, non-superseded records of a given type. There is exactly one projection file per record category:
+
+- =ACTIVE_ADRS.md=
+- =ACTIVE_WORKFLOWS.md=
+- =CURRENT_VOCABULARY.md=
+
+When a new decision occurs that supersedes an old one, e.g. =ADR-019-use-memcached-for-session-caching.md=, the agent updates the projection file, removes ADR-012, and adds ADR-019. We keep the ADR-012 file around because the code may not be up to date yet, and may still have references to ADR-012. ADR-012 indicates it was superseded by ADR-019; when the work to bring the codebase up to date with ADR-019 is finished, we can delete the ADR-012 file.
+
+Operationally, while working in an interactive harness (e.g. Claude Code), the old decision is now going to be in the context window and is going to make the agent slightly worse. So, as soon as a change in record enters the picture, it becomes important to start a new chat with a new context window as soon as possible.
+
+** Automated Materialization & The Maintenance Boundary
+Projections are maintained by the agent itself, subject to a strict operational invariant: the agent updates projections immediately whenever a record is created or updated[fn:3], but during code implementation and review passes, projections are strictly read-only.
+
+Because record titles follow the Newspaper Headline Rule, a projection can often be as compact as a bulleted list of active headlines alongside concise summary rules. The agent reads =ACTIVE_ADRS.md= as part of its =AGENTS.md=, seeding the context window when it starts, gaining unpolluted ground truth without wading through historical dead ends.
+
+* Record Precedence & Targeted Context Routing (~UW-~ →  ~FR-~ → ~ADR-~)
+Even with clean projections, a mature repository can accumulate dozens of active state files across different domains. If we dump every projection file into every prompt, we fall right back into context window bloat and reasoning pollution—searching for truth out in the noise.
+
+To keep token spend flat and focus agent reasoning, context assembly in /The Recs Files/ follows a strict Order of Precedence anchored in user value.
+
+
+#+begin_example
+                             [ VISION.md ]
+                         (Root Unifying Anchor)
+                                   │
+                                   ▼
+                      [ USER WORKFLOW RECORDS ]
+                    (Primary Driver / User Value)
+                                   │
+                                   ▼
+                      [ FEATURE DECISION RECORDS ]
+                    (Implementation Specs & Details)
+                                   │
+               ┌───────────────────┴───────────────────┐
+               ▼                                       ▼
+ [ ERROR / PERFORMANCE RECORDS ]         [ ARCHITECTURAL DECISION RECORDS ]
+ (Specialized Constraints)               (Dynamically Filtered Subset)
+#+end_example
+
+** User Workflows (=UW-=): The Top Precedence
+Every coding session begins with a User Workflow record. User workflows represent the direct, observable value the software delivers (e.g., =UW-014-checkout-flow.md=).
+
+Because software exists to serve user capabilities, User Workflows take precedence over all other decision records except =VISION.md=. They define what needs to be built and why, establishing the local boundary for the entire task.
+
+** Feature Records (=FR-=): Operational Behavior
+User Workflows refer directly to Feature Records (=FR-=), which supply the operational details, domain boundaries, and edge-case behavior required to execute the workflow.
+
+For instance, =UW-014-checkout-flow.md= references =FR-003-stripe-webhook-handling.md= and =FR-009-cart-tax-calculation.md=. Feature records may in turn attach specialized constraint records, such as error-handling schemas (=ERR-= ) or latency targets (=PERF-=).
+
+** Architectural Decision Records (=ADR-=): Dynamic Filtering
+Instead of loading the content of all the active architectural decision records into the prompt, the agent performs targeted context routing:
+
+The agent reads the target =UW-= record and its referenced =FR-= records.
+
+It analyzes the technical capabilities required by those features (e.g., background job queueing, relational persistence, external API calls).
+
+It scans =ACTIVE_ADRS.md= and selects only the ADR headlines and rules relevant to those capabilities.
+
+If you are implementing an offline batch processing job, the agent selects =ADR-005-use-sidekiq-for-background-jobs.md=, and ignores =ADR-019-use-memcached-for-session-caching.md= and =ADR-022-oauth2-token-revocation.md=.
+
+** Context Window Bounding in Practice
+By organizing context through this precedence graph, the agent's context window contains:
+
+- 100% of the local intent (The target =UW-= and linked =FR-= records).
+- 100% of the active constraints (The dynamically filtered =ADR-= rules).
+- 0% of the unrelated system noise.
+
+The result is a bounded, hyper-focused context window. Token consumption scales strictly with the complexity of the specific task at hand, rather than expanding with the age or footprint of the repository.
+* The Execution & Reconciliation Loop (Superpowers, Code Analysis & Human-in-the-Loop)
+With our context routed and bounded, we can turn records into production code.
+
+To ensure the agent never strays from ground truth, execution follows a closed-loop pipeline. For my purposes, I built it on an evolution of the Superpowers workflow ([[https://github.com/obra/superpowers][obra/superpowers]]). You can use whatever implementation workflow you want, as long as it respects the following guidelines:
+
+#+begin_example
+  ┌─────────────────────────────────────────────────────────┐
+  │ 1. RECORDS FIRST                                        │
+  │ Create/modify Record -> Agent updates Projection        │
+  └────────────────────────────┬────────────────────────────┘
+                               │
+                               ▼
+  ┌─────────────────────────────────────────────────────────┐
+  │ 2. CODEBASE ANALYSIS & PLANNING                         │
+  │ Synthesize context + analyze existing code pathways     │
+  │ Draft granular, step-by-step implementation plan        │
+  └────────────────────────────┬────────────────────────────┘
+                               │
+         ┌─────────────────────┴─────────────────────┐
+         │ Is there a Record or Code Contradiction?  │
+         └─────────────┬─────────────────────────────┘
+                       │
+             YES ──────┴────── NO
+              │                 │
+              ▼                 ▼
+  ┌─────────────────────┐  ┌────────────────────────────────┐
+  │ GATED RECONCILIATION│  │ 3. INCREMENTAL EXECUTION       │
+  │ Halt execution      │  │ Execute plan step-by-step      │
+  │ Human resolves gap  │  │ Verify against tests           │
+  └─────────────────────┘  └────────────────────────────────┘
+#+end_example
+
+** Step 1: Records First
+The cardinal rule of /The Recs Files/ architecture is simple: *no code is generated or modified without updating or creating the governing Record first*.
+
+If a feature requirements change, or if a bug exposes an unconsidered domain case, you do not prompt the agent to "fix the code." You prompt the agent to create or update a Record (=UW-=, =FR-=, or =ADR-=). The agent immediately re-materializes the relevant Projection file, establishing the new ground truth before a single line of application code is touched.
+
+** Step 2: Codebase Analysis & Implementation Planning
+Once the record state is updated, the agent begins the planning phase. Borrowing from the Superpowers workflow, the agent does not immediately jump into writing code. Instead, it performs two distinct operations:
+
+1. *Context Assembly*: It loads =VISION.md=, the target =UW-= record, linked =FR-= records, and relevant =ADR-= projections.
+2. *Codebase Analysis*: It analyzes the current codebase to map existing entry points, inspect current module interfaces, and verify active domain vocabulary against the new records.
+
+Using this synthesis of active intent and existing code, the agent drafts a detailed, step-by-step *Implementation Plan*. The plan lays out exact file modifications, interface additions, test cases, and verification steps.
+
+** Step 3: Gated Reconciliation (Human-in-the-Loop)
+During either codebase analysis or active plan execution, the agent will inevitably discover edge cases, record ambiguities, or places where the new requirement conflicts with an existing decision.
+
+This brings us to another strict operational invariant: *the agent is strictly forbidden from modifying Records or Projections autonomously during execution*.
+
+When an incongruence is discovered, the agent must:
+
+1. Immediately halt execution.
+2. Surface the specific conflict or ambiguity to the human developer.
+3. Propose potential resolutions based on =VISION.md=.
+
+The human developer retains complete authority. Once the human selects a path, the governing Record is updated, the agent re-materializes the Projection, and planning resumes. This circuit breaker prevents the agent from quietly inventing architectural workarounds under the hood.
+
+** Step 4: Incremental Plan Execution
+With an approved implementation plan and coherent record state, the agent executes the plan incrementally—one step at a time. After each step, it runs the test suite and verifies code behavior against the boundary conditions defined in the governing =FR-= record.
+
+Because the agent works against a bounded plan grounded in read-only projections, execution is fast, predictable, and structurally congruent.
+* Code Comments as Architectural Anchors & Conclusion
+Even with a clean plan, codebases naturally evolve over months of active development. If code becomes detached from its governing records, future agent passes will struggle to understand why specific abstractions exist, leading right back to accidental duplication and architectural drift.
+
+To bridge the gap between active source code and decision records permanently, we enforce yet another invariant: *inline code comments are restricted to exactly two valid forms*.
+
+#+begin_src ruby
+# 1. TRACEABILITY ANCHORS
+# Point directly to the governing record headline
+# UW-014-checkout-flow
+# ADR-003-idempotent-payment-processing
+
+# 2. TECHNICAL IMPLEMENTATION EXPLANATIONS
+# Reserved strictly for non-domain physical complexity
+# Lock acquired here to prevent race conditions during rapid webhook retries
+def process_payment(account, payload)
+  # ... implementation
+end
+#+end_src
+
+** Traceability Anchors
+A Traceability Anchor is a brief comment that links a block of code, module, or function directly to its governing decision records using exact record prefixes:
+
+#+begin_src ruby
+# UW-014-user-initiates-passwordless-login
+# FR-008-stripe-webhook-idempotency-handling
+# ADR-012-use-redis-for-session-caching
+#+end_src
+
+When an agent (or human) inspects this code months later, there is no need to guess why the logic was structured this way. The anchor points directly to the active =UW-=, =FR-=, and =ADR-= records, giving the agent instant access to the original design intent and boundary conditions.
+** Technical Implementation Explanations
+The only other permissible comments are explanations of non-domain physical complexity: things required to understand the low-level mechanics of the code rather than its business rules, for instance:
+
+- Complex algorithm choices and mathematical operations
+- Low-level concurrency controls and memory management
+- Performance workarounds for third-party library bugs
+
+If a comment attempts to explain what the feature does or what business rule it obeys, it is deleted and, with human approval, moved into an =FR-= or =UW-= record where it belongs.
+
+One important note here: I have found it better to also move these technical comments out of the codebase, replacing them with pointers to sections of specific files in a knowledge base. This is beyond the scope of this article; the above is a good starting point.
+** Maintaining Anchors During Refactoring
+When a decision record is superseded (e.g., =ADR-019= supersedes =ADR-012=), any code anchored to =# ADR-012= is updated during Step 2 of the execution loop (/Codebase Analysis & Implementation Planning/).
+
+Because the agent scans for anchor comments during its codebase analysis pass, it can easily identify, refactor, or deprecate all code units affected by a record change. Code never rots in isolation.
+
+* Stop Searching the Window: the Truth is in Here
+Building software alongside AI coding agents does not require us to choose between two bad choices: flooding prompts with disorganized chat logs or surrendering our architectural authority to an LLM's localized guesses.
+
+By treating context as an *engineered runtime state*, /The Recs Files/ establish an understandable and maintainable pipeline for software development:
+
+1. =VISION.md= sets the immutable North Star.
+2. *Append-Only Records* (e.g. =ADR-=, =UW-=, =FR-=) log every choice explicitly.
+3. *Active Projections* provide compact, unpolluted ground truth.
+4. *Targeted Context Routing* keeps token spend bounded and focused on user value.
+5. *The Execution & Reconciliation Loop* enforces human-in-the-loop control whenever records or code conflict.
+6. *Traceability Anchors* keep source code permanently connected to design intent.
+
+When we build with this architecture, rapid iteration stops being a descent into chaos. Agents execute bounded plans at high speed, while human developers remain in firm, unambiguous control of system design.
+
+The truth about your architecture isn't scattered out in a 200,000-token prompt log or buried in ephemeral chat histories.
+
+/The Recs Files. The truth is in here./
+
+* Footnotes
+
+[fn:3] Here again, note, it is about immutability of intent, not immutability of text.
+
+[fn:1] The key here is immutability of intent; if you must fix a typo, or clarify something, or even add an elment of definition which was intended but that was not identified at creation time, that might be OK. Do what works for your team.
+
+[fn:2] In a team setting, timestamps are recommended over monotonically increasing numbers, to avoid unnecessary conflicts on record files. Here we use numbers for illustrative purposes.
