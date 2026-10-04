@@ -128,26 +128,26 @@ Concrete refusal and failure strings are stored in the error messages category (
 
 Because these messages serve as diagnostic interfaces for humans and feedback loops for plan-authoring agents, we also decided that *tests assert error messages in full*, never via regex or substring matching.
 
-* Phase 1: Brainstorming & Design Planning
-Implementation begins by selecting a target User Workflow (=UW-=).
+* The Workflow
+Work moves through three phases, each driven by a skill. What follows is the short version; the skills themselves are in [[https://github.com/Trevoke/the-recs-files][the-recs-files]] if you want the full detail.
 
-1. *Context Assembly:* The agent opens the target =UW-=, its referenced Feature Records (=F-=), and related =ADR-= files.
-2. *Scanning Traceability Anchors:* The agent scans source code for embedded comment pointers (e.g., ~;; F-7~ or ~;; ADR-021~) to map documented rules directly to implementation files.
-3. *Record Refinement:* Gaps or edge cases surfaced during design are resolved by updating the records *before* writing code.
+** Phase 1: Brainstorming
+- Read the records first, then refine the idea with the human one question at a time, always citing records by number and title.
+- Propose 2–3 approaches, then present the chosen design in short sections, each approved before moving on. New terms are discussed but enter no file until the human agrees to them.
+- Route each agreed decision to its record type (workflow, feature, ADR, vocabulary, error message) and propose the change along with whatever it would make false. Records are written only at the human's direction.
+- Implementation-only leftovers go into a dated design doc, which code may never cite.
 
+** Phase 2: Writing the Plan
+- Write a plan for an engineer with zero context: exact paths, complete code, exact commands and expected output, and each task citing its records.
+- Every plan carries four mandatory sections: the vocabulary terms in play, the files it may not modify, the records to read first, and error text settled before the test that asserts it.
+- Each task is a test-first cycle: failing test, see it fail, minimal code, see it pass, commit.
+- If the plan and a record disagree, the record wins: planning stops and the disagreement goes to the human.
 
-* Phase 2: Generating the Implementation Plan
-Once design choices are committed to records, a fresh agent context generates a step-by-step Implementation Plan.
-
-Because architectural constraints, error strings, and domain terms are already settled, plan generation is "semantically mechanical":
-
-1. File additions and signature changes are mapped out.
-2. Exact assertion targets (=EM-n=) are assigned to test suites.
-3. Execution steps are ordered sequentially.
-
-* Phase 3: Execution & The Gated Reconciliation Circuit
-
-The agent executes the plan incrementally, running tests after every step.
+** Phase 3: Subagent-Driven Development
+- Each task goes to a fresh implementer subagent, given the full task and record text. It can ask questions, then implements test-first, commits and reviews its own work.
+- Two read-only reviewers check the task's commits in turn: first against the spec and records (error text must match exactly), then for code quality. Any finding goes back to the implementer and is re-reviewed until approved.
+- Implementers run one at a time, since a worktree has one git index. No subagent ever edits a record, and a record conflict goes to the human.
+- A final review covers the whole branch before it's finished.
 
 ** Pointers & Traceability Anchors in Code
 
@@ -162,12 +162,14 @@ In code, comments exist purely as citations pointing back to decision records or
 #+END_SRC
 
 ** Pulling The Red Cord
-If an execution step fails or contradicts a record:
+A failing test is not a reason to stop: it is the normal state of a test-first cycle, and the implementer (or a dedicated fix subagent) handles it.
 
-1. *Immediate Halt:* Autonomous edits stop immediately.
-2. *Yield Control:* The agent surrenders control to the human developer.
+A contradiction with a record is. When a plan disagrees with a record, or a task could only be completed by changing one:
 
-The human resolves the contradiction, either by updating the code, modifying the plan, or amending the underlying record.
+1. *Halt:* Work stops at the point of disagreement. Nothing is planned or coded around the record, and no agent "fixes" the record to fit.
+2. *Yield Control:* The disagreement goes to the human.
+
+The human resolves it, either by correcting the plan or by amending the record. Records change only at the human's direction.
 
 * Heuristics: What Belongs in a Record?
 
@@ -201,16 +203,15 @@ A record is anything worth a team-level decision. If a teammate (or agent) imple
 /The Recs Files/ enables a workflow with a clear separation of informational concerns:
 
 #+BEGIN_EXAMPLE
-[ Records (UW, F, ADR, EM) ]
-│
-▼
-[ Design Plan ]
+[ Brainstorming ] ──► [ Records (UW, F, ADR, EM), human-approved ]
 │
 ▼
 [ Implementation Plan ]
 │
 ▼
-[ Bounded Execution ] ──► (Failure/Drift) ──► [ Yield to Human ]
+[ Subagent Execution + Review ]
+
+Any record contradiction, at any stage ──► [ Halt, yield to human ]
 #+END_EXAMPLE
 
 This enables us to move closer to congruence over time, because it reveals incongruence faster.
