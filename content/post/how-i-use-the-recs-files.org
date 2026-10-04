@@ -17,79 +17,191 @@
 
 *SCULLY:* "And the agent respected all of it?"
 
-*MULDER:* "No. That's what the records are for."
+*MULDER:* "Yes. That's what the records are for."
 #+end_quote
 
-* XYZ
-#+TITLE: Record-Driven Implementation: How I Use the "Recs" Files
-#+AUTHOR: Aldric Giacomoni
-#+DATE: [2026-10-03 Sat]
-#+OPTIONS: toc:2 num:t
 
 * Introduction
+In [[./record-driven-development.org][the previous article]], we laid out the general behavior for /The Recs Files/, a record-driven system for agentic development.
 
-When collaborating with LLMs on software development, the standard pattern often revolves around passive context injection—dumping large snippets or unstructured chat histories into the prompt window and hoping the model maintains coherence. In practice, this approach leads to subtle drift, ungrounded decisions, and brittle code edits.
+In this article, we show you how we use these records day to day on *Stone*, a Racket framework for creating and managing agentic facilities, allowing the user to treat an agentic run as a governed job (bounded, portable, auditable, and supervised). Every example below is pulled directly from Stone's repository.
 
-A far more robust pattern is *record-driven implementation*. Instead of relying on unstructured chat history, we drive autonomous or semi-autonomous development using structured, human-authored decision records—what I call the "recs" files.
+A word before we start. For teamwork, or any serious work, we highly recommend the records be written by hand[fn:1].
 
-Before diving into code implementation, our project repository relies on a baseline set of foundational records:
+* Repository Layout & The Context Budget
 
-- =VISION.md= :: The overall product vision and high-level goals.
-- =CURRENT_VOCABULARY.md= :: The ubiquitous language and core domain terminology.
-- =UW-*.md= :: User Workflows capturing concrete actor journeys.
-- =FR-*.md= :: Feature Records detailing functional rules and edge cases (e.g., error handling).
-- =ADR-*.md= :: Architectural Decision Records recording architectural constraints and trade-offs.
+The repository layout follows /The Recs Files/ - see the previous article for the explanation:
 
-With these records in place, code execution becomes a structured, repeatable, and bounded process across three main phases.
+#+BEGIN_EXAMPLE
+AGENTS.md                      ← How to work here; inlines files below
+docs/
+VISION.md                      ← Inlined whole
+CURRENT_VOCABULARY.md          ← Inlined whole
+user-workflows.md              ← Inlined: preamble + one line per record
+user-workflows/UW-2-get-a-long-job-done-without-watching-it.md
+features.md                    ← Inlined: preamble + one line per record
+features/F-7-match-on-routes-on-the-results-of-operations-already-run.md
+architectural-decisions.md     ← Inlined: preamble + one line per record
+architectural-decisions/ADR-021-a-process-plan-names-no-resource.md
+error-messages.md              ← Inlined: preamble + one line per record
+error-messages/EM-27-a-subscriber-that-raises-as-it-is-built-is-left-off.md
+deferred.md                    ← Decisions deliberately not made yet
+knowledge-base/                ← Technical facts that took work to find out
+plans/                         ← Dated implementation plans
+#+END_EXAMPLE
+
+** Managing the Context Budget
+
+Every session starts by reading =AGENTS.md=. This pulls in =VISION.md= and =CURRENT_VOCABULARY.md= in full, but loads every other record file *by title only*.
+
+This title-only listing forms a compact projection (a few hundred lines) that informs the agent of what records exist. The text of a record is read from its own file *only* when active work touches it. System instructions enforce this explicitly:
+
+#+BEGIN_QUOTE
+Open a record's file before you cite a section of it, measure code, a test, a plan or a design against it, assert its text, propose a change to it, or frame a question to the user with it. Its title tells you which records bear on the work; it is never the evidence that something conforms.
+#+END_QUOTE
+
+** Order of Precedence
+
+When evaluating new ideas or resolving conflicts, decisions walk a strict precedence hierarchy:
+
+Vision ⟶ Ubiquitous Language ⟶ User Workflows ⟶ Features / ADRs ⟶ Error Messages
+
+* Anatomy of the Record Categories
+
+** Vision: The Ultimate Tie-Breaker
+Stone's vision defines the core boundaries and costs of the system. The most crucial section for governing AI agents is /What is deliberately not here/:
+
+- No agent marketplace, no prompt library, no model zoo.
+- No hidden retries or silent fallbacks. Everything that spends is metered and appears in the log.
+
+Defining a vision requires saying yes to some things and no to everything else. Saying 'no' here is an important way to exclude ideas from even showing up in conversation, let alone in code.
+
+** Ubiquitous Language: The Words Underneath Everything
+The ubiquitous language bounds every other record and conversation. Stone adopts NIST's manufacturing control taxonomy (devices, machines, process plans, production plans).
+
+Rules for managing domain terms:
+
+- Define a thing through what it is, not what it isn't :: Just as in the vision, you can't define purely through exclusion, you have to say 'yes' to something first.
+- No new word enters any file without explicit human agreement :: This feels painful at first but is a highly valuable exercise in discipline.
+- When a word changes, change it everywhere in one commit :: Docs, code, comments, and tests in a single commit.
+
+** User Workflows: Where Every Conversation Starts
+Written in Alistair Cockburn's casual use-case form, workflows describe actor goals. We have not yet felt the need to explore more structure, but we believe that gherkin-style text may be valuable here, as these records come close to describing acceptance tests.
+
+#+BEGIN_EXAMPLE
+,* UW-2 Get a long job done without watching it
+:PROPERTIES:
+:LEVEL: user goal
+:ACTOR: Operator
+:END:
+
+, Main success scenario
+
+1. Operator writes a facility holding shared resources and a production plan binding capabilities (F-9, F-28).
+2. Operator declares subscribers (F-13, F-21).
+3. Operator releases a job and stops watching.
+, Extensions
+,* 2a. A subscriber cannot be built :: The job runs without it, and the release notes it (EM-27); subscriber behavior cannot affect job execution (F-13).
+#+END_EXAMPLE
+
+
+- The extensions are where the real work lives :: Main scenarios are easy consensus; extensions define edge cases and cite the corresponding feature or error record.
+- Questions must be framed through workflows :: Agent inquiries must open with the workflow and clause being addressed before discussing technical mechanics.
+
+
+** Features vs. Architectural Decisions
+- Features (=F-n=) :: Describe the surface area—inputs, outputs, and user rules. We use plain text, but here again, gherkin structure (features, scenarios, example mapping) may be more valuable.
+- Architectural Decision Records (=ADR-n=) :: Formalize mechanisms, constraints, and invariants using Nygard's format (Context, Decision, Consequences).
+
+To prevent the agent from misfiling decisions, we enforce two placement tests:
+
+1. *Verb/Sequence Test:* If describing the record requires a verb, argument, or step sequence, it is a **Feature**, not an ADR.
+2. *Implementation Survival Test:* If a word survives an implementation swap, it belongs in **CURRENT_VOCABULARY.md**. If changing implementation retires the word (e.g., "middleware"), it belongs in an **ADR**.
+
+** Error Messages: The Exact Words
+Concrete refusal and failure strings are stored in the error messages category (=EM-n=):
+
+#+BEGIN_EXAMPLE
+,* EM-27 A subscriber that raises as it is built is left off, and the job runs on
+: release: subscriber build failed: "logger-1" raised "connection timeout"
+#+END_EXAMPLE
+
+Because these messages serve as diagnostic interfaces for humans and feedback loops for plan-authoring agents, we also decided that *tests assert error messages in full*, never via regex or substring matching.
 
 * Phase 1: Brainstorming & Design Planning
+Implementation begins by selecting a target User Workflow (=UW-=).
 
-Implementation starts not by asking an agent to write code immediately, but by focusing on a single target User Workflow (=UW-=).
+1. *Context Assembly:* The agent opens the target =UW-=, its referenced Feature Records (=F-=), and related =ADR-= files.
+2. *Scanning Traceability Anchors:* The agent scans source code for embedded comment pointers (e.g., ~;; F-7~ or ~;; ADR-021~) to map documented rules directly to implementation files.
+3. *Record Refinement:* Gaps or edge cases surfaced during design are resolved by updating the records *before* writing code.
 
-** Context Assembly & Traceability Anchors
-
-The agent begins by consuming the target =UW-= alongside its linked Feature Records (=FR-=) and relevant Architectural Decision Records (=ADR-=).
-
-To bridge the gap between human documentation and source code, we use *Traceability Anchors*: explicit comments embedded in the codebase that map directly back to feature records or architectural decisions (e.g., ~# F-4~ or ~# ADR-012~). The agent scans the existing repository for these anchors to establish exact code locations, existing structures, and missing implementations.
-
- The Feedback Loop & Record Refinement
-
-During this phase, any ambiguity, missing edge cases, or architectural gaps are surfaced as open questions. The design brainstorming session is where we answer these questions and explicitly update or create the corresponding =UW-=, =FR-=, or =ADR-= files.
-
-Only once the design and records align do we finalize a *Design Plan* and update the project's active projections.
 
 * Phase 2: Generating the Implementation Plan
+Once design choices are committed to records, a fresh agent context generates a step-by-step Implementation Plan.
 
-Once the Design Plan is approved, we dispatch a fresh agent context to produce the step-by-step *Implementation Plan*.
+Because architectural constraints, error strings, and domain terms are already settled, plan generation is "semantically mechanical":
 
-Because the Design Plan has already resolved structural ambiguities and linked all code locations to Traceability Anchors, generating the implementation plan is semantically mechanical. The agent maps out:
-
-1. Exact files to create or modify.
-2. Interface and signature changes.
-3. Test suite additions and assertion requirements.
-4. Step-by-step execution ordering.
-
-Separating design planning from implementation planning keeps the execution steps deterministic and tightly scoped.
+1. File additions and signature changes are mapped out.
+2. Exact assertion targets (=EM-n=) are assigned to test suites.
+3. Execution steps are ordered sequentially.
 
 * Phase 3: Execution & The Gated Reconciliation Circuit
 
-With a concrete implementation plan in hand, the agent executes the steps sequentially. After each step, tests are executed to verify that the changes satisfy both local unit expectations and broader system constraints.
+The agent executes the plan incrementally, running tests after every step.
 
-** Circuit Breakers and Human Control
+** Pointers & Traceability Anchors in Code
 
-If an execution step fails or encounters an unrecoverable contradiction with the records:
+In code, comments exist purely as citations pointing back to decision records or knowledge-base files:
 
-1. *Immediate Halt:* The execution circuit breaker triggers, stopping further autonomous edits.
-2. *Yield Control:* The agent yields control back to the human developer.
+#+BEGIN_SRC racket
+;; EM-27: A subscriber that raises as it is built is left off, and the job runs on
+;; UW-2 §Extensions 2a: Get a long job done without watching it
+;; EM-24: Anything a machine raises becomes a machine fault
+(define (say-a-subscriber-was-not-attached a-subscriber raised)
+...)
+#+END_SRC
 
-Rather than letting the model attempt arbitrary fix loops or invent new requirements on the fly, the human steps in to resolve the disagreement—either by adjusting the code, updating the implementation plan, or updating the underlying record files.
+** Pulling The Red Cord
+If an execution step fails or contradicts a record:
+
+1. *Immediate Halt:* Autonomous edits stop immediately.
+2. *Yield Control:* The agent surrenders control to the human developer.
+
+The human resolves the contradiction, either by updating the code, modifying the plan, or amending the underlying record.
+
+* Heuristics: What Belongs in a Record?
+
+Left unguided, agents tend to turn every local helper function into a record. To keep the projections useful, we gather a strict set of heuristics:
+
+** The Core Rule
+#+BEGIN_QUOTE
+A record is anything worth a team-level decision. If a teammate (or agent) implemented this differently, would you want to have agreed on it first?
+#+END_QUOTE
+
+** What Belongs in a Record
+
+- User Workflows (=UW-n=) :: What the user is trying to achieve and what happens when an edge case occurs.
+- Features (=F-n=) :: Surface area rules, combinator syntax, and input/output expectations.
+- Architectural Decisions (=ADR-n=) :: Non-obvious trade-offs, retry/metering strategies, and resource boundaries.
+- Error Messages (=EM-n=) :: Exact sentences an operator reads when a release or step fails.
+- Ubiquitous Language (=CURRENT_VOCABULARY.md=) :: Terms with wide reach across modules, messages, or records.
+
+** What Does NOT Belong in a Record
+
+- Local Implementation Mechanics :: Helper function splits, local variable names, or loop constructs (handled in code review).
+- External Facts :: Technical quirks or facts about third-party libraries (these belong in =knowledge-base/=).
+- Uncommitted Decisions :: Decisions not yet made belong in =deferred.md= as =DEF-n= items rather than binding code.
+
+** Structural Rules for Records
+-  The Headline Test :: If you cannot write a single title that clearly states the decision, you either have no decision yet or you have two.
+- One Reason to Change :: Split records containing "or" conditions into discrete records to prevent half-true specifications.
 
 * Conclusion
 
-The record-driven workflow creates a clean separation of concerns:
+/The Recs Files/ enables a workflow with a clear separation of informational concerns:
 
 #+BEGIN_EXAMPLE
-[ Records (UW, FR, ADR) ]
+[ Records (UW, F, ADR, EM) ]
 │
 ▼
 [ Design Plan ]
@@ -101,322 +213,8 @@ The record-driven workflow creates a clean separation of concerns:
 [ Bounded Execution ] ──► (Failure/Drift) ──► [ Yield to Human ]
 #+END_EXAMPLE
 
-By anchoring AI agents in explicit, human-maintained records and enforcing gated execution circuits, code generation ceases to be an exercise in prompt guessing. Instead, it becomes a fast, mechanical, and structurally congruent process.
+This enables us to move closer to congruence over time, because it reveals incongruence faster.
 
-* FOOBARBAZ
-[[{{< relref "record-driven-development.org" >}}][The last article]] was the theory. This one is the case file: how I use the records, day to day, on a real project.
+* Footnotes
 
-The project is Stone, a Racket library that treats an agentic run as a governed job: portable, bounded, abandonable, resumable, auditable, supervised. You don't need to care about Stone to read this. It's here because it's the project where I've pushed the records hardest. Every example below is copied from it rather than invented for the post.
-
-A few names are a bit different here from the article where I introduce the practice, so here's how they line up:
-
-- The vision is =docs/vision.org=, not =VISION.md=. Everything is org-mode, because that's what I write in.
-- Features are =F-n=, not =FR-n=.
-- The "specialized constraint records" are concrete: *validation failures* (=VF-n=) and *error messages* (=EM-n=).
-- There's a register I glossed over last time, the *ubiquitous language*. It turned out to matter more than any of the others, because it bounds every other record and every conversation.
-- The projection is the register's own file. =docs/features.org= is a short preamble followed by one line per record, number and headline, linking to the record's file. Because titles are headlines, that list /is/ the active state.
-
-* The Layout
-#+begin_example
-CLAUDE.md                        ← how to work here; inlines the files below
-docs/
-  vision.org                     ← inlined whole
-  ubiquitous-language.org        ← inlined whole
-  user-workflows.org             ← inlined: preamble + one line per record
-  user-workflows/uw-2-get-a-long-job-done-without-watching-it.org
-  features.org                   ← inlined: preamble + one line per record
-  features/f-7-match-on-routes-on-the-results-of-operations-already-run.org
-  architectural-decisions.org    ← …and so on for each register
-  architectural-decisions/adr-021-a-process-plan-names-no-resource.org
-  validation-failures.org
-  validation-failures/vf-24-refuse-a-production-plan-addressing-a-scope-….org
-  error-messages.org
-  error-messages/em-27-a-subscriber-that-raises-as-it-is-built-is-left-off-….org
-  deferred.org                   ← decisions deliberately not made yet
-  knowledge-base/                ← facts that took work to find out
-  plans/                         ← dated implementation plans
-#+end_example
-
-Every session starts by reading =CLAUDE.md=, which pulls in the vision and the ubiquitous language in full and every other register *by title only*. That's the context budget: a few hundred lines that tell the agent which records exist and what each one decides. The text of a record is read from its own file, and only when the work touches it. The instructions say so in exactly those terms:
-
-#+begin_quote
-Open a record's file before you cite a section of it, measure code, a test, a plan or a design against it, assert its text, propose a change to it, or frame a question to the user with it. Its title tells you which records bear on the work; it is never the evidence that something conforms.
-#+end_quote
-
-That second sentence was earned. Before it existed, the agent would read a headline, decide the code "followed F-7", and move on without opening F-7.
-
-The rest of this post walks the registers in order of precedence: the vision, then the ubiquitous language, then user workflows, then features and architectural decisions, then validation failures and error messages.
-
-Precedence isn't only for breaking ties. It's the order every new idea walks in. When I bring the agent something to design, its brainstorming skill reads the records first and asks which existing records the idea touches, extends, or contradicts. Then it routes each decision we agree on to its register: what users must be able to do goes to a workflow, a thing's surface goes to a feature, an invariant and its reason go to an architectural decision, and so on down. A change that amends a record is proposed together with every sentence elsewhere that it would make false, so when I say yes, I'm agreeing to the consequences and not just the record.
-
-* Vision: The Tie-Breaker
-Stone's vision is about a page and a half, in five parts:
-
-- *The problem*: "Agentic runs are written as hopeful scripts. You start one, and then you watch it, because there is nothing else you can do."
-- *The claim*: a run should be a governed job. Each of the six properties gets one dense paragraph saying what it means /and what it costs/. "Bounded", for example, admits that a ceiling is exceeded by whatever was in flight when it was crossed.
-- *Who it is for*, and who it isn't for: "Not for a single chat completion, and not for a three-step pipeline that always works."
-- *What is deliberately not here.*
-- *A worked example*: an overnight literature triage, told from planning to morning. It ends by naming the decisions that made it work: "The ceiling stopped the job without anyone watching (ADR-005)… The hold lost nothing because the journal is the source of truth (ADR-014)."
-
-The section I lean on most is /What is deliberately not here/:
-
-#+begin_quote
-- No hidden retries or silent fallbacks. Everything that spends is metered and appears in the log.
-- No credentials, endpoints, or model names anywhere in a plan. They belong to the job, not to the work.
-#+end_quote
-
-Agents love adding a quiet retry. They love a sensible default model name. Each of those is locally reasonable, and each one is a direct violation of the vision. Having the refusal written down, and inlined into every session, is what turns "the agent did something plausible" into "the agent did something it was told not to do", which is a much easier conversation.
-
-The vision changes rarely, and only when I've changed my mind about what Stone /is/. When a feature and an architectural decision pull in opposite directions, the vision is where the argument ends.
-
-* Ubiquitous Language: The Words Underneath Everything
-The ubiquitous language comes second because it bounds everything after it. Every record is written in it, and so is every conversation: when the agent and I use the same word for the same thing, a question has one reading, and a record has one meaning. Without it, you get the opening of the last post: =Account= quietly renamed to =Subscriber= across four modules.
-
-Stone borrows NIST's manufacturing control taxonomy (devices, machines, workstations, process plans, production plans, the as-built) because a governed agentic run has the shape of the problem that taxonomy was built to solve. Each term gets one definition, a sentence or two, and agentic synonyms are noted inline:
-
-#+begin_quote
-- Device :: What a machine uses to perform an operation — a shell command, an HTTP call, a plain function. A machine decides; a device does. /Synonym: tool./
-#+end_quote
-
-"Tool" is a synonym, so it's understood when I say it, but it never appears in a record. The rules that keep this working:
-
-- *Say what a thing is, not what it isn't.* "A quote is the price offered for a set of line items, valid until its expiry date, before anything is reserved", not "a quote offers, it does not oblige".
-- *No new word enters any file until I've agreed to that specific word.* The agent proposes candidates, checks each one against words the taxonomy already owns, and waits.
-- *When a word changes, sweep it everywhere in one pass.* Records, code, comments, tests. A real example from Stone's history:
-
-#+begin_example
-docs: retitle eight user workflows in the taxonomy's words
-
-Several titles used "run" and "tool", which the ubiquitous language
-keeps only as synonyms for job and device, and "hold", which it
-reserves for a job state. Each title now states the goal in the
-taxonomy's own words; every pointer citing an old title moves
-with it.
-#+end_example
-
-That one commit renamed eight files and touched both the docs and the source tree. It's tedious work, and exactly the kind an agent does well, provided someone has decided what the word is.
-
-Readers of the last post may notice that I just renamed eight records. That's allowed, under the same rule as fixing a typo: the intent doesn't change, only the clarity. A title is the one-sentence version of the decision, the top level of what StrongDM calls a [[https://factory.strongdm.ai/techniques][pyramid summary]]. It has to tell you what you'll read if you open the record, so when a better word arrives, the title follows it.
-
-* User Workflows: Where Every Conversation Starts
-A user workflow is what a person is trying to achieve. I write them in Alistair Cockburn's casual use-case form: a level (summary, user goal, or subfunction), an actor, a precondition, a main success scenario, and extensions.
-
-The register's preamble names the actors once: "the *planner* authors process plans; the *operator* releases and watches jobs… the *reviewer* reads what past jobs learned. Often one person, at three different moments." It also states one rule: "Titles state what the user wants, not what Stone does." So the titles read like this:
-
-- UW-1: Decompose a problem into a process plan
-- UW-2: Get a long job done without watching it
-- UW-7: Resume a job that stopped partway
-- UW-11: Make the next job better from what this one found
-
-Here's a slice of UW-2:
-
-#+begin_example
-,* UW-2 Get a long job done without watching it
-:PROPERTIES:
-:LEVEL: user goal
-:ACTOR: Operator
-:END:
-
-,** Main success scenario
-1. Operator writes a facility holding the resources every job run in it
-   shares, and a production plan binding the plan's capabilities to them
-   (F-9, F-28).
-2. Operator declares in it any subscribers, from the shipped historian to
-   their own, which hear the whole job (F-13, F-21).
-3. Operator releases a job from it and stops watching.
-…
-
-,** Extensions
-- 2a. A subscriber cannot be built :: The job runs without it, and the
-  release says so where it was run (EM-27); nothing a subscriber does can
-  affect what a job does (F-13).
-- 4a. A call fails without producing an answer :: Dispatch tries the next
-  LLM client bound to that capability, unsupervised. Nothing in the work
-  notices. If every client fails, the machine sees a model call fault.
-#+end_example
-
-/In plain terms: you set up where the job runs and who listens to it, start it, and walk away; the extensions say what happens when a listener breaks or a model call fails./
-
-If 4a sounds like the silent fallback the vision forbids, it isn't. The operator writes the fallback order into the production plan, every attempt is metered and journaled whether it answered or not, and the as-built names the client that served each call (ADR-008, /Dispatch retries a call that came back with no answer/). "Nothing in the work notices" means the plan doesn't have to handle it; the log still shows it.
-
-Three things about how I use these.
-
-*The extensions are where the work is.* The main scenario is five lines everyone agrees with. The extensions are the edge cases, and every one of them cites the feature, validation failure or error message that handles it. When I find a new edge case, it becomes an extension /before/ it becomes code.
-
-*Every question starts from a workflow.* When the agent needs a decision from me, the instructions say how to ask:
-
-#+begin_example
-We are working on `UW-X: Frobnicate the widget`.
-`Section 1b: whirl first` says the user frobnicates after having whirled.
-`F-Y: Frobnication` says that we must whirl only after whooping.
-
-At the moment, we must whirl before we pool because....
-#+end_example
-
-The workflow comes first, then whatever constrains it, each by number /and title/, then the situation, and only then the problem. Before I made this a rule, questions arrived as "the =dispatch-line-scope= function returns =#f= when…", and I had to translate back into my own domain before I could answer. Now I read the question and already know which promise to which user is at stake.
-
-*Planning and triage are sorted by workflow.* Stone keeps a list of decisions that have been made but not yet built, and a second file that reads the same list by workflow: for each entry, which user workflow someone is in when the missing piece matters to them. That's how I choose what to build next. It's also how I noticed that "decided" and "worth building now" are different questions: a decision can be settled for months and matter to nobody until someone is actually in the workflow that reaches it.
-
-* Features: The Surface
-A feature is what the system takes, what it produces, and what the user may do next. Workflows are built out of features, so features have to be separately citable.
-
-The shape I've settled on, using F-7 (/match-on routes on the results of operations already run/) as the example:
-
-1. A short description, plus a code sample when the feature is syntax:
-   #+begin_src racket
-   (match-on (survey scope-check)
-     [(success failure) narrow]
-     [(success success) proceed])
-   #+end_src
-   /In plain terms: branch on how earlier steps turned out, and have every mistake in the branching caught when the plan is built, not when it runs./
-2. *Rules*: the constraints, one per bullet. "It may name an operation at its own level of containment or in an enclosing one. Never inside a sibling composite." "A name addresses one operation, so a name applied twice in the plan is refused."
-3. *What this gives the user*: one bolded promise per bullet, each followed by its justification. "*Every rule fails at build time.* A name out of scope, a name that has not run yet, a name meaning two operations… each is a compile error and never a stuck job."
-
-The "what this gives the user" section ties the feature back to the workflows. If I can't say what a rule buys a user, the rule is suspect.
-
-* Architectural Decisions: The Mechanism
-ADRs are in Michael Nygard's form: context, decision, consequences, plus a =STATUS= property. Here's one that does a lot of work:
-
-#+begin_example
-,* ADR-021 A process plan names no resource
-:PROPERTIES:
-:STATUS: Accepted
-:END:
-- Context :: MSI separates the process plan — a template for how work is
-  done — from the production plan, which is that template bound to specific
-  resources at specific times. Frameworks that merge them cannot tell the
-  work apart from the machinery it happened to run on.
-- Decision :: A process plan names topology, capabilities, and goals, and
-  never a model, credential, endpoint, or concurrency figure. …
-- Consequences :: The same plan runs against different providers unedited.
-  … Resources are sayable in one language and nowhere else: a plan module
-  has no form for a model, a credential, an endpoint or a concurrency
-  figure, a device module has none either, and ~stone/facility~ is where
-  all four are written.
-#+end_example
-
-/In plain terms: the plan says what to do, never which model, API key or server does it; those live in one separate file./
-
-Notice how ADR-021 enforces the vision's "no model names anywhere in a plan". The vision states the intent. The ADR states the mechanism: the plan language literally has no syntax for a model name. That pattern, an intent stated in the vision and backed by an ADR that makes the violation impossible to write, is the strongest thing in the whole setup.
-
-The hardest part of ADRs is keeping things that aren't architecture out of them. Two placement tests settle it, and both are in the instructions:
-
-1. *If describing the record names a verb, an argument, or a sequence of events, it is a feature*, not an architectural decision.
-2. *If a word would survive a change of implementation, it is ubiquitous language; if changing the implementation would retire the word, it belongs in an architectural decision.* The worked example is "middleware". It names how something is built, so it lives in ADR-030 (/Equipment is built in layers, with metering outermost/), not in the vocabulary.
-
-The agent misfiles records constantly without these tests. With them, it misfiles occasionally, and it can explain why it put a record where it did.
-
-* Validation Failures and Error Messages: The Exact Words
-These two registers are the most concrete and the most unusual. They hold the *exact text* the system says when it refuses something or when something goes wrong.
-
-- *Validation failures* (=VF-n=): what Stone says when it refuses a plan, a facility or a production plan /before/ anything runs.
-- *Error messages* (=EM-n=): what Stone says when something goes wrong /while/ a job runs.
-
-A record is a headline, the message itself, and a short note:
-
-#+begin_example
-,* VF-24 Refuse a production plan addressing a scope the process plan does not name
-: production plan validation: a production plan addresses the job, or a
-: composite, workstation or machine the process plan names; found:
-: 'investigation, for an interlock
-
-One check for the three things a production plan addresses — an interlock,
-a dispatch line, a resident planner — so the ~found:~ field says which one
-named it.
-#+end_example
-
-/In plain terms: the file that binds a plan to real resources tried to attach a check to a step called =investigation=, and the plan has no step by that name./
-
-Each register's preamble sets the conventions every message follows. For validation failures, "each message states what the plan language is, then what arrived — the expectation as a positive sentence in the ubiquitous language." For error messages, the prefix is the raising function, the stem says what could not be done, and what arrived comes last.
-
-Why give error text its own register? Because the text is an API. A person reads it at three in the morning from a stopped job, and an agent writing plans iterates against it. So:
-
-- *Tests assert the message whole.* Not a substring, not a regex. The whole thing.
-- *Wording changes in the record before it changes in the code.* If a message reads badly, I fix the record, and the failing test shows me where the code has to follow.
-
-Every new edge case therefore forces one small, very concrete decision: /what exactly do we say?/ Making that decision on purpose, in the ubiquitous language, beats discovering whatever the agent happened to =format= at the time.
-
-Error messages also turned out to be a good place to be honest about gaps:
-
-#+begin_example
-,* EM-19 Releasing a job that has a journal is refused until resuming is built
-: release: cannot be continued, job "triage-1" has a journal and resuming
-: is not built yet: "journals/triage-1-20260821T225508Z"
-#+end_example
-
-/In plain terms: this job already has a history, and picking up where it left off isn't built yet, so Stone won't start it again./
-
-The feature it falls short of (/A stopped job resumes from its journal/) is decided but not built. Rather than silently starting a second job in the same journal, the system refuses, in words that say why. When resuming lands, this record is retired, and the sweep finds every place that cites it.
-
-* Pointers: How the Code Cites the Records
-The last post said comments come in two kinds: pointers to records, and explanations of technical mechanics. In practice I tightened that further. The second kind is also a pointer, to a heading in =docs/knowledge-base/=. *A comment is a pointer and nothing else.* It carries no prose of its own, because prose next to a citation is a copy, and the copy is what goes stale.
-
-A pointer gives the number, the section when it matters, and the title:
-
-#+begin_src racket
-;; EM-27: A subscriber that raises as it is built is left off, and the job runs on
-;; UW-2 §Extensions 2a: Get a long job done without watching it
-;; EM-24: Anything a machine raises becomes a machine fault
-(define (say-a-subscriber-was-not-attached a-subscriber raised)
-  …)
-#+end_src
-
-/In plain terms: this function tells the operator that a listener couldn't be attached, and the three lines say which records require it to./
-
-The section, when there is one, says where in the record to look; the title is always the record's own, so =§Extensions 2a= sits next to UW-2's title, not the extension's.
-
-Tests cite records the same way, and the check's own message says what is being asserted:
-
-#+begin_src racket
-;; VF-46: Refuse an LLM client drawing on a pool the facility does not declare
-(check-equal? (facility-validation-failures
-               #:llm-clients (list (llm-client 'llama "http://localhost:11434"
-                                               "llama-3-8b" #f 'staging)))
-              (list "facility validation: an LLM client draws on a pool the facility declares; found: 'staging, for 'llama")
-              "a client drawing on a pool the facility declares nowhere is refused")
-#+end_src
-
-/In plain terms: a model client says it draws on a concurrency pool called =staging=, nobody declared one, and the test checks the refusal word for word./
-
-When I want to know what implements VF-24, I grep for =VF-24=. When VF-24 is retired, the same grep is the checklist. Stone has almost four thousand of these pointers, and they're the reason I can change a record without fearing the code.
-
-* What Should Be a Record?
-Left alone, an agent will make everything a record: every helper function, every naming choice, every test fixture. A project with three hundred records that each decide nothing is no better than one with none, because the titles stop telling you anything.
-
-My answer is short: *a record is anything worth a team-level decision.*
-
-That holds even when the team is one person and an agent. The question to ask is: /if a teammate did this differently, would I want us to have agreed first?/
-
-Both ways of getting this wrong cost something. Too few records, and every unwritten decision gets made anyway, by the agent, as a plausible local guess: that's the drift the last post opened with. Too many, and the register files stop being a map, the context budget goes to records that decide nothing, and every sweep wades through them. The team-level line sits where the cost flips: below it, a wrong guess is cheap to fix in review; above it, a wrong guess spreads.
-
-- What the user is trying to achieve, and what happens when it goes sideways? Yes, a workflow.
-- What a combinator accepts, and what it refuses? Yes, a feature.
-- Whether we retry silently, where credentials live, which layer meters spend? Yes, an architectural decision.
-- The exact sentence an operator reads when a release is refused? Yes, a validation failure. Someone will read it with a stopped job in front of them, and a test asserts it.
-- What we call the thing? Very much yes, ubiquitous language. Naming is the decision every other one is written in. The test is reach: a name that appears in a record, a message, or across a module boundary belongs to everyone, so everyone has to agree on it.
-
-Once something is a record, the placement tests from the architectural decisions section say which register it goes in.
-
-And what isn't a record:
-
-- *How a function is split into helpers, what a local variable is called, which loop construct you use.* These are names and choices with no reach: nobody outside the function ever sees them. Code review handles them. They die with the code, and that's fine.
-- *How a library actually behaves.* That's a fact, not a decision. It goes in =docs/knowledge-base/=, with the run that established it. Stone has entries like =racket-match.org= and =racket-concurrency.org=, and a pointer can cite them.
-- *A plan.* Implementation plans live in =docs/plans/=, dated. They're written under the records of their day and keep the titles they had, so they're history, not truth.
-- *A decision not yet made*, at least not in a register. This one is subtle. Choosing /not/ to decide is itself a team-level decision, so it is a record, but it lives in =docs/deferred.org=, as =DEF-n=, rather than among the decisions that bind the code: the question, what stands meanwhile, the cost of deferring, and what deciding would need. "Can a ceiling mean exactly what it says?" is a deferred decision, and it says what to do in the meantime.
-
-Two more rules keep records from multiplying or bloating.
-
-*One record, one reason to change.* Stone once had =VF-23 A capability bound without a model, or a device bound with one=: two opposite mistakes, refused by one sentence. The commit that split it explains why that's a problem: "a fault becoming impossible would have left the message standing, half true." It became VF-30 and VF-31, one fault each, and the old number was retired, not reused. The tell is usually the title: an "or" in the headline, or a headline that, after an amendment, describes only half of what the body decides. Split the record rather than retitle it.
-
-*The headline test.* If you can't write a title that states the decision, so that a reader who stops at the title knows the substance, then either there's no decision yet, or there are two.
-
-* Closing the File
-The obvious objection is that this is a lot of ceremony, and it is. Sweeps are tedious, every edge case costs a sentence before it costs a line of code, and every new word waits for me. But the agent pays most of that, in typing. What I pay is a decision, and I'd have had to make it anyway. The only choice is whether I make it on purpose, in a record, or find out later what the agent decided for me in the code.
-
-The records also don't make the agent obedient. Mulder's answer stands: it doesn't respect all of it. What the records do is make a violation visible and arguable. When the agent drifts, there's a page to point at, a test that fails, and a grep that finds every other place it might have drifted the same way.
-
-None of this is clever. It's a directory of org files, a set of naming rules, and an instruction file that says /read the record before you claim the code follows it/. What makes it work is the discipline of going through the records first: a new edge case becomes an extension, a new refusal becomes a VF, a new word waits for agreement, and only then does anyone touch the code.
-
-The agent does most of the typing. The records are where I do the deciding.
-
-/The truth is in here. Now you know which drawer to open./
+[fn:1] We have had some success in letting the agent write the records, but this has *always* meant that down the line, a dedicated amount of time went to making semantic corrections to the records, which necessarily trickled down to some code updates - in essence, a waste of time.
