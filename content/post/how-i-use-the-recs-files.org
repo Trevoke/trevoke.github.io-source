@@ -1,11 +1,11 @@
 #+TITLE:       How I Use The Recs Files
-#+SUBTITLE: Field Notes From An Active Case
+#+SUBTITLE: An experience report
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2026-10-02T09:00:00-04:00
-#+DRAFT: t
+#+DATE: 2026-10-05T13:00:00-04:00
+#+DRAFT: f
 #+categories[]: llm
-#+tags[]: context-management
+#+tags[]: context-management the-recs-files
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: An experience report: one workflow followed from its first records to working code, and what the records caught along the way.
@@ -26,7 +26,9 @@ In [[./record-driven-development.org][the previous article]], we laid out the ge
 
 In this article, we show you how we use these records day to day on *Stone*, a Racket framework for creating and managing agentic facilities, allowing the user to treat an agentic run as a governed job (bounded, portable, auditable, and supervised). Every example below is pulled directly from Stone's repository.
 
-This is an experience report as much as a tutorial. We follow Stone's core workflow from its first records to working code, including the places where things went wrong: what decisions got surfaced, how they were recorded, and what they cost. Reference sections on each kind of record and on the workflow itself close the article.
+This is an experience report as much as a tutorial. We follow Stone's core workflow from its first records to working code, including the places where things went wrong: what decisions got surfaced, how they were recorded, and what they cost.
+
+The skills that drive this workflow, from brainstorming to plans to subagent execution, are published at [[https://github.com/Trevoke/the-recs-files][github.com/Trevoke/the-recs-files]], along with a kickstart skill for bringing records into an existing codebase.
 
 A word before we start. For teamwork, or any serious work, we highly recommend the records be written by hand[fn:1].
 
@@ -62,10 +64,25 @@ This title-only listing forms a compact projection (a few hundred lines) that in
 Open a record's file before you cite a section of it, measure code, a test, a plan or a design against it, assert its text, propose a change to it, or frame a question to the user with it. Its title tells you which records bear on the work; it is never the evidence that something conforms.
 #+END_QUOTE
 
-* Opening a Case: What to Write First
-If you want to start today, two records are absolutely required.
+** What AGENTS.md Tells the Agent
+Besides the inlined records, =AGENTS.md= sets up the behaviors every session and every subagent carries:
 
-- The vision :: What the product is for, and what is deliberately not in it.
+- The records are the truth :: The agent does not modify them on its own, only at the user's request.
+- How to write a record :: Define a thing by what it is, not by comparison to what it isn't. One record, one reason to change. The title is a headline, so a reader who stops there knows the substance. A retitle renames the file and sweeps every pointer to the old title.
+- Which records may cite which :: A workflow may name features, error messages, terms and other workflows; a feature may name validation failures, terms and other features; an ADR may name other ADRs and terms; a term may name only other terms.
+- Where a record belongs :: One line per register, plus the two placement tests for the hard cases.
+- How to talk to the user :: Every record is named by number[fn:5] /and/ title. Every question opens from the workflow and the step it is in, then names the situation in the records' own words, and only then the mechanism. No new term goes into any file before the user agrees to that specific word.
+- How to write code :: A comment is a pointer to a record or to a knowledge-base heading, and nothing else. When the agent finds any other kind of comment, it looks for a record to point to, and removes the comment if there is none.
+- The knowledge base :: What an entry holds, and where it came from: a manual, a specification, or a run, with the code and its output.
+- Project mechanics :: The facts no skill should carry: the exact test command, that only one agent at a time may commit in a worktree, and which skills to use.
+
+The skills stay generic so they can be reused in other projects; everything specific to Stone lives here.
+
+* Starting with /The Recs Files/: What to Write First
+If you want to start today, three records are absolutely required.
+
+- The vision :: What the product is for, and, crucially, what it isn't and doesn't do. Stone's vision says, among other things: "No agent marketplace, no prompt library, no model zoo," and "No hidden retries or silent fallbacks. Everything that spends is metered and appears in the log." This is the ultimate tie-breaker, and a very important way to keep ideas from even showing up in conversation, let alone in code.
+- A ubiquitous language with a few terms :: Just the words the vision and the core workflow need. Stone adopts NIST's manufacturing control taxonomy (devices, machines, process plans, production plans). Define each term as clearly as you can: just as with the vision, you can't define purely by exclusion. And no word enters a file without the human agreeing to it. This feels painful at first, but it is a highly valuable exercise with high pay-off.
 - The core user workflow :: The smallest set of things a user can do to get the core domain[fn:4] value out of the product.
 
 Everything else waits:
@@ -95,14 +112,16 @@ The activity users spend the most time on, and the one Stone constrains least.
 ...
 #+END_EXAMPLE
 
+Workflows are written in Alistair Cockburn's casual use-case form, describing an actor's goal. We have not yet felt the need for more structure, but gherkin-style text may be valuable here, as these records come close to describing acceptance tests. The main scenario is usually easy consensus. The extensions are where the work is: they define the edge cases, and each one cites the feature or error record that covers it.
+
 I already knew what I wanted this to look like, and I wanted to see how much I could do at once. I let the agent interview me to create this record, but I did two things I now recommend against: I let the agent write this record, and in the same commit, I added another 11 user workflows, 24 features, and 26 ADRs.
 
-Today I recommend letting the agent help you by eliciting knowledge from you, but stopping short of letting it write a file—write it by hand instead[fn:5]. I also strongly recommend starting with just one user workflow record. If you know you want other user workflows, put them somewhere that the agent can't read them.
+Today I strongly recommend starting with just one user workflow record. If you know you want other user workflows, put them somewhere that the agent can't read them.
 
 ** Who Writes What
 The rule we arrived at:
 
-- Anything new is written by people :: A new term, a new ADR, a new feature, a new workflow. This is work the team should do together. An agent can help elicit the knowledge, and ask the questions the new record needs to answer, but an agent becomes dangerous to the project when it drafts: the drift between what it writes and what we want it to mean is always non-zero, and not always noticeable.
+- New records are written by people :: This is work the team should do together. An agent can help elicit the knowledge, ask the questions the new record needs to answer, and even propose wording, but the humans decide what goes in the file. The drift between what an agent writes and what we want it to mean is _always_ non-zero, and not always noticeable.
 - An amendment can go to the agent :: Once the surrounding records have been reworded carefully enough, the intent of a correction is clear and unambiguous, and the agent can be given the wording. You explain how the record is wrong; it proposes the fix; you approve it.
 
 * How Slightly Wrong Words Compound
@@ -110,7 +129,7 @@ The typical failure in the agent-written records was much harder to catch than a
 
 One such word is easy to fix. Many of them add up, and eventually they add up to a decision that cannot be reconciled.
 
-The combinator features said that one operation's result was handed to the next. The architecture said something else: =ADR-002= has an operation reach another by reading its =part= from the =as-built=, the record of everything a job produced. As the agent did the work, it turned out that the code followed the features, so there was no mechanism for querying the =as-built= at all, only the assumption that data always comes from the operation right before.
+For example: the combinator features said that one operation's result was handed to the next. The architecture said something else: =ADR-002= has an operation reach another by reading its =part= from the =as-built=, the record of everything a job produced. As the agent did the work, it turned out that the code followed the features, so there was no mechanism for querying the =as-built= at all, only the assumption that data always comes from the operation right before. In addition, =ADR-002=
 
 It survived a long time. It came to light five intense weeks of agentic implementation later, during a conversation about how information enters a machine (implementing =#:reads=), when it became clear that nothing could ask the as-built for anything. The features were badly worded, and =ADR-002= was what I had always meant. The message for the commit that settled it:
 
@@ -122,20 +141,22 @@ As a result, here's what had to happen:
 
 - A new feature record, =F-34: A machine declares what it reads=.
 - =UW-1= step 2 rewritten, so that a planner "declares what each reads".
-- The combinator features reworded, and one vocabulary term (=command=) put back to being a noun.
+- The combinator features reworded, and one vocabulary term (=command=) put back to being a noun. When a word changes, it changes everywhere in one commit: docs, code, comments, and tests.
 - The implementation plan in flight for the next workflow, =UW-2=, stopped from Task 12 onward, then reworked against F-34 (=d6814837=).
-- A new plan for the reads (=10438d35=), and the code for it.
+- A new plan for the reads, and the code for it.
 
 The records worked: the mismatch surfaced as soon as a conversation touched it, and the fix went records first, then plans, then code. But letting the agent write the records is what created that rework, and it could have been avoided. The careful reader will note that this surfaced during implementation of =UW-2=, not =UW-1=, which would have been more desirable.
 
 * Working Through UW-1
-The rest of =UW-1= shows the process running as intended.
+The rest of =UW-1= shows the process running as intended. Work moves through three phases, each driven by a skill: brainstorming, writing the plan, and subagent-driven development.
 
 I brought the set of combinators with me: ~sequence~, ~loop~, ~match-on~, ~fan-out~, ~fan-in~, ~map~, ~reduce~ and ~filter~. Working with the agent, the question was what to build first. The order I chose followed two rules: whatever is required to get =UW-1= going, then whatever is simplest, building new ones on top of the previous ones where possible.
 
 ~loop~ came last. It is the combinator whose =as-built= differs most from its plan (the as-built holds the loop unrolled), and there was work to do to figure out what its stopping rule would do and how it would operate.
 
 ** The Brainstorm Surfaces a Wrong Record
+A brainstorm starts with the agent reading the records, then refining the idea with me one question at a time, always citing records by number and title. It proposes two or three approaches, then presents the chosen design in short sections, each approved before moving on. New terms get discussed, but enter no file until I agree to them.
+
 The loop brainstorm ran over a few real-time days (limited time to really sit and focus on it), and as it started, it hit the same problem again. =F-6= said the stopping rule was "run on each pass's result": the implied "get the last machine's result", where the intent had always been for the rule to query whatever it needs, explicitly, to decide whether to go round again.
 
 This time, I explained to the agent how the record was wrong, and it proposed the new wording. That was acceptable, because enough of the surrounding records had been reworded carefully that the intent was unambiguous. The change:
@@ -145,12 +166,16 @@ This time, I explained to the agent how the record was wrong, and it proposed th
 + ~#:while~ names a workstation, or a composite with one exit, run once each pass; the loop goes round again while its result succeeds (ADR-031).
 #+END_src
 
+You will notice we modify ADR-031 in place. In practice, this is a clarification of intent; the ADR was not fundamentally incorrect, even though some rework in the code is required after this change. This is why I recommend writing the records by hand: you don't want to have to decide, as a team, whether you should supersede your own =ADR-031= or edit it in-place.
+
 ** Records First
-The brainstorm's decisions landed as record commits within half an hour, before any code, of course. Among them:
+Each decision the brainstorm agrees on is routed to its record type (workflow, feature, ADR, vocabulary, error message) and proposed along with whatever it would make false. The decisions landed as record commits within half an hour, before any code, of course. Among them:
 
 - =F-6='s stopping rule, a new validation failure refusing a stopping rule with several exits (which has no single result to test), and a narrowed consequence in =ADR-031=.
 - =F-1= through =F-8= saying which building block each combinator supplies, and why.
 - The empty cases settled (what an empty collection and an empty composite do), and a counted loop deferred.
+
+The first bullet is the two placement tests from [[./record-driven-development.org][the previous article]] at work: what a planner can do went into the feature, and what follows from the architecture went into the ADR. Features we write in plain text (gherkin structure may serve better here too); ADRs follow Nygard's format: Context, Decision, Consequences.
 
 Through some amount of path of least resistance, I allowed deferred decisions to go in a =deferred.org= file, as =DEF-= records. Similarly to the "future user workflows", I would now recommend putting those somewhere the agent can't reach.
 
@@ -165,21 +190,36 @@ Through some amount of path of least resistance, I allowed deferred decisions to
 
 A counted loop is more API surface, more for the user to read and understand, and is syntactic sugar for something which is already possible, if inelegantly. It doesn't bring enough new value to the project to be added right away, but I didn't want to just discard the idea.
 
-** Design Doc, Plan, Execution
-Then the design document, which opens by listing the four record commits it builds on and stating its place:
+** The Design Document
+Whatever the brainstorm settled that isn't a record goes into a dated design document. Code may never cite it. The loop's design document opens by listing the four record commits it builds on and stating its place:
 
 #+BEGIN_QUOTE
 What follows is what the records do not carry: how the walk and the plan language come to honour them. The records are the measure; where this document and a record disagree, the record stands.
 #+END_QUOTE
 
-Then the implementation plan, and then execution by subagents, test-first, each task reviewed against the records and then for code quality. The plan landed late in the morning; the loop work was done the next afternoon. I was mostly away, coming back to approve, or to settle the questions the agents raised.
+** The Plan
+The implementation plan is written for an engineer with zero context: exact paths, complete code, exact commands and their expected output, and each task citing its records. Every plan carries four mandatory sections:
+
+- How to Speak :: The vocabulary in play.
+- Do Not Modify :: The files no task may touch.
+- Reading List :: The records to read first.
+- Cataloged-Text Ordering :: Error text settled before the test that asserts it.
+
+Each task is a test-first cycle: write the failing test, see it fail, write the minimal code, see it pass, commit. If the plan and a record disagree, the record wins: planning stops and the disagreement goes to the human.
+
+** Execution
+Each task goes to a fresh implementer subagent, given the full task and record text. It can ask questions, then implements test-first, commits, and reviews its own work. Implementers run one at a time, since a worktree has one git index.
+
+Two read-only reviewers then check the task's commits in turn: first against the spec and records (error text must match exactly), then for code quality. Any finding goes back to the implementer and is re-reviewed until approved. No subagent ever edits a record. A final review covers the whole branch before it's finished.
+
+The plan landed late in the morning; the loop work was done the next afternoon. I was mostly away, coming back to approve, or to settle the questions the agents raised.
 
 * When a Record Is Silent
 One of those questions shows what a settled question looks like.
 
 While reviewing Task 5, the reviewer found that the operation after a ~match-on~ waited on the exits of /every/ branch, so it waited forever on the branches not taken. =F-7= did not contradict the code; it said nothing at all about what follows a ~match-on~.
 
-A silent record means the decision is not made, or was made somewhere else and not linked. So the first thing to do is to have the agent re-check the other records, just in case. After that, the missing decision goes to the human. Agents sometimes see a gap that isn't there, or ask for a decision to be recorded when it doesn't need to be. But sometimes they surface a real problem: a missing product behavior for a situation a user will certainly be in, or the consequence of an architectural decision in a scenario nobody walked through. It is always better to surface it.
+A silent record means the decision is not made, or was made somewhere else and not linked. So the first thing to do is to have the agent re-check the other records, just in case. After that, the missing decision goes to the human, and the question opens with the workflow and clause it addresses before getting into any technical mechanics. Agents sometimes see a gap that isn't there, or ask for a decision to be recorded when it doesn't need to be. But sometimes they surface a real problem: a missing product behavior for a situation a user will certainly be in, or the consequence of an architectural decision in a scenario nobody walked through. It is always better to surface it.
 
 This silence was a real problem. The series of events:
 
@@ -202,70 +242,17 @@ The loop design document holds a decision that looks like it should be a record:
 
 But is it a decision? Or is it an inescapable consequence of decisions already made: there is a plan, there is an as-built, and everything in the plan produces, during a release, a part that goes into the as-built? This is one of the most powerful aspects of using /The Recs Files/: combinations of decisions don't need to become records, because they can be figured out again from the records they follow from[fn:3].
 
-* The Knowledge Base
-Not every hard-won fact is a decision. Racket's behavior is a fact, and re-discovering it costs time and tokens on every task that needs it. So, often, I forced the creation of knowledge-base documents to settle core Racket behavior questions once: concurrency, the HTTP client, JSON, metaprogramming[fn:6]. Each claim comes with a probe, a small program that demonstrates it, so the entry can be checked rather than trusted. Most were written ahead of the =UW-1= implementation tasks that needed them.
-
-Code cites them the same way it cites records. From the code behind =EM-27=:
-
-#+BEGIN_SRC racket
-;; docs/knowledge-base/racket-strings.org §~~e~ cuts its value at ~error-print-width~, and the other directives do not
-(eprintf "release: cannot be attached, subscriber ~e raised: ~e\n" ...)
-#+END_SRC
-
-* The Records, Register by Register
-
-** Vision: The Ultimate Tie-Breaker
-Stone's vision defines the core boundaries and costs of the system. Any vision must define something as what it is and, crucially, /what it isn't or doesn't do/:
-
-- No agent marketplace, no prompt library, no model zoo.
-- No hidden retries or silent fallbacks. Everything that spends is metered and appears in the log.
-
-This is also a very important way to keep ideas from even showing up in conversation, let alone in code.
-
-** Ubiquitous Language: The Words Underneath Everything
-The ubiquitous language bounds every other record and conversation. Stone adopts NIST's manufacturing control taxonomy (devices, machines, process plans, production plans).
-
-- Define a thing through what it is, not what it isn't :: Just as in the vision, you can't define purely through exclusion, you have to say 'yes' to something first.
-- Holding the line on new words :: No word enters a file without the human agreeing to it. This feels painful at first but is a highly valuable exercise in discipline.
-- When a word changes, change it everywhere in one commit :: Docs, code, comments, and tests in a single commit.
-
-** User Workflows: Where Every Conversation Starts
-Written in Alistair Cockburn's casual use-case form, workflows describe actor goals. We have not yet felt the need to explore more structure, but we believe that gherkin-style text may be valuable here, as these records come close to describing acceptance tests.
+* Code Cites the Records
+In code, comments exist purely as citations pointing back to records or knowledge-base files. One trail from =UW-2= shows the whole chain. Its extension 2a:
 
 #+BEGIN_EXAMPLE
 ,* UW-2 Get a long job done without watching it
-:PROPERTIES:
-:LEVEL: user goal
-:ACTOR: Operator
-:END:
-
-- Precondition :: A process plan as originally authored (UW-1).
-
-,** Main success scenario
-1. Operator writes a facility holding the resources every job run in it shares, and a production plan binding the plan's capabilities to them (F-9, F-28).
-2. Operator declares in it any subscribers, from the shipped historian to their own, which hear the whole job (F-13, F-21).
-3. Operator releases a job from it and stops watching.
 ...
-
 ,** Extensions
-...
 - 2a. A subscriber cannot be built :: The job runs without it, and the release says so where it was run (EM-27); nothing a subscriber does can affect what a job does (F-13).
-...
 #+END_EXAMPLE
 
-
-- The extensions are crucial :: Main scenarios are often easy consensus; extensions define edge cases and cite the corresponding feature or error record.
-- Questions must be framed through workflows :: Agent inquiries to the user must open with the workflow and clause being addressed before discussing technical mechanics.
-
-
-** Features vs. Architectural Decisions
-- Features (=F-n=) :: We write them in plain text, but here again, gherkin structure (features, scenarios, example mapping) may be more valuable.
-- Architectural Decision Records (=ADR-n=) :: We use Nygard's format (Context, Decision, Consequences).
-
-To keep the agent from misfiling decisions, we hold it to the two placement tests from [[./record-driven-development.org][the previous article]].
-
-** Error Messages: The Exact Words
-Concrete refusal and failure strings are stored in the error messages category (=EM-n=):
+The extension cites =EM-27=, an error-message record, which holds the exact words:
 
 #+BEGIN_EXAMPLE
 ,* EM-27 A subscriber that raises as it is built is left off, and the job runs on
@@ -277,32 +264,7 @@ plan wrote it, arguments included, since one subscriber may be written twice
 with different arguments. What raised is printed as EM-24 prints it.
 #+END_EXAMPLE
 
-Because these messages serve as diagnostic interfaces for humans and feedback loops for plan-authoring agents, we also decided that *tests assert error messages in full*, never via regex or substring matching.
-
-* The Workflow
-Work moves through three phases, each driven by a skill. What follows is the short version; the skills themselves are in [[https://github.com/Trevoke/the-recs-files][the-recs-files]] if you want the full detail.
-
-** Phase 1: Brainstorming
-- Read the records first, then refine the idea with the human one question at a time, always citing records by number and title.
-- Propose 2–3 approaches, then present the chosen design in short sections, each approved before moving on. New terms are discussed but enter no file until the human agrees to them.
-- Route each agreed decision to its record type (workflow, feature, ADR, vocabulary, error message) and propose the change along with whatever it would make false. The human writes the record.
-- Implementation-only leftovers go into a dated design doc, which code may never cite.
-
-** Phase 2: Writing the Plan
-- Write a plan for an engineer with zero context: exact paths, complete code, exact commands and expected output, and each task citing its records.
-- Every plan carries four mandatory sections: /How to Speak/ (the vocabulary in play), /Do Not Modify/ (the files no task may touch), /Reading List/ (the records to read first), and /Cataloged-Text Ordering/ (error text settled before the test that asserts it).
-- Each task is a test-first cycle: failing test, see it fail, minimal code, see it pass, commit.
-- If the plan and a record disagree, the record wins: planning stops and the disagreement goes to the human.
-
-** Phase 3: Subagent-Driven Development
-- Each task goes to a fresh implementer subagent, given the full task and record text. It can ask questions, then implements test-first, commits and reviews its own work.
-- Two read-only reviewers check the task's commits in turn: first against the spec and records (error text must match exactly), then for code quality. Any finding goes back to the implementer and is re-reviewed until approved.
-- Implementers run one at a time, since a worktree has one git index. No subagent ever edits a record, and a record conflict goes to the human.
-- A final review covers the whole branch before it's finished.
-
-** Pointers & Traceability Anchors in Code
-
-In code, comments exist purely as citations pointing back to decision records or knowledge-base files:
+And the code cites both:
 
 #+BEGIN_SRC racket
 ;; EM-27: A subscriber that raises as it is built is left off, and the job runs on
@@ -310,6 +272,18 @@ In code, comments exist purely as citations pointing back to decision records or
 ;; EM-24: Anything a machine raises becomes a machine fault
 (define (say-a-subscriber-was-not-attached a-subscriber raised)
 ...)
+#+END_SRC
+
+Because these messages serve as diagnostic interfaces for humans and feedback loops for plan-authoring agents, we also decided that *tests assert error messages in full*, never via regex or substring matching.
+
+** The Knowledge Base
+Not every hard-won fact is a decision. Racket's behavior is a fact, and re-discovering it costs time and tokens on every task that needs it. So, often, I forced the creation of knowledge-base documents to settle core Racket behavior questions once: concurrency, the HTTP client, JSON, metaprogramming[fn:6]. Each claim comes with a probe, a small program that demonstrates it, so the entry can be checked rather than trusted. Most were written ahead of the =UW-1= implementation tasks that needed them.
+
+Code cites them the same way it cites records. From the code behind =EM-27=:
+
+#+BEGIN_SRC racket
+;; docs/knowledge-base/racket-strings.org §~~e~ cuts its value at ~error-print-width~, and the other directives do not
+(eprintf "release: cannot be attached, subscriber ~e raised: ~e\n" ...)
 #+END_SRC
 
 * Conclusion
@@ -328,14 +302,14 @@ In code, comments exist purely as citations pointing back to decision records or
 Any record contradiction, at any stage ──► [ Halt, yield to human ]
 #+END_EXAMPLE
 
-This enables us to move closer to congruence over time, because it reveals incongruence faster.
+This enables us to move closer to congruence over time, because it reveals incongruence faster. The skills that drive each phase are in [[https://github.com/Trevoke/the-recs-files][the-recs-files]], if you want the full detail.
 
 * Footnotes
+[fn:5] For teams, we recommend timestamps and not monotonically increasing numbers
 
 [fn:6] Also worth noting, the agents prefer figuring things out themselves to reading the documentation. It turns out most programming languages have excellent documentation, and they should use that as a basis for the knowledge base docs they write.
-[fn:5] If you really want to let the agent draft, I can tell you that the Claude 5 family is terrible at it, that the Claude 5.5 family is better, and that I need more experience reports of letting the agent draft records that have proven to be good over a long period of time, because problems with records show up down the line, not immediately.
 
-[fn:1] We have had some success in letting the agent write the records, but this has *always* meant that down the line, a dedicated amount of time went to making semantic corrections to the records, which necessarily trickled down to some code updates - in essence, a waste of time.
+[fn:1] We have had some success in letting the agent write the records, but this has *always* meant that down the line, a dedicated amount of time went to making semantic corrections to the records, which necessarily trickled down to some code updates - in essence, a waste of time. If you really want to let the agent draft, I can tell you that the Claude 5 family is terrible at it, that the Claude 5.5 family is better, and that I need more experience reports of letting the agent draft records that have proven to be good over a long period of time, because problems with records show up down the line, not immediately.
 
 [fn:2] Markdown is the more common choice for records like these, and it works fine. We use org-mode because it is a more powerful syntax: property drawers, tables, status keywords, timestamps, and executable source blocks, which a knowledge base can use to demonstrate what it claims.
 

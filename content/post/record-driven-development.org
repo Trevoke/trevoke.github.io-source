@@ -2,10 +2,10 @@
 #+SUBTITLE: The Truth Is In Here
 #+AUTHOR:      Aldric Giacomoni
 #+EMAIL:       trevoke@gmail.com
-#+DATE: 2026-10-02
-#+DRAFT: t
+#+DATE: 2026-10-05T12:00:00-04:00
+#+DRAFT: f
 #+categories[]: llm
-#+tags[]: context-management
+#+tags[]: context-management the-recs-files
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: The way to manage the truth of your codebase
