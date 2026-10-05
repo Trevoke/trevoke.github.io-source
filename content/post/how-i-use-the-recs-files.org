@@ -152,7 +152,7 @@ The brainstorm's decisions landed as record commits within half an hour, before 
 - =F-1= through =F-8= saying which building block each combinator supplies, and why.
 - The empty cases settled (what an empty collection and an empty composite do), and a counted loop deferred.
 
-The counted loop is worth a look, because deferring is a decision too:
+Through some amount of path of least resistance, I allowed deferred decisions to go in a =deferred.org= file, as =DEF-= records. Similarly to the "future user workflows", I would now recommend putting those somewhere the agent can't reach.
 
 #+BEGIN_EXAMPLE
 ,* DEF-24 A counted loop
@@ -163,7 +163,7 @@ The counted loop is worth a look, because deferring is a decision too:
 - Cost of deferring :: A fixed count is two machines a planner writes and a reader reads, where the building block is one keyword.
 #+END_EXAMPLE
 
-A counted loop is more API surface, more for the user to read and understand, and it is already possible without it, if inelegantly. It doesn't bring enough new value to the project. Writing that down means the question doesn't come back every session.
+A counted loop is more API surface, more for the user to read and understand, and is syntactic sugar for something which is already possible, if inelegantly. It doesn't bring enough new value to the project to be added right away, but I didn't want to just discard the idea.
 
 ** Design Doc, Plan, Execution
 Then the design document, which opens by listing the four record commits it builds on and stating its place:
