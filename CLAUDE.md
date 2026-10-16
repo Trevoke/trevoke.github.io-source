@@ -11,10 +11,19 @@ directly.
 - **`public/`** — a git submodule pointing at `git@github.com:Trevoke/trevoke.github.io.git`,
   the actual GitHub Pages repo (served from its `master` branch). `hugo` builds into
   this directory; committing/pushing inside `public/` is what publishes the site.
-- **`themes/`** — five theme submodules (`hugo-tufte`, `kiss`, `binario`, `even`,
-  `hello-friend-ng`). Only one is active at a time, set by `theme = "..."` in
+- **`themes/`** — four theme submodules (`hugo-tufte`, `kiss`, `binario`, `even`)
+  plus `hemingway`, which is vendored as plain tracked files. Only one is active at a time, set by `theme = "..."` in
   `config.toml` (currently `hugo-tufte`). The others are just parked there — don't
   assume an unfamiliar diff in `themes/` matters unless it's the active theme.
+- **`themes/hugo-tufte` is our fork**, `Trevoke/hugo-tufte`, of the unmaintained
+  `loikein/hugo-tufte` (no upstream commits since Nov 2024). The recorded commit lives
+  on the fork's `local/hugo-0.164-compat` branch, which carries the Hugo 0.164 fixes
+  (`css.Sass`, `.Prev`/`.Next`, partial renames to avoid dotted-name recursion).
+  Inside the submodule, `origin` = the fork (fetches over HTTPS, pushes over SSH) and
+  `upstream` = loikein. Theme changes go there: commit in `themes/hugo-tufte`, `git
+  push` (to the fork), then commit the bumped pointer here. **Always push the theme
+  commit before pushing the source repo** — a pointer to an unpushed theme commit
+  breaks fresh clones (this has already happened once).
 - Posts live in `content/post/*.org`. Hugo has native org-mode support (via go-org),
   so no preprocessing step converts org to markdown.
 
@@ -94,15 +103,20 @@ Things worth checking specifically:
   never committed/pushed from inside `public/`. Check `git -C public status`; if it
   looks like a legitimate rebuild, finish the deploy (steps 2–3 above) rather than
   discarding it.
-- **`themes/hello-friend-ng` (or any non-active theme) showing local changes /
+- **Any non-active theme (`kiss`, `binario`, `even`, `hemingway`) showing local changes /
   detached HEAD** — it's not in use per `config.toml`, so this is dead weight, not a
   blocker. Don't try to "fix" it by resetting unless you're intentionally working on
   that theme; it's safe to leave alone.
 - **`themes/hugo-tufte` showing `-` in `git submodule status`** — means the
-  submodule isn't properly registered even though files exist on disk (likely from a
-  manual clone at some point). This is the *active* theme, so if `hugo` builds fine,
-  leave it; if you need to fix the registration cleanly:
-  `git submodule update --init themes/hugo-tufte`.
+  submodule isn't initialized. Run `git submodule sync themes/hugo-tufte && git
+  submodule update --init themes/hugo-tufte` (the `sync` matters on old checkouts
+  whose submodule config still points at upstream loikein).
+- **`themes/hugo-tufte` showing `+`** — the checked-out theme commit differs from the
+  recorded one. Check `git -C themes/hugo-tufte status -sb`: if it's a new local
+  commit, push it to the fork and commit the pointer; if the recorded commit is
+  missing locally, `git -C themes/hugo-tufte fetch` first. Before committing a
+  pointer bump, confirm the commit exists remotely:
+  `git -C themes/hugo-tufte branch -r --contains HEAD` must list `origin/...`.
 - **`.hugo_build.lock` and `resources/` are tracked in git** — these are Hugo build
   artifacts and probably shouldn't be committed, but that's a pre-existing repo
   quirk, not something to "fix" as a side effect of an unrelated change. Only touch
