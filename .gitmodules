@@ -13,4 +13,4 @@
 	url = https://github.com/olOwOlo/hugo-theme-even
 [submodule "themes/hugo-tufte"]
 	path = themes/hugo-tufte
-	url = https://github.com/loikein/hugo-tufte.git
+	url = https://github.com/Trevoke/hugo-tufte.git
