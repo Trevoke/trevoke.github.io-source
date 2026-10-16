@@ -26,7 +26,7 @@
 *MULDER:* "Stop treating context like an unstructured chat log and start treating it like an engineered runtime state. /The Recs Files, Scully. The truth is in here./"
 #+end_quote
 
-If you’ve spent more than a few weeks building a system alongside AI coding agents, that conversation isn't science fiction. It’s your Tuesday afternoon.
+If you’ve spent more than a few weeks building a system alongside AI coding agents, that conversation isn't science fiction. It's just your work experience.
 
 When an agent operates over long-running projects without explicit structural boundaries, all the decisions you haven't made explicit were never made at all. Left unconstrained, the model default-fills architectural ambiguity with plausible, localized guesses. The codebase slowly degrades into a patchwork of competing idioms, duplicate abstractions, and shifted vocabulary.
 
